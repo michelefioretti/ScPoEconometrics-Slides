@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>ScPoEconometrics</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald, Gustave Kenedi and Pierre Villedieu" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
     <link rel="stylesheet" href="../css/scpo.css" type="text/css" />
@@ -15,8 +15,8 @@ class: center, middle, inverse, title-slide
 
 # ScPoEconometrics
 ## Introduction
-### Florian Oswald, Gustave Kenedi and Pierre Villedieu
-### Sciences Po Paris </br> 2020-01-28
+### Michele Fioretti
+### Sciences Po Paris </br> 2020-08-03
 
 ---
 
@@ -30,18 +30,41 @@ layout: true
 
 
 
+# Welcome to Applied Data Analysis for Public Policy Studies
+
+--
+
+- This course will teach you the core tools of ***econometrics***.
+ 
+--
+
+- We will meet every Wednesday at XXX on Zoom. 
+
+--
+
+- You will meet with the TA, Florin Cogne, every two weeks to discuss the material and review problem sets.
+
+
+
+
 
 # Welcome to ScPoEconometrics!
 
 --
 
-- In this course you will learn the core tools of ***econometrics***.
+- This course builds on the (amazing) openSource lectures by the ScPo Econometrics team (Florian Oswald, Gustave Kenedi and Pierre Villedieu), available @ https://github.com/ScPoEcon/ScPoEconometrics.
  
 --
 
-- You will also learn to use the `R` programming language!
+- A book overview of the material is available at https://scpoecon.github.io/ScPoEconometrics/index.html.
 
 --
+
+- The goal of the course is to provide you with essential data analysis tools (a.k.a. ***econometrics***).
+
+--
+
+- We will learn these tools through example based on ***the programming language R***. 
 
 ## What is *econometrics*?
 
@@ -676,7 +699,7 @@ class: inverse
     ```
     
     ```
-    ## [1] '0.2.5'
+    ## [1] '0.2.6'
     ```
 
 ---
@@ -732,7 +755,7 @@ example_data
 
 ```
 ##   x       y     z
-## 1 1   Hello  TRUE
+## 1 1   Hello FALSE
 ## 2 3   Hello FALSE
 ## 3 5   Hello  TRUE
 ## 4 7 Goodbye  TRUE
@@ -971,9 +994,25 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -982,7 +1021,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

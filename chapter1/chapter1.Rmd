@@ -1,7 +1,7 @@
 ---
 title: "ScPoEconometrics"
 subtitle: "Introduction"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "Sciences Po Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -36,6 +36,14 @@ knitr::opts_chunk$set(
   #fig.height = 5
 )
 
+# install.packages("ggthemes")
+# install.packages("maptools")
+# install.packages("pander")
+# install.packages("magrittr")
+# install.packages("knitr")
+# install.packages("devtools")
+# devtools::install_github("hadley/emo")
+
 # Load packages
 library(dplyr)
 library(magrittr)
@@ -47,18 +55,41 @@ library(knitr)
 ```
 
 
+# Welcome to Applied Data Analysis for Public Policy Studies
+
+--
+
+- This course will teach you the core tools of ***econometrics***.
+ 
+--
+
+- We will meet every Wednesday at XXX on Zoom. 
+
+--
+
+- You will meet with the TA, Florin Cogne, every two weeks to discuss the material and review problem sets.
+
+
+
+
 
 # Welcome to ScPoEconometrics!
 
 --
 
-- In this course you will learn the core tools of ***econometrics***.
+- This course builds on the (amazing) openSource lectures by the ScPo Econometrics team (Florian Oswald, Gustave Kenedi and Pierre Villedieu), available @ https://github.com/ScPoEcon/ScPoEconometrics.
  
 --
 
-- You will also learn to use the `R` programming language!
+- A book overview of the material is available at https://scpoecon.github.io/ScPoEconometrics/index.html.
 
 --
+
+- The goal of the course is to provide you with essential data analysis tools (a.k.a. ***econometrics***).
+
+--
+
+- We will learn these tools through example based on ***the programming language R***. 
 
 ## What is *econometrics*?
 

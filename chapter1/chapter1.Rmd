@@ -67,13 +67,17 @@ library(knitr)
 
 --
 
-- You will meet with the TA, Florin Cogne, every two weeks to discuss the material and review problem sets.
+- You will meet with the TA, Florin Cogne, every couple of weeks to discuss the material and review problem sets.
 
 
 
 
 
 # Welcome to ScPoEconometrics!
+
+--
+
+- We will learn these tools through example based on ***the programming language R***. 
 
 --
 
@@ -87,9 +91,7 @@ library(knitr)
 
 - The goal of the course is to provide you with essential data analysis tools (a.k.a. ***econometrics***).
 
---
 
-- We will learn these tools through example based on ***the programming language R***. 
 
 ## What is *econometrics*?
 
@@ -178,25 +180,25 @@ As in the acclaimed [Book of Why](https://www.amazon.fr/Book-Why-Science-Cause-E
 
 ## Grading
 
-1. There will be ***five quizzes*** on Moodle roughly every two weeks => 40%
+1. There will be ***periodic quizzes*** on Moodle roughly every two weeks => 10%
 
 --
 
-1. There will be ***two take home exams / case studies*** => 60%
+1. There will be ***two problem sets / case studies*** => 40%
 
 --
 
-1. There will be _no_ final exam `r emo::ji("sweat_smile")`.
+1. There will be ***a take home exam*** => 50%
 
 ---
 
 # Course Materials
 
-1. The [Book](https://scpoecon.github.io/ScPoEconometrics/)
+1. The [Book](https://michelefioretti.github.io/ScPoEconometrics/)
 
-1. The [Slides](https://github.com/ScPoEcon/ScPoEconometrics-Slides)
+1. The [Slides](https://michelefioretti.github.io/ScPoEconometrics-Slides/)
 
-1. The code repository for book and [R package](https://github.com/ScPoEcon/ScPoEconometrics)
+1. The code repository for the [R package](https://github.com/ScPoEcon/ScPoEconometrics)
 
 1. Quizzes on [Moodle](https://moodle.sciences-po.fr)
 
@@ -344,7 +346,7 @@ layout: true
 
 ---
 
-# Showcase #1: Spatial Data
+# Showcase #1: Spatial Data <!-- The shp fil is missing-->
 
 .pull-left[
 
@@ -375,7 +377,7 @@ tm_shape(iris_map) +
 
 .pull-right[
 
-* Can be improved but you get this with only __13 lines of code!__
+* Can be improved but you get this with only __14 lines of code!__
 
 ```{r, echo = FALSE}
 library(sf)
@@ -453,6 +455,8 @@ head(gapminder,n = 4)
 * Here we will only focus on the `dplyr` way:
 
 ```{r}
+  # to install the dplyr package: install.packages("dplyr")
+library(dplyr)
   # compute the required statistics
 gapminder_dplyr <- gapminder %>% 
   group_by(continent, year) %>% 
@@ -478,6 +482,9 @@ head(gapminder_dplyr, n = 5)
 * Nothing beats a picture, though:
 
 ```{r,eval = FALSE}
+  # to install the dplyr package: install.packages("ggplot2")
+library(ggplot2)
+  # create a plot
 ggplot(data = gapminder_dplyr, 
        mapping = aes(x = mean_lifeexp,
                      y = mean_gdppercap,
@@ -842,7 +849,7 @@ ncol(murders) # number of columns
     murders[murders$total > 500, c("state", "total")]
     ```
     
-* But there is a special function which looks nicer.
+* There is also a special function for subsetting data:
     ```{r}
     subset(murders, subset = total > 500, select = c("state", "total"))
     ```
@@ -886,9 +893,9 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 

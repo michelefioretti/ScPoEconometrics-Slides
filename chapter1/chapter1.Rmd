@@ -1,5 +1,5 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Introduction"
 author: "Michele Fioretti"
 date: "Sciences Po Paris </br> `r Sys.Date()`"
@@ -826,6 +826,11 @@ ncol(murders) # number of columns
 ---
 
 # Data on Gun Murders in the US
+
+* Let's ***View*** the data in a table format
+    ```{r, eval=F}
+    View(murders) # Open a data.frame/vector in an Excel style table (up to 50 columns)
+    ```
 
 * Let's look at the first rows of `murders`.
     ```{r}

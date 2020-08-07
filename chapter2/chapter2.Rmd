@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Summarising, Visualizing and Tidying Data"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -36,7 +36,7 @@ knitr::opts_chunk$set(
   #fig.height = 5
 )
 
-library(learnr) # this line needs to be run manually I have no idea why but otherwise I get this error message which I can't seem to solve...
+#library(learnr) # this line needs to be run manually I have no idea why but otherwise I get this error message which I can't seem to solve...
 # Quitting from lines 27-40 (chapter2.Rmd) 
 # Error: package or namespace load failed for 'learnr':
 #  .onAttach failed in attachNamespace() for 'learnr', details:
@@ -55,7 +55,7 @@ library(learnr) # this line needs to be run manually I have no idea why but othe
 --
 
 * Basic data wrangling:
-  - `str`, `names`, `nrow`, `ncol`
+  - `View`, `str`, `names`, `nrow`, `ncol`
   - *subsetting:* `murders[row condition, "column name"]`
   - *variable creation:* `murders$total_percap = (murders$total / murders$population) * 10000`
 
@@ -82,7 +82,7 @@ knitr::include_graphics("chapter2_files/figure-html/data_science_pipeline.png")
 
 * According a to [2014 NYTimes article](https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html), "data scientists [...] spend from ***50 percent to 80 percent of their time*** mired in this more mundane labor of collecting and preparing unruly digital data, before it can be explored for useful nuggets."
 
-* In the next two lectures you will learn to the basics of summarizing, visualising and tidying data
+* In the next two lectures you will learn the __basics__ of summarizing, visualising and tidying data
 
 ---
 
@@ -307,6 +307,73 @@ ggplot(data = data.frame(x = c(-5, 5)), aes(x)) +
 ]
 ---
 
+
+# Example: the Weight of Women and Men<sup>1</sup>
+
+.pull-left[
+* Men weight 65 kg and women 55 kg on average. The variance is 25.
+    ```{r, echo = TRUE}
+    # Generate a random dataset
+    set.seed(1234) # `set.seed` allows replicating random data
+    df <- data.frame(
+        sex=factor(rep(c("F", "M"), each=200)),
+        weight=round(c(rnorm(200, mean=55, sd=5), # ?rnorm | Note: sd = sqrt(variance)
+                       rnorm(200, mean=65, sd=5))))
+    ```
+
+
+* Plot the overall density
+    ````{r, eval=F, echo = TRUE}
+    ggplot(df, aes(x=weight)) + geom_density() + theme_bw() #white background
+    ```
+    
+* Plot separated densities
+    ````{r, eval=F, echo = TRUE}
+    # Change density plot line colors by groups
+    ggplot(df, aes(x=weight, color=sex)) + geom_density() + theme_bw() # White background
+    ```
+]
+
+--
+
+.pull-right[
+```{r,echo = FALSE,fig.height=2.5,message = FALSE,warning = FALSE}
+library(ggplot2)
+ggplot(df, aes(x=weight)) + 
+          geom_density() +
+          # Additional option 1: mean line
+          geom_vline(aes(xintercept=mean(weight)),
+                   color="blue", linetype="dashed", size=1) +
+          ggtitle("Overall density") +
+          theme_bw() # Additional option 2: white background
+```
+
+```{r,echo = FALSE,fig.height=3,message = FALSE,warning = FALSE}
+    library(plyr)
+    library(ggplot2)
+      mu <- ddply(df, "sex", summarise, grp.mean=mean(weight))
+  
+    # Change density plot line colors by groups
+    ggplot(df, aes(x=weight, color=sex)) +
+      geom_density()+
+      # Additional option 1: mean
+      geom_vline(data=mu, aes(xintercept=grp.mean, color=sex),
+                 linetype="dashed") + 
+      ggtitle("Density by sex") +
+      theme_bw() + # Additional option 2: white background
+      theme(legend.position="bottom") 
+    ```
+
+.footnote[
+[1]: This example is taken from [sthda.com](http://www.sthda.com/english/wiki/ggplot2-density-plot-quick-start-guide-r-software-and-data-visualization).  
+]
+
+]
+
+---
+
+
+
 # The `table` function
 
 * `table(x)` is a useful function that counts the occurence of each unique value in `x`:
@@ -337,7 +404,7 @@ ggplot(data = data.frame(x = c(-5, 5)), aes(x)) +
     prop.table(table(gapminder_2015$fertility_above_2,gapminder_2015$continent), margin = 2) 
     ```
 
-* `r emo::ji("warning")` To obtain `table`s or `crosstable`s with `NA`s, use the `useNA = "always"` or `useNA = "ifany"`
+* `r emo::ji("warning")` To obtain `table`s with `NA`s, use the `useNA = "always"` or `useNA = "ifany"`
 ---
 
 layout: false
@@ -720,8 +787,8 @@ ScPoEconometrics::runTutorial('chapter2-script')
 ---
 
 # How are x and y related? Covariance and Correlation
-
-* [This](https://scpoecon.github.io/ScPoEconometrics/sum.html#summarize-two) is the relevant section in the book about Covariance.
+<!-- Note: update the link below -->
+* [This](https://scpoecon.github.io/ScPoEconometrics/sum.html#summarize-two) is the relevant section in the book about Covariance. 
 
 .pull-left[
 ```{r x-y-corr,echo=FALSE,message=FALSE,warning=FALSE,fig.align='center',fig.height = 5,fig.width=6}
@@ -839,7 +906,7 @@ library(dslabs)
 library(dplyr)
 data(polls_us_election_2016) # this data is from fivethirtyeight.com
 polls_us_election_2016 <- as_tibble(polls_us_election_2016)
-head(polls_us_election_2016[,1:6]) # show first 6 lines of first 6 variables
+head(polls_us_election_2016[,1:6], n = 6) # show first 6 lines of first 6 variables
 ```
 
 `r emo::ji("rotating_light")` This is a `tibble` (more informative than `data.frame`)
@@ -930,6 +997,35 @@ class: inverse
 1. Which polls (i) did not have missing poll data for Johnson, (ii) had a combined raw poll vote share for Trump and Clinton greater than 95% _and_ (iii) had a sample size greater than 1,000.?
 
 1. Which polls (i) did not poll for vote intentions for Johnson, (ii) had a difference in raw poll vote shares between Trump and Clinton greater than 5, and (iii) were done in the state of Iowa?
+
+
+```{r, echo = FALSE, eval = FALSE}
+# ANSWERS
+
+# Question 1
+  df1 <- filter(polls_us_election_2016, rawpoll_clinton <= rawpoll_trump)
+  dim(df1)
+
+# Question 2
+  df2 <- filter(polls_us_election_2016, is.na(grade) == TRUE)
+  dim(df2)
+  
+# Question 3
+  df3 <- filter(polls_us_election_2016, pollster %in% c("American Strategies", "GfK Group", "Merrill Poll"), samplesize > 1000)
+
+# Question 4  
+  polls_us_election_2016_mutated4 <- mutate(polls_us_election_2016, rawpoll_clinton_trump = rawpoll_clinton + rawpoll_trump)
+  dim(polls_us_election_2016)
+  dim(polls_us_election_2016_mutated4 )   # we have a column more now!
+  df4 <- filter(polls_us_election_2016_mutated4, is.na(rawpoll_johnson) == TRUE,  rawpoll_clinton_trump > 0.95 )
+
+# Question 5
+  polls_us_election_2016_mutated5 <- mutate(polls_us_election_2016, rawpoll_trump_clinton_diff = rawpoll_trump - rawpoll_clinton)
+  dim(polls_us_election_2016)
+  dim(polls_us_election_2016_mutated5 )   # we have a column more now!
+  df5 <- filter(polls_us_election_2016_mutated5, is.na(rawpoll_johnson) == TRUE,  rawpoll_trump_clinton_diff > 5 )
+  
+```
 
 ---
 
@@ -1022,9 +1118,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape chapter2.html chapter2.pdf --chrome-arg=--disable-web-security")
+```

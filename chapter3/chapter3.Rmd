@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Simple Linear Regression"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -93,7 +93,7 @@ class:: inverse
 
   * What is the unit of observations, i.e. what does each row correspond to?
   * How many observations are there?
-  * What variables do we have? View the dataset to see what the variables correspond to.
+  * What variables do we have? `View` the dataset to see what the variables correspond to.
   * What do the variables `avgmath` and `avgverb` correspond to?
   * Use the `skim` function from the `skimr` package to obtain common summary statistics for the variables `classize`, `avgmath` and `avgverb`.  
   Hint: use `dplyr` to `select` the variables and then simply pipe (`%>%`) `skim()`.
@@ -105,6 +105,37 @@ class:: inverse
 ```{r, echo=FALSE}
 # import data
 grades = read_dta(file = "https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1")
+```
+
+```{r, echo = FALSE, eval = FALSE}
+# ANSWERS
+
+# Question 1
+  library("haven")
+  grades = read_dta(file = "https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1")
+  head(grades)
+
+# Question 2
+  # a) the unit of observation is the class-by-school
+  # b) 2019 observations
+  dim(grades)
+  # c) You see that each variable is labeled in the `View` table
+  View(grades)
+  # d) avgmath = "average composite math score in class",
+  #    avgverb = "average composite verbal score in class"
+  # e) 
+  library(skimr)
+  grades %>% 
+    select(classize, avgmath, avgverb) %>%
+    skim()
+  
+# Question 3
+  # what do you think?
+
+# Question 4
+  grades %>% 
+    select(classize, avgmath, avgverb) %>% 
+    cor()
 ```
 
 ---
@@ -195,10 +226,43 @@ class:: inverse
 1. Compute the correlation between class size and the new aggreagated math and verbal scores variables. Why is the (linear) association so much stronger?
 
 ```{r, echo = FALSE}
-grades_avg_cs = grades %>%
-  group_by(classize) %>%
-  summarise(avgmath_cs = mean(avgmath),
-            avgverb_cs = mean(avgverb))
+
+# Question 1
+  grades_avg_cs = grades %>%
+    group_by(classize) %>%
+    summarise(avgmath_cs = mean(avgmath),
+              avgverb_cs = mean(avgverb))
+
+# Question 2
+  # g_math_cs = ggplot(grades_avg_cs, aes(x = classize, y = avgmath_cs)) + 
+  #     geom_point(size = 2) +
+  #     xlim(0,45) +
+  #     ylim(0, 100) +
+  #     labs(
+  #       x = "Class size",
+  #       y = "Average score",
+  #       title = "Mathematics") +
+  #     theme_bw(base_size = 20)
+  # g_math_cs
+  # 
+  # g_verb_cs = ggplot(grades_avg_cs, aes(x = classize, y = avgverb_cs)) + 
+  #     geom_point(size = 2) +
+  #     xlim(0,45) +
+  #     ylim(0, 100) +
+  #     labs(x = "Class size",
+  #          y = "Average score",
+  #          title = "Reading") +
+  #     theme_bw(base_size = 20)
+  # g_verb_cs
+
+# Question 3 (don't visualize)
+  # grades_avg_cs %>% 
+  #   select(classize, avgmath_cs, avgverb_cs) %>% 
+  #   cor
+  #            classize avgmath_cs avgverb_cs
+  # classize   1.0000000  0.5244569  0.3420341
+  # avgmath_cs 0.5244569  1.0000000  0.6428880
+  # avgverb_cs 0.3420341  0.6428880  1.0000000
 ```
 
 ---
@@ -377,7 +441,7 @@ plot_ex + geom_line(color = "#d90502")
 
 * If all the data points were __on__ the line then $\widehat{y}_i = y_i$.
 
-* However, since in most cases the *dependent variable* $(y)$ is not *only* explained by the chosen *independent variable* $(x)$, $\widehat{y}_i \neq y_i$, i.e. we make an __error__.  
+* However, since in most cases the *dependent variable* $(y)$ is not ***only*** explained by the chosen *independent variable* $(x)$, $\widehat{y}_i \neq y_i$, i.e. we make an __error__.  
 This __error__ is called the __error term__.
 
 --
@@ -395,8 +459,9 @@ This __error__ is called the __error term__.
 --
 
 * **Goals**
-  * Find the values for $b_0$ and $b_1$ that **make the errors as small as possible**,
-  * Check whether these values **give a reasonable description of the data**.
+  1. Find the values for $b_0$ and $b_1$ that **make the errors as small as possible**,
+  
+  1. Check whether these values **give a reasonable description of the data**.
 
 
 ---
@@ -485,6 +550,15 @@ library(ScPoEconometrics) # load our library
 launchApp('reg_simple_arrows')
 aboutApp('reg_simple_arrows') # explainer about app
 ```
+
+```{r,eval=FALSE,echo=FALSE}
+ # the best line is y = 1.5 - 0.5 x
+ # Try to find the true line!
+ # It’s at a=1.5,b=−0.5
+ # Compare the sum of errors at the true line to the sum of errors when you set b=−0.51! Which error is smaller?
+ # How is the same comparison for sum of the absolute values of the errors? Any Better?
+```
+
 
 ---
 
@@ -728,9 +802,36 @@ class: inverse
 3. What is the predicted average verbal score when the class size is equal to 30 students?
 
 
+```{R, eval=FALSE,echo=FALSE}
+# Question 1
+  x <- grades_avg_cs$classize
+  y <- grades_avg_cs$avgmath_cs
+  beta_1 <- cov(x,y)/var(x)
+  beta_0 <- mean(y) - beta_1 * mean(x)
+  
+# Question 2
+  reg <- lm(y ~ x)
+  reg$coefficients
+  
+# Question 3 
+  # what do you think? YES!
+  
+# Question 4
+  hat_y_x_0 <- beta_0 + beta_1 * 0
+  hat_y_x_0
+  # Does it make sense? What's the average grade in a class with no students?
+  
+# Question 5
+  hat_y_x_30 <- beta_0 + beta_1 * 30
+  hat_y_x_30
+
+```
+
 ---
 
 # OLS variations / restrictions
+
+<!-- Note: change the link -->
 
 * All are described [in the book](https://scpoecon.github.io/ScPoEconometrics/linreg.html#OLS). Optional `r emo::ji("nerd_face")`.
 
@@ -871,7 +972,7 @@ mtcars %>% ggplot(aes(x = hp, y = mpg)) +
 
 ---
 
-# Analysis of Variance
+# Analysis of Variance (ANOVA)
 
 * Remember that $y_i = \widehat{y}_i + e_i$.
 
@@ -883,6 +984,10 @@ mtcars %>% ggplot(aes(x = hp, y = mpg)) +
   * $Cov(\hat{y},e)=0$
 
 * __Total variation (SST) = Model explained (SSE) + Unexplained (SSR)__
+
+  * SST = sum of squares total
+  * SSE = sum of squares error
+  * SSE = sum of squares regresion
 
 ---
 
@@ -926,6 +1031,73 @@ class: inverse
 
 1. Repeat steps 1 and 2 for `avgverb_cs`. For which exam does the variance in class size explain more of the variance in students' scores?
 
+```{r,eval=FALSE,echo=FALSE}
+  x <- grades_avg_cs$classize
+  y <- grades_avg_cs$avgmath_cs 
+  
+# Question 1
+  math_reg <- lm(y ~ x)
+  math_reg
+  
+# Question 2
+  summary(math_reg)
+  
+# Question 3
+  cor(x,y) #--> cor(x,y) = r = sqrt(R^2)
+  # Check that this is true!
+  round(sqrt(summary(math_reg)$r.squared), 4) == round(cor(x,y), 4)
+
+# Question 4
+  # as by the question using the `broom` package
+  install.packages("broom") # install the package
+  library(broom)            # load the package
+  
+  math_reg_broomed <- broom::augment(math_reg)
+  
+  math_reg_broomed # math_reg is a tibble containing lots of interesting info
+  
+  var(math_reg_broomed$.fitted) / var(math_reg_broomed$y) # =  0.275055
+  1 - var(math_reg_broomed$.resid) / var(math_reg_broomed$y) # =  0.275055
+  
+  # alternative 1
+    # computing them by hand
+    beta_1 <- cov(x,y)/var(x)
+    beta_0 <- mean(y) - beta_1 * mean(x)
+    fitted <- beta_0 + beta_1 * x
+    residual <- y - fitted
+    var(fitted)/var(y)  # = 0.275055
+    1 - var(residual)/var(y) # = 0.275055
+  # alternative 2
+    # `lm` objects are `list`s, which contains other objects. 
+    # we can find both `fitted.values`, `residuals` and the `y` (as well as `x`) inside an `lm` object
+    var(math_reg$fitted.values) / var(math_reg$model$y)  # = 0.275055
+    1 - var(math_reg$residuals) / var(math_reg$model$y)  # = 0.275055
+  
+  # alternative 3
+    # using the `fitted(.)` and `residuals(.)` functions
+    ?fitted
+    ?residuals
+    var(fitted(math_reg)) / var(math_reg$model$y) # = 0.275055
+    1 - var(residuals(math_reg)) / var(math_reg$model$y) # = 0.275055
+  
+ # Question 5  
+    y_verb <- grades_avg_cs$avgverb_cs 
+    
+    verb_reg <- lm(y_verb ~ x)
+    # compare math_reg with verb_reg: 
+        # a) which regression courve is flatter? 
+        # b) what's the average verbal score in a class with no students?
+    summary(math_reg)
+    summary(verb_reg)
+    
+    # get the R^2
+    summary(verb_reg)$r.squared
+    
+    # which regression "fits the data better"?
+    summary(verb_reg)$r.squared > summary(math_reg)$r.squared
+  
+```
+
 ---
 
 
@@ -939,8 +1111,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
+
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape chapter3.html chapter3.pdf --chrome-arg=--disable-web-security")
+```

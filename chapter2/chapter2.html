@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
-    <title>ScPoEconometrics</title>
+    <title>Applied Data Analysis for Public Policy Studies</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald, Gustave Kenedi and Pierre Villedieu" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
     <link rel="stylesheet" href="../css/scpo.css" type="text/css" />
@@ -13,10 +13,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ScPoEconometrics
+# Applied Data Analysis for Public Policy Studies
 ## Summarising, Visualizing and Tidying Data
-### Florian Oswald, Gustave Kenedi and Pierre Villedieu
-### SciencesPo Paris </br> 2020-02-11
+### Michele Fioretti
+### SciencesPo Paris </br> 2020-08-06
 
 ---
 
@@ -40,7 +40,7 @@ layout: true
 --
 
 * Basic data wrangling:
-  - `str`, `names`, `nrow`, `ncol`
+  - `View`, `str`, `names`, `nrow`, `ncol`
   - *subsetting:* `murders[row condition, "column name"]`
   - *variable creation:* `murders$total_percap = (murders$total / murders$population) * 10000`
 
@@ -65,7 +65,7 @@ layout: true
 
 * According a to [2014 NYTimes article](https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html), "data scientists [...] spend from ***50 percent to 80 percent of their time*** mired in this more mundane labor of collecting and preparing unruly digital data, before it can be explored for useful nuggets."
 
-* In the next two lectures you will learn to the basics of summarizing, visualising and tidying data
+* In the next two lectures you will learn the __basics__ of summarizing, visualising and tidying data
 
 ---
 
@@ -87,10 +87,14 @@ layout: true
     ```
     
     ```
-    ##   country year infant_mortality life_expectancy fertility population         gdp continent          region
-    ## 1 Albania 1960            115.4           62.87      6.19    1636054          NA    Europe Southern Europe
-    ## 2 Algeria 1960            148.2           47.50      7.65   11124892 13828152297    Africa Northern Africa
-    ## 3  Angola 1960            208.0           35.98      7.32    5270844          NA    Africa   Middle Africa
+    ##   country year infant_mortality life_expectancy fertility population
+    ## 1 Albania 1960            115.4           62.87      6.19    1636054
+    ## 2 Algeria 1960            148.2           47.50      7.65   11124892
+    ## 3  Angola 1960            208.0           35.98      7.32    5270844
+    ##           gdp continent          region
+    ## 1          NA    Europe Southern Europe
+    ## 2 13828152297    Africa Northern Africa
+    ## 3          NA    Africa   Middle Africa
     ```
 
 ---
@@ -103,7 +107,8 @@ layout: true
     ```
     
     ```
-    ## [1] "country"          "year"             "infant_mortality" "life_expectancy"  "fertility"        "population"       "gdp"              "continent"       
+    ## [1] "country"          "year"             "infant_mortality" "life_expectancy" 
+    ## [5] "fertility"        "population"       "gdp"              "continent"       
     ## [9] "region"
     ```
 
@@ -349,6 +354,53 @@ median(x)
 ]
 ---
 
+
+# Example: the Weight of Women and Men&lt;sup&gt;1&lt;/sup&gt;
+
+.pull-left[
+* Men weight 65 kg and women 55 kg on average. The variance is 25.
+    
+    ```r
+    # Generate a random dataset
+    set.seed(1234) # `set.seed` allows replicating random data
+    df &lt;- data.frame(
+        sex=factor(rep(c("F", "M"), each=200)),
+        weight=round(c(rnorm(200, mean=55, sd=5), # ?rnorm | Note: sd = sqrt(variance)
+                       rnorm(200, mean=65, sd=5))))
+    ```
+
+
+* Plot the overall density
+    
+    ```r
+    ggplot(df, aes(x=weight)) + geom_density() + theme_bw() #white background
+    ```
+    
+* Plot separated densities
+    
+    ```r
+    # Change density plot line colors by groups
+    ggplot(df, aes(x=weight, color=sex)) + geom_density() + theme_bw() # White background
+    ```
+]
+
+--
+
+.pull-right[
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+
+.footnote[
+[1]: This example is taken from [sthda.com](http://www.sthda.com/english/wiki/ggplot2-density-plot-quick-start-guide-r-software-and-data-visualization).  
+]
+
+]
+
+---
+
+
+
 # The `table` function
 
 * `table(x)` is a useful function that counts the occurence of each unique value in `x`:
@@ -369,14 +421,22 @@ median(x)
     
     ```
     ## 
-    ## Australia and New Zealand                 Caribbean           Central America              Central Asia            Eastern Africa              Eastern Asia 
-    ##                       114                       741                       456                       285                       912                       342 
-    ##            Eastern Europe                 Melanesia                Micronesia             Middle Africa           Northern Africa          Northern America 
-    ##                       570                       285                       114                       456                       342                       171 
-    ##           Northern Europe                 Polynesia             South America        South-Eastern Asia           Southern Africa             Southern Asia 
-    ##                       570                       171                       684                       570                       285                       456 
-    ##           Southern Europe            Western Africa              Western Asia            Western Europe 
-    ##                       684                       912                      1026                       399
+    ## Australia and New Zealand                 Caribbean           Central America 
+    ##                       114                       741                       456 
+    ##              Central Asia            Eastern Africa              Eastern Asia 
+    ##                       285                       912                       342 
+    ##            Eastern Europe                 Melanesia                Micronesia 
+    ##                       570                       285                       114 
+    ##             Middle Africa           Northern Africa          Northern America 
+    ##                       456                       342                       171 
+    ##           Northern Europe                 Polynesia             South America 
+    ##                       570                       171                       684 
+    ##        South-Eastern Asia           Southern Africa             Southern Asia 
+    ##                       570                       285                       456 
+    ##           Southern Europe            Western Africa              Western Asia 
+    ##                       684                       912                      1026 
+    ##            Western Europe 
+    ##                       399
     ```
 
 ---
@@ -410,7 +470,7 @@ median(x)
     prop.table(table(gapminder_2015$fertility_above_2,gapminder_2015$continent), margin = 2) 
     ```
 
-* ⚠️ To obtain `table`s or `crosstable`s with `NA`s, use the `useNA = "always"` or `useNA = "ifany"`
+* ⚠️ To obtain `table`s with `NA`s, use the `useNA = "always"` or `useNA = "ifany"`
 ---
 
 layout: false
@@ -444,7 +504,7 @@ gapminder_2015 &lt;- gapminder[gapminder$year == 2015,]
 hist(gapminder_2015$life_expectancy)
 ```
 
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-26-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ]
@@ -473,7 +533,7 @@ hist(gapminder_2015$life_expectancy,
 ]
 
 .pull-right[
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-29-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -516,7 +576,7 @@ boxplot(life_expectancy ~ continent,
 ]
 
 .pull-right[
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-27-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-32-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -560,7 +620,7 @@ plot(fertility ~ infant_mortality,
     las = 1)
 ```
 
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-29-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-34-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -618,7 +678,7 @@ ggplot(gapminder_2015,
 ]
 
 .pull-right[
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-32-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-37-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -644,7 +704,7 @@ ggplot(gapminder_2015,
 ]
 
 .pull-right[
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-34-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-39-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -671,7 +731,7 @@ ggplot(gapminder_2015,
 ]
 
 .pull-right[
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-36-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-41-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -693,7 +753,7 @@ ggplot(gapminder_2015,
 ]
 
 .pull-right[
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-38-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-43-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -719,7 +779,7 @@ ggplot(gapminder_2015,
 ]
 
 .pull-right[
-&lt;img src="chapter2_files/figure-html/unnamed-chunk-40-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter2_files/figure-html/unnamed-chunk-45-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 
@@ -754,8 +814,8 @@ ScPoEconometrics::runTutorial('chapter2-script')
 ---
 
 # How are x and y related? Covariance and Correlation
-
-* [This](https://scpoecon.github.io/ScPoEconometrics/sum.html#summarize-two) is the relevant section in the book about Covariance.
+&lt;!-- Note: update the link below --&gt;
+* [This](https://scpoecon.github.io/ScPoEconometrics/sum.html#summarize-two) is the relevant section in the book about Covariance. 
 
 .pull-left[
 &lt;img src="chapter2_files/figure-html/x-y-corr-1.svg" style="display: block; margin: auto;" /&gt;
@@ -870,19 +930,19 @@ library(dslabs)
 library(dplyr)
 data(polls_us_election_2016) # this data is from fivethirtyeight.com
 polls_us_election_2016 &lt;- as_tibble(polls_us_election_2016)
-head(polls_us_election_2016[,1:6]) # show first 6 lines of first 6 variables
+head(polls_us_election_2016[,1:6], n = 6) # show first 6 lines of first 6 variables
 ```
 
 ```
 ## # A tibble: 6 x 6
-##   state startdate  enddate    pollster                                                   grade samplesize
-##   &lt;fct&gt; &lt;date&gt;     &lt;date&gt;     &lt;fct&gt;                                                      &lt;fct&gt;      &lt;int&gt;
-## 1 U.S.  2016-11-03 2016-11-06 ABC News/Washington Post                                   A+          2220
-## 2 U.S.  2016-11-01 2016-11-07 Google Consumer Surveys                                    B          26574
-## 3 U.S.  2016-11-02 2016-11-06 Ipsos                                                      A-          2195
-## 4 U.S.  2016-11-04 2016-11-07 YouGov                                                     B           3677
-## 5 U.S.  2016-11-03 2016-11-06 Gravis Marketing                                           B-         16639
-## 6 U.S.  2016-11-03 2016-11-06 Fox News/Anderson Robbins Research/Shaw &amp; Company Research A           1295
+##   state startdate  enddate    pollster                          grade samplesize
+##   &lt;fct&gt; &lt;date&gt;     &lt;date&gt;     &lt;fct&gt;                             &lt;fct&gt;      &lt;int&gt;
+## 1 U.S.  2016-11-03 2016-11-06 ABC News/Washington Post          A+          2220
+## 2 U.S.  2016-11-01 2016-11-07 Google Consumer Surveys           B          26574
+## 3 U.S.  2016-11-02 2016-11-06 Ipsos                             A-          2195
+## 4 U.S.  2016-11-04 2016-11-07 YouGov                            B           3677
+## 5 U.S.  2016-11-03 2016-11-06 Gravis Marketing                  B-         16639
+## 6 U.S.  2016-11-03 2016-11-06 Fox News/Anderson Robbins Resear… A           1295
 ```
 
 🚨 This is a `tibble` (more informative than `data.frame`)
@@ -905,10 +965,12 @@ What variables does this dataset contain?
     
     ```
     ## # A tibble: 1 x 15
-    ##   state startdate  enddate    pollster grade samplesize population rawpoll_clinton rawpoll_trump rawpoll_johnson rawpoll_mcmullin adjpoll_clinton adjpoll_trump
-    ##   &lt;fct&gt; &lt;date&gt;     &lt;date&gt;     &lt;fct&gt;    &lt;fct&gt;      &lt;int&gt; &lt;chr&gt;                &lt;dbl&gt;         &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;         &lt;dbl&gt;
-    ## 1 Indi… 2016-04-26 2016-04-28 Marist … A           2149 rv                      41            48              NA               NA            37.9          51.7
-    ## # … with 2 more variables: adjpoll_johnson &lt;dbl&gt;, adjpoll_mcmullin &lt;dbl&gt;
+    ##   state startdate  enddate    pollster grade samplesize population
+    ##   &lt;fct&gt; &lt;date&gt;     &lt;date&gt;     &lt;fct&gt;    &lt;fct&gt;      &lt;int&gt; &lt;chr&gt;     
+    ## 1 Indi… 2016-04-26 2016-04-28 Marist … A           2149 rv        
+    ## # … with 8 more variables: rawpoll_clinton &lt;dbl&gt;, rawpoll_trump &lt;dbl&gt;,
+    ## #   rawpoll_johnson &lt;dbl&gt;, rawpoll_mcmullin &lt;dbl&gt;, adjpoll_clinton &lt;dbl&gt;,
+    ## #   adjpoll_trump &lt;dbl&gt;, adjpoll_johnson &lt;dbl&gt;, adjpoll_mcmullin &lt;dbl&gt;
     ```
    
 ---
@@ -1000,6 +1062,9 @@ class: inverse
 
 1. Which polls (i) did not poll for vote intentions for Johnson, (ii) had a difference in raw poll vote shares between Trump and Clinton greater than 5, and (iii) were done in the state of Iowa?
 
+
+
+
 ---
 
 # Split-Apply-Combine
@@ -1033,20 +1098,8 @@ class: inverse
     ```
     
     ```
-    ## # A tibble: 11 x 2
-    ##    grade mean_vote_clinton
-    ##    &lt;fct&gt;             &lt;dbl&gt;
-    ##  1 D                  46.7
-    ##  2 C-                 43.2
-    ##  3 C                  41.8
-    ##  4 C+                 44.2
-    ##  5 B-                 43.9
-    ##  6 B                  37.3
-    ##  7 B+                 44.1
-    ##  8 A-                 43.0
-    ##  9 A                  45.3
-    ## 10 A+                 45.8
-    ## 11 &lt;NA&gt;               43.2
+    ##   mean_vote_clinton
+    ## 1          41.99086
     ```
 ]
 
@@ -1122,9 +1175,9 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| &lt;a href="mailto:florian.oswald@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | florian.oswald@sciencespo.fr       |
-| &lt;a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
-| &lt;a href="https://scpoecon.github.io/ScPoEconometrics"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
+| &lt;a href="mailto:michele.fioretti@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | michele.fioretti@sciencespo.fr       |
+| &lt;a href="https://github.com/michelefioretti/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
+| &lt;a href="https://michelefioretti.github.io/ScPoEconometrics/"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
 | &lt;a href="http://twitter.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                         |
 | &lt;a href="http://github.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-github fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                       |
     </textarea>
@@ -1176,6 +1229,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -1193,17 +1272,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

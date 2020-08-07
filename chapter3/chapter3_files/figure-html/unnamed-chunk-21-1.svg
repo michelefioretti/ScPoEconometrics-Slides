@@ -127,13 +127,10 @@
   <path d="M 681 33.972656 L 684 33.972656 L 684 313.839844 L 681 313.839844 Z M 681 33.972656 "/>
 </clipPath>
 <clipPath id="clip20">
-  <path d="M 59.066406 173 L 712.03125 173 L 712.03125 175 L 59.066406 175 Z M 59.066406 173 "/>
-</clipPath>
-<clipPath id="clip21">
   <path d="M 59.066406 33.972656 L 712.03125 33.972656 L 712.03125 313.839844 L 59.066406 313.839844 Z M 59.066406 33.972656 "/>
 </clipPath>
 </defs>
-<g id="surface829">
+<g id="surface179">
 <rect x="0" y="0" width="720" height="360" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <rect x="0" y="0" width="720" height="360" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <path style="fill:none;stroke-width:1.551969;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:10;" d="M 0 360 L 720 360 L 720 0 L 0 0 Z M 0 360 "/>
@@ -201,9 +198,6 @@
 <path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.708661;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 565.582031 97.578125 C 565.582031 100.183594 561.675781 100.183594 561.675781 97.578125 C 561.675781 94.972656 565.582031 94.972656 565.582031 97.578125 "/>
 <path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.708661;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 624.945312 123.019531 C 624.945312 125.628906 621.035156 125.628906 621.035156 123.019531 C 621.035156 120.414062 624.945312 120.414062 624.945312 123.019531 "/>
 <g clip-path="url(#clip20)" clip-rule="nonzero">
-<path style="fill:none;stroke-width:1.066978;stroke-linecap:butt;stroke-linejoin:round;stroke:rgb(85.098039%,1.960784%,0.784314%);stroke-opacity:1;stroke-miterlimit:10;" d="M 59.066406 173.90625 L 712.03125 173.90625 "/>
-</g>
-<g clip-path="url(#clip21)" clip-rule="nonzero">
 <path style="fill:none;stroke-width:1.551969;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(20%,20%,20%);stroke-opacity:1;stroke-miterlimit:10;" d="M 59.066406 313.839844 L 712.03125 313.839844 L 712.03125 33.972656 L 59.066406 33.972656 Z M 59.066406 313.839844 "/>
 </g>
 <g style="fill:rgb(30.196078%,30.196078%,30.196078%);fill-opacity:1;">

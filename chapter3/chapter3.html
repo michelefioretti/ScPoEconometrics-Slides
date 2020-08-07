@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
-    <title>ScPoEconometrics</title>
+    <title>Applied Data Analysis for Public Policy Studies</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald, Gustave Kenedi and Pierre Villedieu" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="libs/kePrint/kePrint.js"></script>
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
@@ -14,10 +14,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ScPoEconometrics
+# Applied Data Analysis for Public Policy Studies
 ## Simple Linear Regression
-### Florian Oswald, Gustave Kenedi and Pierre Villedieu
-### SciencesPo Paris </br> 2020-02-26
+### Michele Fioretti
+### SciencesPo Paris </br> 2020-08-07
 
 ---
 
@@ -78,7 +78,7 @@ class:: inverse
 
   * What is the unit of observations, i.e. what does each row correspond to?
   * How many observations are there?
-  * What variables do we have? View the dataset to see what the variables correspond to.
+  * What variables do we have? `View` the dataset to see what the variables correspond to.
   * What do the variables `avgmath` and `avgverb` correspond to?
   * Use the `skim` function from the `skimr` package to obtain common summary statistics for the variables `classize`, `avgmath` and `avgverb`.  
   Hint: use `dplyr` to `select` the variables and then simply pipe (`%&gt;%`) `skim()`.
@@ -89,16 +89,18 @@ class:: inverse
 
 
 
+
+
 ---
 
 # Class size and student performance: Scatter plot
 
 .pull-left[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 --
@@ -110,11 +112,11 @@ class:: inverse
 # Class size and student performance: `jitter` scatter plot 
 
 .pull-left[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 --
@@ -141,11 +143,11 @@ class:: inverse
 # Class size and student performance: Binned scatter plot 
 
 .pull-left[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -154,7 +156,7 @@ class:: inverse
 
 * We'll first focus on the mathematics scores and for visual simplicity we'll zoom in
 
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -165,7 +167,7 @@ How to visually summarize the relationship: **a line through the scatter plot**
 --
 
 .left-wide[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto auto auto 0;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto auto auto 0;" /&gt;
 ]
 
 --
@@ -186,7 +188,7 @@ How to visually summarize the relationship: **a line through the scatter plot**
 How to visually summarize the relationship: **a line through the scatter plot**
 
 .left-wide[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto auto auto 0;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto auto auto 0;" /&gt;
 ]
 
 --
@@ -244,14 +246,6 @@ Let's formalise a bit what we are doing so far.
 
 --
 
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
-
----
-
-# Simple Linear Regression: Error term
-
-* If all the data points were __on__ the line then `\(\widehat{y}_i = y_i\)`.
-
 &lt;img src="chapter3_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
@@ -260,7 +254,15 @@ Let's formalise a bit what we are doing so far.
 
 * If all the data points were __on__ the line then `\(\widehat{y}_i = y_i\)`.
 
-* However, since in most cases the *dependent variable* `\((y)\)` is not *only* explained by the chosen *independent variable* `\((x)\)`, `\(\widehat{y}_i \neq y_i\)`, i.e. we make an __error__.  
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Simple Linear Regression: Error term
+
+* If all the data points were __on__ the line then `\(\widehat{y}_i = y_i\)`.
+
+* However, since in most cases the *dependent variable* `\((y)\)` is not ***only*** explained by the chosen *independent variable* `\((x)\)`, `\(\widehat{y}_i \neq y_i\)`, i.e. we make an __error__.  
 This __error__ is called the __error term__.
 
 --
@@ -278,15 +280,10 @@ This __error__ is called the __error term__.
 --
 
 * **Goals**
-  * Find the values for `\(b_0\)` and `\(b_1\)` that **make the errors as small as possible**,
-  * Check whether these values **give a reasonable description of the data**.
+  1. Find the values for `\(b_0\)` and `\(b_1\)` that **make the errors as small as possible**,
+  
+  1. Check whether these values **give a reasonable description of the data**.
 
-
----
-
-# Simple Linear Regression: Graphically
-
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -314,6 +311,12 @@ This __error__ is called the __error term__.
 
 ---
 
+# Simple Linear Regression: Graphically
+
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
 class: inverse
 
 # App Time! (5 minutes)
@@ -330,24 +333,27 @@ launchApp('reg_simple_arrows')
 aboutApp('reg_simple_arrows') # explainer about app
 ```
 
----
 
-# Minimizing the Absolute Value of the Sum of Errors
 
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Minimizing the Absolute Value of the Sum of Errors
 
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Minimizing the Absolute Value of the Sum of Errors
+
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Minimizing the Absolute Value of the Sum of Errors
 
 .pull-left[
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -371,7 +377,7 @@ aboutApp('reg_simple_arrows') # explainer about app
 
 --
 
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-25-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -382,7 +388,7 @@ aboutApp('reg_simple_arrows') # explainer about app
 
 * Choose `\((b_0,b_1)\)` such that `\(\sum_{i = 1}^N e_1^2 + \dots + e_N^2\)` is **as small as possible**.
 
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-26-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -549,9 +555,13 @@ class: inverse
 3. What is the predicted average verbal score when the class size is equal to 30 students?
 
 
+
+
 ---
 
 # OLS variations / restrictions
+
+&lt;!-- Note: change the link --&gt;
 
 * All are described [in the book](https://scpoecon.github.io/ScPoEconometrics/linreg.html#OLS). Optional 🤓.
 
@@ -615,7 +625,7 @@ Standardized Regression | `launchApp('reg_standardized')`
 
 .left-wide[
 
-&lt;img src="chapter3_files/figure-html/unnamed-chunk-30-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter3_files/figure-html/unnamed-chunk-33-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 --
@@ -699,6 +709,10 @@ Standardized Regression | `launchApp('reg_standardized')`
 
 * __Total variation (SST) = Model explained (SSE) + Unexplained (SSR)__
 
+  * SST = sum of squares total
+  * SSE = sum of squares error
+  * SSE = sum of squares regresion
+
 ---
 
 # Goodness of Fit
@@ -741,6 +755,8 @@ class: inverse
 
 1. Repeat steps 1 and 2 for `avgverb_cs`. For which exam does the variance in class size explain more of the variance in students' scores?
 
+
+
 ---
 
 
@@ -754,9 +770,9 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| &lt;a href="mailto:florian.oswald@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | florian.oswald@sciencespo.fr       |
-| &lt;a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
-| &lt;a href="https://scpoecon.github.io/ScPoEconometrics"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
+| &lt;a href="mailto:michele.fioretti@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | michele.fioretti@sciencespo.fr       |
+| &lt;a href="https://github.com/michelefioretti/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
+| &lt;a href="https://michelefioretti.github.io/ScPoEconometrics/"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
 | &lt;a href="http://twitter.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                         |
 | &lt;a href="http://github.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-github fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                       |
     </textarea>
@@ -808,6 +824,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -825,17 +867,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

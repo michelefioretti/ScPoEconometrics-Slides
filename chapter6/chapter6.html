@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
-    <title>ScPoEconometrics</title>
+    <title>Applied Data Analysis for Public Policy Studies</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald, Gustave Kenedi and Pierre Villedieu" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
     <link rel="stylesheet" href="../css/scpo.css" type="text/css" />
@@ -13,10 +13,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ScPoEconometrics
+# Applied Data Analysis for Public Policy Studies
 ## Sampling
-### Florian Oswald, Gustave Kenedi and Pierre Villedieu
-### SciencesPo Paris </br> 2020-03-31
+### Michele Fioretti
+### SciencesPo Paris </br> 2020-08-10
 
 ---
 
@@ -29,7 +29,7 @@ layout: true
 
 
 
-# Recap from last week
+# Recap from last Week
 
 * *Multiple Linear Regression Model*: `\(y_i = b_0 + b_1 x_{1,i} + \dots + b_k x_{k,i} + e_i\)`
 
@@ -44,7 +44,7 @@ layout: true
 .footnote[
 [1]: This lecture is very heavily based on the wonderful [sampling chapter](https://moderndive.com/7-sampling.html) of [ModernDive](https://moderndive.com/)]
 
-* Fun activity to discover sampling, sampling variation and sampling distributions.
+* Fun activity to discover *sampling*, sampling variation and sampling distributions.
 
 * Sampling terminology: population, sample, population parameter, point estimate or sample statistic, etc.
 
@@ -54,7 +54,7 @@ layout: true
 
 ---
 
-# What's the proportion of green pasta?
+# What's the Proportion of Green Pasta?
 
 .center[
 &lt;img src="../img/photos/pasta/pasta_bowl.JPG" width="600px" style="display: block; margin: auto;" /&gt;
@@ -95,7 +95,7 @@ Yellow   |  1    |     0.05
 
 * What would happen if we took a *new* sample (putting the 20 previous pasta back in the bowl)? Would we also get 14 *greens* as before?
 
---
+
 
 * What if we repeated this activity multiple times?
 
@@ -103,15 +103,18 @@ Yellow   |  1    |     0.05
 
 * Probably not. The samples will vary from draw to draw.
 
+
+* Why?
+
 --
 
-* Key to this observation: these are *randomly* drawn samples.
+* Key to this observation: these are ***randomly*** drawn samples.
 
 ---
 
 # Taking 18 Samples (One per Student)
 
-* Because we can't do this activity in class, we drew 18 samples of 20 pasta (with replacement).
+* Because we can't do this activity in class, we drew 18 samples of 20 pasta *(with replacement)*.
 
 --
 
@@ -170,6 +173,8 @@ class: inverse
 
 1. What do you observe?
 
+
+
 ---
 
 # Sample Distribution: Histogram
@@ -181,7 +186,7 @@ class: inverse
 --
 
 .pull-right[
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -205,7 +210,7 @@ class: inverse
 --
   
   1. **Sampling**: extract a *sample* of 20 pasta from the bowl to obtain an ***estimate***.  
-  Out first ***estimate*** of the proportion of green pasta was 0.70, but it was actually larger than most other ***estimates***.
+  Our first ***estimate*** of the proportion of green pasta was 0.70, but it was actually larger than most other ***estimates***.
   
 --
 
@@ -216,7 +221,7 @@ class: inverse
 # Taking Virtual (not Real) Samples
 
 .pull-left[
-* We counted the exact number of green, red and yellow pasta in the bowl 🧐 `#confinement`
+* We counted the exact number of green, red and yellow pasta in the bowl 🧐
 
 * All the pasta in the bowl are stored in a csv file [here](https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1).
 
@@ -271,7 +276,7 @@ nrow(bowl)
 ```r
 #load moderndive package
 library(moderndive)
-
+set.seed(123) # we will all have the same draw!
 virtual_shovel &lt;- bowl %&gt;% # notice that moderndive functions can be "pipped"
   rep_sample_n(size = 50) # take a sample of 50 balls
 ```
@@ -286,22 +291,15 @@ head(virtual_shovel)
 ```
 ## # A tibble: 6 x 3
 ## # Groups:   replicate [1]
-##   replicate pasta_ID color
-##       &lt;int&gt;    &lt;int&gt; &lt;fct&gt;
-## 1         1      176 red  
-## 2         1      198 green
-## 3         1      705 green
-## 4         1      410 green
-## 5         1      215 red  
-## 6         1      398 green
+##   replicate pasta_ID color 
+##       &lt;int&gt;    &lt;int&gt; &lt;fct&gt; 
+## 1         1      313 yellow
+## 2         1      548 green 
+## 3         1      696 green 
+## 4         1      264 green 
+## 5         1       20 red   
+## 6         1      308 yellow
 ```
-
-* Column `replicate` tells us the ID of the sample. Here: `1`.
-]
-
---
-
-.pull-right[
 
 ```r
 # number of observations in sample
@@ -311,6 +309,26 @@ nrow(virtual_shovel)
 ```
 ## [1] 50
 ```
+
+]
+
+--
+
+.pull-right[
+* Column `replicate` tells us the ID of the sample. Here: `1` since we create only one sample (see option `reps`).
+
+```r
+# display the sample's first 6 rows
+virtual_shovel_4 &lt;- bowl %&gt;% 
+  rep_sample_n(size = 50, reps = 4)
+
+unique(virtual_shovel_4$replicate)
+```
+
+```
+## [1] 1 2 3 4
+```
+
 ]
 
 ---
@@ -318,6 +336,17 @@ nrow(virtual_shovel)
 # Proportion of Green Pasta
 
 .pull-left[
+1. Compute:
+  * sum of green pasta in sample,
+  * number of observations in sample (i.e. 50 in this case)
+
+1. Compute proportion of green pasta
+
+]
+
+--
+
+.pull-right[
 
 ```r
 sample_1 &lt;- virtual_shovel %&gt;% 
@@ -336,21 +365,17 @@ sample_1
 ## # A tibble: 1 x 4
 ##   replicate num_green sample_n prop_green
 ##       &lt;int&gt;     &lt;int&gt;    &lt;int&gt;      &lt;dbl&gt;
-## 1         1        23       50       0.46
+## 1         1        29       50      0.580
 ```
+
 ]
 
-.pull-right[
-1. Compute:
-  * sum of green pasta in sample,
-  * number of observations in sample (i.e. 50 in this case)
 
-1. Compute proportion of green pasta
 
-👉 0.46 are green! This is an ***estimate*** of the proportion of green pasta in the bowl. What if we try again?
+* 👉 0.58 are green! This is an ***estimate*** of the proportion of green pasta in the bowl. What if we try again?
 
-What if we try many times, like, 33 times?
-]
+* What if we try many times, like, 33 times?
+
 
 ---
 
@@ -362,6 +387,7 @@ What if we try many times, like, 33 times?
 
 
 ```r
+set.seed(123) # we will all have the same draw!
 virtual_samples &lt;- bowl %&gt;%
   # get 33 samples of size 50
   rep_sample_n(size = 50, reps = 33)
@@ -373,16 +399,16 @@ virtual_samples
 ## # Groups:   replicate [33]
 ##    replicate pasta_ID color 
 ##        &lt;int&gt;    &lt;int&gt; &lt;fct&gt; 
-##  1         1      270 green 
-##  2         1      377 red   
-##  3         1      697 red   
-##  4         1      189 green 
-##  5         1      166 yellow
-##  6         1      313 yellow
-##  7         1      293 yellow
-##  8         1      108 green 
-##  9         1      154 red   
-## 10         1      111 red   
+##  1         1      415 yellow
+##  2         1      463 yellow
+##  3         1      179 green 
+##  4         1      526 red   
+##  5         1      195 green 
+##  6         1      118 yellow
+##  7         1      299 green 
+##  8         1      229 green 
+##  9         1      244 green 
+## 10         1       14 green 
 ## # … with 1,640 more rows
 ```
 ]
@@ -395,6 +421,7 @@ Compute the proportion of green pasta in each sample.
 
 
 ```r
+set.seed(123) # we will all have the same draw!
 virtual_prop_green &lt;- virtual_samples %&gt;% 
   group_by(replicate) %&gt;% # calculate stat by sample
   summarize(
@@ -408,16 +435,16 @@ virtual_prop_green
 ## # A tibble: 33 x 4
 ##    replicate num_green sample_n prop_green
 ##        &lt;int&gt;     &lt;int&gt;    &lt;int&gt;      &lt;dbl&gt;
-##  1         1        21       50      0.42 
-##  2         2        27       50      0.54 
-##  3         3        25       50      0.5  
-##  4         4        26       50      0.52 
-##  5         5        20       50      0.4  
-##  6         6        26       50      0.52 
-##  7         7        27       50      0.54 
-##  8         8        29       50      0.580
-##  9         9        22       50      0.44 
-## 10        10        21       50      0.42 
+##  1         1        22       50       0.44
+##  2         2        17       50       0.34
+##  3         3        25       50       0.5 
+##  4         4        22       50       0.44
+##  5         5        22       50       0.44
+##  6         6        20       50       0.4 
+##  7         7        24       50       0.48
+##  8         8        26       50       0.52
+##  9         9        32       50       0.64
+## 10        10        32       50       0.64
 ## # … with 23 more rows
 ```
 ]
@@ -452,7 +479,7 @@ ggplot(virtual_prop_green, aes(x = prop_green)) +
 --
 
 .pull-right[
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -465,9 +492,9 @@ Instead of taking only 33 samples, let's take ***1000***!
 
 1. Why do we not take 1000 samples "by hand"?
 
-1. Load the [data](https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1) into an object `pasta`.
+1. Load the [data](https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1) into an object `pasta`. 
 
-1. Obtain 1000 samples of size 50 using the `rep_sample_n()` function from the `moderndive` package.
+1. Obtain 1000 samples of size 50 using the `rep_sample_n()` function from the `moderndive` package. Note: use `set.seed(1234)` to allow replication (`?set.seed()`)
 
 1. Calculate the proportion of green pasta in each sample.
 
@@ -477,11 +504,13 @@ Instead of taking only 33 samples, let's take ***1000***!
 
 1. How likely is it that we sample 50 pasta of which less than 20% are green?
 
+
+
 ---
 
 # Sampling Distribution of 1000 Samples
 
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -515,6 +544,8 @@ Generate all samples of different sizes:
 
 
 ```r
+set.seed(1234)
+
 # Sample size: 25
 virtual_samples_25 &lt;- bowl %&gt;% 
   rep_sample_n(size = 25, reps = 1000)
@@ -552,7 +583,7 @@ virtual_prop_green_25 &lt;- virtual_samples_25 %&gt;%
 
 # Role of Sample Size
 
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -583,7 +614,7 @@ Sample Size | Standard Deviation
 
 * Remember that the ***standard deviation*** measures the *spread* of a variable around its mean.
 
---
+
 
 * So as the sample size increases, our ***estimates*** of the true proportion of the bowl's green pasta get more *precise*.
 
@@ -700,7 +731,7 @@ sum(bowl$color == "green")/nrow(bowl)
 
 # Visualizing Unbiasedness and Sampling Variation
 
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 # Some Sampling Scenarios
@@ -763,9 +794,9 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| &lt;a href="mailto:florian.oswald@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | florian.oswald@sciencespo.fr       |
-| &lt;a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
-| &lt;a href="https://scpoecon.github.io/ScPoEconometrics"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
+| &lt;a href="mailto:michele.fioretti@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | michele.fioretti@sciencespo.fr       |
+| &lt;a href="https://github.com/michelefioretti/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
+| &lt;a href="https://michelefioretti.github.io/ScPoEconometrics/"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
 | &lt;a href="http://twitter.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                         |
 | &lt;a href="http://github.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-github fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                       |
     </textarea>
@@ -817,6 +848,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -834,17 +891,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

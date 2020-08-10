@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Sampling"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -42,7 +42,7 @@ library(gganimate)
 
 ```
 
-# Recap from last week
+# Recap from last Week
 
 * *Multiple Linear Regression Model*: $y_i = b_0 + b_1 x_{1,i} + \dots + b_k x_{k,i} + e_i$
 
@@ -57,7 +57,7 @@ library(gganimate)
 .footnote[
 [1]: This lecture is very heavily based on the wonderful [sampling chapter](https://moderndive.com/7-sampling.html) of [ModernDive](https://moderndive.com/)]
 
-* Fun activity to discover sampling, sampling variation and sampling distributions.
+* Fun activity to discover *sampling*, sampling variation and sampling distributions.
 
 * Sampling terminology: population, sample, population parameter, point estimate or sample statistic, etc.
 
@@ -67,7 +67,7 @@ library(gganimate)
 
 ---
 
-# What's the proportion of green pasta?
+# What's the Proportion of Green Pasta?
 
 .center[
 ```{r, echo = FALSE, out.width = "600px"}
@@ -110,7 +110,7 @@ Yellow   |  1    |     `r format(round(1/20,2), nsmall = 2)`
 
 * What would happen if we took a *new* sample (putting the 20 previous pasta back in the bowl)? Would we also get 14 *greens* as before?
 
---
+
 
 * What if we repeated this activity multiple times?
 
@@ -118,15 +118,18 @@ Yellow   |  1    |     `r format(round(1/20,2), nsmall = 2)`
 
 * Probably not. The samples will vary from draw to draw.
 
+
+* Why?
+
 --
 
-* Key to this observation: these are *randomly* drawn samples.
+* Key to this observation: these are ***randomly*** drawn samples.
 
 ---
 
 # Taking 18 Samples (One per Student)
 
-* Because we can't do this activity in class, we drew 18 samples of 20 pasta (with replacement).
+* Because we can't do this activity in class, we drew 18 samples of 20 pasta *(with replacement)*.
 
 --
 
@@ -184,6 +187,39 @@ class: inverse
 1. Create a histogram of these proportions using `ggplot2`. Use these parameters in `geom_histogram()`: `boundary = 0.325, binwidth = 0.05`.
 
 1. What do you observe?
+
+```{r,eval=FALSE,echo=FALSE}
+  # Question 1
+  count_vector <- c(14, 14, 10, 10, 6, 10, 8, 9, 11, 8, 7, 9, 9, 14, 11, 10, 7, 13)
+  pasta <- data.frame(count = count_vector, prop_green = round(count_vector/20,2) )
+  
+  # Question 2
+  ghist_data <- ggplot(pasta,
+                  aes(x = count_vector)) 
+  
+  ghist1 <- ghist_data  +
+    geom_histogram()
+  ghist1 + theme_bw()
+  
+  ghist2 <- ghist_data +
+    geom_histogram(boundary = 0.325, # boundary between two bins
+                   binwidth = 0.05 # how large is the binsize
+                   )
+  ghist2 + theme_bw()
+  
+  ghist3 <- ghist_data +
+    geom_histogram(boundary = 0.325, # boundary between two bins
+                   binwidth = 5 # how many bins do you see now?
+                   )
+  ghist3 + theme_bw()
+  
+  # Note: see lecture 2 on how to prittify this graph
+  
+  # Question 3
+  # The plot shows the frequency of each of the outcome from randomly sampling pasta 18 times with replacement. 
+  # E.g., we never draw 12 green pastas, but we did draw 14 green pastas (3 times).
+
+```
 
 ---
 
@@ -263,7 +299,7 @@ pasta_samples %>%
 --
   
   1. **Sampling**: extract a *sample* of 20 pasta from the bowl to obtain an ***estimate***.  
-  Out first ***estimate*** of the proportion of green pasta was 0.70, but it was actually larger than most other ***estimates***.
+  Our first ***estimate*** of the proportion of green pasta was 0.70, but it was actually larger than most other ***estimates***.
   
 --
 
@@ -274,7 +310,7 @@ pasta_samples %>%
 # Taking Virtual (not Real) Samples
 
 .pull-left[
-* We counted the exact number of green, red and yellow pasta in the bowl `r emo::ji("monocle")` `#confinement`
+* We counted the exact number of green, red and yellow pasta in the bowl `r emo::ji("monocle")`
 
 * All the pasta in the bowl are stored in a csv file [here](https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1).
 
@@ -312,7 +348,7 @@ nrow(bowl)
 ```{r}
 #load moderndive package
 library(moderndive)
-
+set.seed(123) # we will all have the same draw!
 virtual_shovel <- bowl %>% # notice that moderndive functions can be "pipped"
   rep_sample_n(size = 50) # take a sample of 50 balls
 ```
@@ -321,18 +357,24 @@ virtual_shovel <- bowl %>% # notice that moderndive functions can be "pipped"
 ```{r, echo = TRUE}
 # display the sample's first 6 rows
 head(virtual_shovel)
+# number of observations in sample
+nrow(virtual_shovel)
 ```
 
-* Column `replicate` tells us the ID of the sample. Here: `1`.
 ]
 
 --
 
 .pull-right[
+* Column `replicate` tells us the ID of the sample. Here: `1` since we create only one sample (see option `reps`).
 ```{r, echo = TRUE}
-# number of observations in sample
-nrow(virtual_shovel)
+# display the sample's first 6 rows
+virtual_shovel_4 <- bowl %>% 
+  rep_sample_n(size = 50, reps = 4)
+
+unique(virtual_shovel_4$replicate)
 ```
+
 ]
 
 ---
@@ -340,6 +382,17 @@ nrow(virtual_shovel)
 # Proportion of Green Pasta
 
 .pull-left[
+1. Compute:
+  * sum of green pasta in sample,
+  * number of observations in sample (i.e. 50 in this case)
+
+1. Compute proportion of green pasta
+
+]
+
+--
+
+.pull-right[
 ```{r}
 sample_1 <- virtual_shovel %>% 
   summarize(
@@ -352,19 +405,15 @@ sample_1 <- virtual_shovel %>%
     prop_green = num_green / sample_n)
 sample_1
 ```
+
 ]
 
-.pull-right[
-1. Compute:
-  * sum of green pasta in sample,
-  * number of observations in sample (i.e. 50 in this case)
 
-1. Compute proportion of green pasta
 
-`r emo::ji("point_right")` `r sample_1$prop_green` are green! This is an ***estimate*** of the proportion of green pasta in the bowl. What if we try again?
+* `r emo::ji("point_right")` `r sample_1$prop_green` are green! This is an ***estimate*** of the proportion of green pasta in the bowl. What if we try again?
 
-What if we try many times, like, 33 times?
-]
+* What if we try many times, like, 33 times?
+
 
 ---
 
@@ -375,6 +424,7 @@ What if we try many times, like, 33 times?
 33 samples (*replicates*) of size 50.
 
 ```{r}
+set.seed(123) # we will all have the same draw!
 virtual_samples <- bowl %>%
   # get 33 samples of size 50
   rep_sample_n(size = 50, reps = 33)
@@ -389,6 +439,7 @@ virtual_samples
 Compute the proportion of green pasta in each sample.
 
 ```{r}
+set.seed(123) # we will all have the same draw!
 virtual_prop_green <- virtual_samples %>% 
   group_by(replicate) %>% # calculate stat by sample
   summarize(
@@ -452,9 +503,9 @@ Instead of taking only 33 samples, let's take ***1000***!
 
 1. Why do we not take 1000 samples "by hand"?
 
-1. Load the [data](https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1) into an object `pasta`.
+1. Load the [data](https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1) into an object `pasta`. 
 
-1. Obtain 1000 samples of size 50 using the `rep_sample_n()` function from the `moderndive` package.
+1. Obtain 1000 samples of size 50 using the `rep_sample_n()` function from the `moderndive` package. Note: use `set.seed(1234)` to allow replication (`?set.seed()`)
 
 1. Calculate the proportion of green pasta in each sample.
 
@@ -464,11 +515,77 @@ Instead of taking only 33 samples, let's take ***1000***!
 
 1. How likely is it that we sample 50 pasta of which less than 20% are green?
 
+
+```{r,eval=FALSE,echo=FALSE}
+  # Question 1
+  # Try if you have spare time.
+
+  # Question 2
+  pasta <-read.csv("https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1") # remember the "..."
+  #  - or - 
+  # pasta <- bowl
+
+  # Question 3
+  n_size = 50
+  n_rep = 1000
+  set.seed(1234) # you can put any number `?set.seed`
+  virtual_samples_1000 <- pasta %>%
+    rep_sample_n(size = n_size, reps = n_rep)
+  
+  # Question 4
+  virtual_prop_green_1000 <- virtual_samples_1000 %>% 
+  group_by(replicate) %>% # calculate stat by sample
+  summarize(
+    prop_green = mean(color == "green", na.rm = TRUE)) 
+  virtual_prop_green_1000
+  
+  # -- check that it is the same as --
+  virtual_prop_green_1000_old_way <- virtual_samples_1000 %>% 
+  group_by(replicate) %>% # calculate stat by sample
+  summarize(
+    num_green = sum(color == "green"),
+    sample_n = n()) %>% 
+  mutate(prop_green = num_green / sample_n)
+  
+  unique(virtual_prop_green_1000$prop_green == virtual_prop_green_1000_old_way$prop_green)
+  
+  # Question 5
+  ggplot(virtual_prop_green_1000, aes(x = prop_green)) +
+  geom_histogram(binwidth = 0.02, 
+                 boundary = 0.51,
+                 color = "white",
+                 fill = "red") +
+  scale_y_continuous(breaks = seq(0, 120, by = 20)) + # This option says that we want the y axis to go from 0 to 120, with breaks every 20. adjust this value if you need to do so
+  labs(x = "Proportion of 50 pasta that were green",
+       y = "Frequency",
+       title = paste0("Distribution of ", n_rep, " samples of size ", n_size) ) +
+  theme_bw(base_size = 20)
+  
+  # Question 6
+  # 0.5 is the most frequent occurrence, the histogram looks like a `normal density`.
+  # The plot was not centered around a number when we took only 33 samples. 
+  # Would the plot change if we were to take 10000 random samples instead??
+  
+  # Question 7
+  # let's count the number of observations such as `prop_green` < 20%
+  nrow(virtual_prop_green_1000[virtual_prop_green_1000$prop_green < 0.2,])
+  # [1] 0
+  # what do you conclude?
+  # Instead, how likely is it that  we sample 50 pasta of which less than 50% are green?
+  nrow(virtual_prop_green_1000[virtual_prop_green_1000$prop_green < 0.5,])
+  #[1] 458
+  # There are 458 such occurrences our of 1000 draws or
+  nrow(virtual_prop_green_1000[virtual_prop_green_1000$prop_green < 0.5,])/nrow(virtual_prop_green_1000) * 100
+  # [1] 45.8
+  # occurrences
+  
+```
 ---
 
 # Sampling Distribution of 1000 Samples
 
 ```{r, echo = FALSE, eval = TRUE, fig.height = 4.5, fig.width = 7.75}
+set.seed(1234)
 virtual_samples <- bowl %>% 
   rep_sample_n(size = 50, reps = 1000)
 
@@ -523,6 +640,8 @@ If your goal is still to estimate the proportion of the bowl’s pasta that are 
 Generate all samples of different sizes:
 
 ```{r}
+set.seed(1234)
+
 # Sample size: 25
 virtual_samples_25 <- bowl %>% 
   rep_sample_n(size = 25, reps = 1000)
@@ -638,7 +757,7 @@ Sample Size | Standard Deviation
 
 * Remember that the ***standard deviation*** measures the *spread* of a variable around its mean.
 
---
+
 
 * So as the sample size increases, our ***estimates*** of the true proportion of the bowl's green pasta get more *precise*.
 
@@ -778,7 +897,7 @@ df %>%
           `50` = "1000 samples of size 50",
           `100` = "1000 samples of size 100"))) +
     theme_bw(base_size = 14) +
-  geom_vline(xintercept = p, col = "black", size = 0.75) +
+  geom_vline(xintercept = p, col = "red", size = 0.75) +
   geom_text(data = dat_text, mapping = aes(x = 0.662, y = Inf, label = label), vjust = 2, size = 3)
 ```
 
@@ -843,9 +962,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape chapter6.html chapter6.pdf --chrome-arg=--disable-web-security")
+```

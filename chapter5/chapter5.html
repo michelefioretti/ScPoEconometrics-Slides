@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
-    <title>ScPoEconometrics</title>
+    <title>Applied Data Analysis for Public Policy Studies</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
     <link rel="stylesheet" href="../css/scpo.css" type="text/css" />
@@ -13,10 +13,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ScPoEconometrics
-## Session 5
-### Florian Oswald
-### SciencesPo Paris </br> 2019-10-08
+# Applied Data Analysis for Public Policy Studies
+## Chategorical Variables
+### Michele Fioretti
+### SciencesPo Paris </br> 2020-08-08
 
 ---
 
@@ -29,11 +29,11 @@ layout: true
 
 
 
-# Data On Cars
+&lt;!-- # Data On Cars --&gt;
 
 # Categorical Variables
 
-* We have seen different data types in the first session.
+* We have seen different data types in the 1st session.
 
 --
 
@@ -69,9 +69,9 @@ layout: true
 # Dummy Variables
 
 .pull-left[
-* We defined `is.male`. Let's define its pendant.
+* We defined `is.male`...
 
-* That is, for females, 
+* ... Similarly, for females, 
     `$$\begin{aligned}\text{is.female}_i &amp;=  \begin{cases}1 &amp; \text{if }i\text{ is female} \\0 &amp; \text{if }i\text{ is not female}. \\\end{cases} \\\end{aligned}$$`
     
 ]
@@ -80,7 +80,7 @@ layout: true
 
 .pull-right[
     
-* let's all create this dataset:
+* Let's all create this dataset:
 
 
 ```r
@@ -120,6 +120,28 @@ lm(income ~ is.male + is.female,df1)
 
 ]
 
+
+--
+
+.pull-right[
+
+
+```r
+lm(income ~ is.male + is.female,df1)
+```
+
+```
+## 
+## Call:
+## lm(formula = income ~ is.male + is.female, data = df1)
+## 
+## Coefficients:
+##   (Intercept)    is.maleTRUE  is.femaleTRUE  
+##          4250           1000             NA
+```
+
+]
+
 ---
 
 # The Trap: Multicolinearity
@@ -146,7 +168,7 @@ df1
 
 * Oops. `is.male + is.female` is **always** equal `1`!
 
-* In other words, `is.male = 1 - is.female`. A **perfect colinearity**!
+* In other words, `is.male = 1 - is.female`. A **perfect collinearity**!
 
 * Multiple regression fails. 😠
 
@@ -163,10 +185,6 @@ df1
 * If someone is `male` they are *not* `female`.
 
 * So we **drop one of the categories**. Only do `\(y = b_0 + b_1 is.female\)`
-
-]
-
-.pull-right[
 
 
 ```r
@@ -185,11 +203,40 @@ lm1
 ```
 ]
 
+--
+
+.pull-left[
+
+* Would we get a ***different slope and intercept*** if we were to `\(y = b_0 + b_1 is.male\)` instead?
+
+]
+
+--
+
+.pull-right[
+
+
+```r
+lm2 = lm(income ~ is.female,df1)
+lm2
+```
+
+```
+## 
+## Call:
+## lm(formula = income ~ is.female, data = df1)
+## 
+## Coefficients:
+##   (Intercept)  is.femaleTRUE  
+##          5250          -1000
+```
+]
+
 ---
 
 # Interpretation of Dummies
 
-* We have excluded `is.male`.
+* Let's go back to the case where we excluded the variable `is.male`.
 
 * So what's the effect of being `male` now?
   * Well, *male* means `is.female = 0`. So `male` is **subsumed in the intercept**!
@@ -241,6 +288,8 @@ class: inverse
 library(ScPoEconometrics)
 launchApp("reg_dummy")
 ```
+
+
 
 ---
 
@@ -295,6 +344,146 @@ factor(x = c(1,1,2,4,3,4),labels = c("HS","someCol","BA","MSc"))
 
 ---
 
+# Log Wages and Dummies {#factors}
+
+* Let us illustrate the simplest use of `factors` in `R`.
+
+* Going back to our wage example, let's say that a worker's wage depends on their education as well as their gender:
+
+`\begin{equation}
+\ln w_i = b_0 + b_1 educ_i + b_2 female_i + e_i 
+\end{equation}`
+
+
+```r
+data("wage1", package = "wooldridge")
+wage1$female = as.factor(wage1$female)  # convert 0-1 to factor
+lm_w = lm(lwage ~ educ, data = wage1)
+lm_w_sex = lm(lwage ~ educ + female, data = wage1)
+```
+
+---
+
+# Let's Plot the Outcomes
+
+
+
+
+&lt;table style="text-align:center"&gt;&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="2"&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="2" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="2"&gt;lwage&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(1)&lt;/td&gt;&lt;td&gt;(2)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;educ&lt;/td&gt;&lt;td&gt;0.083&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.077&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.008)&lt;/td&gt;&lt;td&gt;(0.007)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;female1&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;-0.361&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;(0.039)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;0.584&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.826&lt;sup&gt;***&lt;/sup&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;(0.097)&lt;/td&gt;&lt;td&gt;(0.094)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;526&lt;/td&gt;&lt;td&gt;526&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.186&lt;/td&gt;&lt;td&gt;0.300&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Adjusted R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.184&lt;/td&gt;&lt;td&gt;0.298&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Residual Std. Error&lt;/td&gt;&lt;td&gt;0.480 (df = 524)&lt;/td&gt;&lt;td&gt;0.445 (df = 523)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;F Statistic&lt;/td&gt;&lt;td&gt;119.582&lt;sup&gt;***&lt;/sup&gt; (df = 1; 524)&lt;/td&gt;&lt;td&gt;112.189&lt;sup&gt;***&lt;/sup&gt; (df = 2; 523)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;em&gt;Note:&lt;/em&gt;&lt;/td&gt;&lt;td colspan="2" style="text-align:right"&gt;&lt;sup&gt;*&lt;/sup&gt;p&lt;0.1; &lt;sup&gt;**&lt;/sup&gt;p&lt;0.05; &lt;sup&gt;***&lt;/sup&gt;p&lt;0.01&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
+
+---
+
+# Interpretation
+
+* `R` chooses a *reference category* (by default the first of all levels by order of appearance), which is excluded - here this is `female==0`. 
+
+* The interpretation is that `\(b_2\)` measures the effect of being female *relative* to being male. 
+
+* `R` automatically creates a dummy variable for each potential level, excluding the first category.
+
+&lt;img src="chapter5_files/figure-html/wage-plot-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Interactions
+
+* It can be useful to let the slope of a certain variable vary with ***another*** regressor.
+
+* For instance, what if women with higher education had better wages than similar men?
+
+--
+
+`\begin{equation}
+\ln w = b_0 + b_1 \text{female} + b_2 \text{educ} + b_3 (\text{female} \times \text{educ}) + e 
+\end{equation}`
+
+* `female` is a factor with levels `0` and `1`: i.e. the interaction term `\(b_3\)` will be zero for all men. 
+
+
+```r
+# No need to write all variables, R expands to full interactions model!!
+lm_w_interact &lt;- lm(lwage ~ educ * female , data = wage1)  
+lm_w_interact
+```
+
+```
+## 
+## Call:
+## lm(formula = lwage ~ educ * female, data = wage1)
+## 
+## Coefficients:
+##  (Intercept)          educ       female1  educ:female1  
+##    8.260e-01     7.723e-02    -3.601e-01    -6.408e-05
+```
+
+
+---
+
+# Let's Plot Our Results
+
+
+&lt;img src="chapter5_files/figure-html/wage-plot2-1.svg" style="display: block; margin: auto;" /&gt;
+
+* Are the slope different?
+
+--
+
+* Right panel allows slopes to be different - turns out they are not!
+
+* **Next session:** how can we ***test*** whether slopes are different?
+
+---
+
+# Last but not Least: Individual Heterogeneity
+
+1. Suppose we have data on hourly wage and a the number of hours worked by workers
+1. We want to study the labour supply of those workers: regression `hours_worked ~ wage`.
+1. We expect a positive coefficient on `wage`: higher wage =&gt; more hours worked.
+1. Additional info: workers are either in group `g=0` or `g=1`.
+
+--
+
+&lt;img src="chapter5_files/figure-html/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
+* ... ***a negative relation***?
+
+---
+
+# Are We Missing Something?
+
+* Let's run the same analysis *controlling* by group:
+
+&lt;img src="chapter5_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+
+* This is an artificial example; yet it shows the importance of group-specific effects. 
+
+* What if groups are ***unobserved***? - we will need advanced methods that are beyond the scope of this course to infer the groups.
+
+* If ***known***, you should include a group dummy so as to control for group effects.
+
+---
 
 class: title-slide-final, middle
 background-image: url(../img/logo/ScPo-econ.png)
@@ -308,9 +497,9 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| &lt;a href="mailto:florian.oswald@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | florian.oswald@sciencespo.fr       |
-| &lt;a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
-| &lt;a href="https://scpoecon.github.io/ScPoEconometrics"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
+| &lt;a href="mailto:michele.fioretti@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | michele.fioretti@sciencespo.fr       |
+| &lt;a href="https://github.com/michelefioretti/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
+| &lt;a href="https://michelefioretti.github.io/ScPoEconometrics/"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
 | &lt;a href="http://twitter.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                         |
 | &lt;a href="http://github.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-github fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                       |
     </textarea>
@@ -361,9 +550,25 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -372,7 +577,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

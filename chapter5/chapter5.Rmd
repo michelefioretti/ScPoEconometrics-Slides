@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
-subtitle: "Session 5"
-author: "Florian Oswald"
+title: "Applied Data Analysis for Public Policy Studies"
+subtitle: "Chategorical Variables"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -42,7 +42,7 @@ library(magrittr)
 
 ```
 
-# Data On Cars
+<!-- # Data On Cars -->
 
 # Categorical Variables
 
@@ -82,9 +82,9 @@ library(magrittr)
 # Dummy Variables
 
 .pull-left[
-* We defined `is.male`. Let's define its pendant.
+* We defined `is.male`...
 
-* That is, for females, 
+* ... Similarly, for females, 
     $$\begin{aligned}\text{is.female}_i &=  \begin{cases}1 & \text{if }i\text{ is female} \\0 & \text{if }i\text{ is not female}. \\\end{cases} \\\end{aligned}$$
     
 ]
@@ -93,7 +93,7 @@ library(magrittr)
 
 .pull-right[
     
-* let's all create this dataset:
+* Let's all create this dataset:
 
 ```{r,echo=TRUE}
 df1 = data.frame(income=c(3000,5000,7500,3500),
@@ -130,6 +130,17 @@ lm(income ~ is.male + is.female,df1)
 
 ]
 
+
+--
+
+.pull-right[
+
+```{r,eval=TRUE,echo=TRUE}
+lm(income ~ is.male + is.female,df1)
+```
+
+]
+
 ---
 
 # The Trap: Multicolinearity
@@ -147,7 +158,7 @@ df1
 
 * Oops. `is.male + is.female` is **always** equal `1`!
 
-* In other words, `is.male = 1 - is.female`. A **perfect colinearity**!
+* In other words, `is.male = 1 - is.female`. A **perfect collinearity**!
 
 * Multiple regression fails. `r emo::ji("angry")`
 
@@ -165,13 +176,27 @@ df1
 
 * So we **drop one of the categories**. Only do $y = b_0 + b_1 is.female$
 
-]
-
-.pull-right[
-
 ```{r}
 lm1 = lm(income ~ is.female,df1)
 lm1
+```
+]
+
+--
+
+.pull-left[
+
+* Would we get a ***different slope and intercept*** if we were to $y = b_0 + b_1 is.male$ instead?
+
+]
+
+--
+
+.pull-right[
+
+```{r,eval=TRUE,echo=TRUE}
+lm2 = lm(income ~ is.female,df1)
+lm2
 ```
 ]
 
@@ -179,7 +204,7 @@ lm1
 
 # Interpretation of Dummies
 
-* We have excluded `is.male`.
+* Let's go back to the case where we excluded the variable `is.male`.
 
 * So what's the effect of being `male` now?
   * Well, *male* means `is.female = 0`. So `male` is **subsumed in the intercept**!
@@ -281,6 +306,10 @@ library(ScPoEconometrics)
 launchApp("reg_dummy")
 ```
 
+```{r,eval=FALSE,echo=FALSE}
+#Your guess: y = 2.25 + 3x
+```
+
 ---
 
 # Dummy *and* $X$
@@ -327,6 +356,178 @@ factor(x = c(1,1,2,4,3,4),labels = c("HS","someCol","BA","MSc"))
 
 ---
 
+# Log Wages and Dummies {#factors}
+
+* Let us illustrate the simplest use of `factors` in `R`.
+
+* Going back to our wage example, let's say that a worker's wage depends on their education as well as their gender:
+
+\begin{equation}
+\ln w_i = b_0 + b_1 educ_i + b_2 female_i + e_i 
+\end{equation}
+
+```{r,eval=TRUE,echo=TRUE}
+data("wage1", package = "wooldridge")
+wage1$female = as.factor(wage1$female)  # convert 0-1 to factor
+lm_w = lm(lwage ~ educ, data = wage1)
+lm_w_sex = lm(lwage ~ educ + female, data = wage1)
+```
+
+---
+
+# Let's Plot the Outcomes
+```{r,eval=TRUE,echo=FALSE}
+# library(rlang)
+library(stargazer)
+mkTexTable <- function(..., file){
+
+    tbl <- capture.output({
+        stargazer(...)
+    })    
+
+    tbl <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", tbl, fixed = T)
+    tbl <- gsub("\\end{tabular}", "\\end{tabular}}", tbl, fixed = T)
+
+    fileConn <- file(file)
+    writeLines(tbl, fileConn)
+    close(fileConn)
+}
+```
+
+
+```{r,results="asis",echo=FALSE}
+stargazer::stargazer(lm_w,lm_w_sex,type = if (knitr:::is_latex_output()) "latex" else "html")
+# mkTexTable(lm_w,lm_w_sex, file = "texOutput.tex")
+```
+
+
+---
+
+# Interpretation
+
+* `R` chooses a *reference category* (by default the first of all levels by order of appearance), which is excluded - here this is `female==0`. 
+
+* The interpretation is that $b_2$ measures the effect of being female *relative* to being male. 
+
+* `R` automatically creates a dummy variable for each potential level, excluding the first category.
+
+```{r wage-plot,fig.align='center',echo=FALSE,message=FALSE,warning=FALSE,fig.height=3}
+library(ggplot2)
+p1 = ggplot(mapping = aes(y=lwage,x=educ), data=wage1) + geom_point(shape=1,alpha=0.6) + geom_smooth(method="lm",col="blue",se=FALSE) + theme_bw()
+
+p_sex = cbind(wage1,pred=predict(lm_w_sex))
+# p_sex = dplyr::sample_n(p_sex,2500)
+p2 <- ggplot(data=p_sex,mapping=aes(x=educ,y=lwage,color=female)) 
+p2 <- p2 + geom_jitter(shape=1,alpha=0.6,width=0.1) + geom_line(mapping = aes(y=pred), size=1) + theme_bw() + scale_y_continuous(name = NULL)
+cowplot::plot_grid(p1,p2, rel_widths = c(1,1.2))
+```
+
+---
+
+# Interactions
+
+* It can be useful to let the slope of a certain variable vary with ***another*** regressor.
+
+* For instance, what if women with higher education had better wages than similar men?
+
+--
+
+\begin{equation}
+\ln w = b_0 + b_1 \text{female} + b_2 \text{educ} + b_3 (\text{female} \times \text{educ}) + e 
+\end{equation}
+
+* `female` is a factor with levels `0` and `1`: i.e. the interaction term $b_3$ will be zero for all men. 
+
+```{r,echo = TRUE}
+# No need to write all variables, R expands to full interactions model!!
+lm_w_interact <- lm(lwage ~ educ * female , data = wage1)  
+lm_w_interact
+```
+
+
+---
+
+# Let's Plot Our Results
+
+
+```{r wage-plot2,fig.align='center',echo=FALSE,message=FALSE,warning=FALSE,fig.height=3}
+
+p_sex = cbind(wage1,pred=predict(lm_w_sex))
+p_sex = cbind(p_sex,pred_inter=predict(lm_w_interact))
+# p_sex = dplyr::sample_n(p_sex,2500)
+p2 <- ggplot(data=p_sex,mapping=aes(x=educ,y=lwage,color=female)) 
+p2 <- p2 + geom_jitter(shape=1,alpha=0.6,width=0.1) + geom_line(mapping = aes(y=pred), size=1) + theme_bw() + scale_y_continuous(name = "log wage") + ggtitle("Impose Parallel Slopes") + theme(legend.position = "none")
+
+p3 <- ggplot(data=p_sex,mapping=aes(x=educ,y=lwage,color=female)) 
+p3 <- p3 + geom_jitter(shape=1,alpha=0.6,width=0.1) + geom_line(mapping = aes(y=pred_inter), size=1) + theme_bw() + scale_y_continuous(name = NULL)  + ggtitle("Allow Different Slopes") + theme(legend.position = "none")
+
+cowplot::plot_grid(p2,p3)
+```
+
+* Are the slope different?
+
+--
+
+* Right panel allows slopes to be different - turns out they are not!
+
+* **Next session:** how can we ***test*** whether slopes are different?
+
+---
+
+# Last but not Least: Individual Heterogeneity
+
+1. Suppose we have data on hourly wage and a the number of hours worked by workers
+1. We want to study the labour supply of those workers: regression `hours_worked ~ wage`.
+1. We expect a positive coefficient on `wage`: higher wage => more hours worked.
+1. Additional info: workers are either in group `g=0` or `g=1`.
+
+--
+
+```{r, echo = FALSE,fig.height=3, fig.width=3}
+two_clouds <- function(a1 = 5, a2 = -2, b1 = 2.5, b2 = 1.5, n1 = 50, n2 = 50){
+  set.seed(12)
+  x1 = rnorm(n1,mean = 1,sd = 0.5)
+  x2 = rnorm(n2,mean = 1.3,sd = 0.5)
+  y1 = a1 + b1 * x1 + rnorm(n1,sd = 2)
+  y2 = a2 + b2 * x2 + rnorm(n2,sd = 2)
+  x = c(x1,x2)
+  y = c(y1,y2)
+  g = factor(c(rep(1,n1),rep(2,n1)))
+  z = data.frame(x,y,g)
+  m1 = lm(y~x,data = z)
+  m2 = update(m1, . ~ . + g)
+  p1 = ggplot(z, aes(x,y)) + geom_point() + geom_smooth(method = "lm",se =FALSE) + scale_x_continuous(name = "wage")  + scale_y_continuous(name = "hours") + theme_bw() 
+  p2 = ggplot(z, aes(x,y,color = g)) + geom_point() + geom_smooth(method = "lm",se = FALSE) + scale_x_continuous(name = "wage")  + scale_y_continuous(name = "hours") + theme_bw()  + ggtitle("Controlling for Group")
+  # par(mfcol = c(1,2))
+  # plot(z$x,z$y)
+  # abline(m1)
+  list(m1=m1,m2=m2,p1 = p1, p = cowplot::plot_grid(p1,p2,rel_widths = c(1,1.2)))
+}
+tc = two_clouds()
+tc$p1
+```
+
+--
+
+* ... ***a negative relation***?
+
+---
+
+# Are We Missing Something?
+
+* Let's run the same analysis *controlling* by group:
+
+```{r,echo = FALSE,fig.align='center',fig.height=3 }
+tc$p
+```
+
+* This is an artificial example; yet it shows the importance of group-specific effects. 
+
+* What if groups are ***unobserved***? - we will need advanced methods that are beyond the scope of this course to infer the groups.
+
+* If ***known***, you should include a group dummy so as to control for group effects.
+
+---
 
 class: title-slide-final, middle
 background-image: url(../img/logo/ScPo-econ.png)
@@ -340,9 +541,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape chapter5.html chapter5.pdf --chrome-arg=--disable-web-security")
+```

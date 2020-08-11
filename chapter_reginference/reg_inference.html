@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
-    <title>ScPoEconometrics</title>
+    <title>Applied Data Analysis for Public Policy Studies</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald, Gustave Kenedi and Pierre Villedieu" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
     <link rel="stylesheet" href="../css/scpo.css" type="text/css" />
@@ -13,10 +13,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ScPoEconometrics
+# Applied Data Analysis for Public Policy Studies
 ## Regression Inference
-### Florian Oswald, Gustave Kenedi and Pierre Villedieu
-### SciencesPo Paris </br> 2020-04-14
+### Michele Fioretti
+### SciencesPo Paris </br> 2020-08-11
 
 ---
 
@@ -238,7 +238,7 @@ As we did for the sampling distribution of the proportion of *green pasta*, we w
 
 --
 
-***standard error:*** 1.69 `\(\rightarrow\)` very close to the one in the table (1.68)!
+***standard error:*** 1.7 `\(\rightarrow\)` very close to the one in the table (1.68)!
 
 ---
 
@@ -297,7 +297,7 @@ round(observed_stat,2)
 
 ```
 ## smallTRUE 
-##      5.26
+##      5.24
 ```
 ]
 
@@ -351,7 +351,7 @@ null_distribution &lt;- null_distribution %&gt;%
   mutate(test_stat = stat/sd(bootstrap_distrib$stat))
 ```
 
-* Remember we got `\(\hat{SE}(b_\textrm{small})\)` = 1.69 from our bootstrap distribution.
+* Remember we got `\(\hat{SE}(b_\textrm{small})\)` = 1.7 from our bootstrap distribution.
 ]
 
   
@@ -379,7 +379,7 @@ Very unlikely to obtain `\(b_\textrm{small}\)` = 8.9 when `\(H_0\)` is true.
 
 # Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
 
-* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.257 **or** superior to 5.257. 
+* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.24 **or** superior to 5.24. 
 
 ---
 
@@ -396,7 +396,7 @@ What does the p-value correspond to?
 
 # Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
 
-* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.26 **or** superior to 5.26. 
+* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.24 **or** superior to 5.24. 
 
 * Computing the *p-value* we get:
 
@@ -422,7 +422,7 @@ p_value
 
 # Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
 
-* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.26 **or** superior to 5.26. 
+* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.24 **or** superior to 5.24. 
 
 * Computing the *p-value* we get:
 
@@ -557,7 +557,7 @@ bootstrap_distrib %&gt;%
 ## # A tibble: 1 x 2
 ##   lower_bound upper_bound
 ##         &lt;dbl&gt;       &lt;dbl&gt;
-## 1        5.58        12.2
+## 1        5.57        12.2
 ```
 ]
 
@@ -924,6 +924,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -941,17 +967,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

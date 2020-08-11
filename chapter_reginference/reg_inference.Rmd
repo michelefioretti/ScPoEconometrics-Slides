@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Regression Inference"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -174,6 +174,7 @@ tidy(lm(math ~ small, star_df))
 ```
 
 ```{r echo=FALSE}
+reg_star <- lm(math ~ small, star_df)
 reg_summary_star_df = round(summary(reg_star)$coefficients,2)
 ```
 
@@ -399,7 +400,7 @@ plot_null_distrib +
 
 --
 
-Very unlikely to obtain $b_\textrm{small}$ = `r coeff_star[2]` when $H_0$ is true.
+Very unlikely to obtain $b_\textrm{small}$ = `r reg_summary_star_df[2]` when $H_0$ is true.
 
 ---
 

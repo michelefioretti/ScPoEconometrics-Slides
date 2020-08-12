@@ -49,7 +49,7 @@ overwrite = FALSE
 
 ```
 
-# Recap from last week
+# Recap from Last Week
 
 * Sampling: ***sampling variation*** and ***sampling distributions***
 
@@ -61,7 +61,7 @@ overwrite = FALSE
 
 --
 
-## Today: Deeper dive into ***statistical inference*** <sup>1</sup>
+## Today: Deeper Dive Into ***Statistical Inference*** <sup>1</sup>
 
 .footnote[
 [1]: This lecture is based on the wonderful [confidence interval](https://moderndive.com/8-confidence-intervals.html) and [hypothesis testing](https://moderndive.com/9-hypothesis-testing.html) chapters of [ModernDive](https://moderndive.com/)]
@@ -76,7 +76,7 @@ background-image: url(https://media.giphy.com/media/hXG93399r19vi/giphy.gif)
 background-position: 18% 45%
 background-size: 450px
 
-# Back to reality (there goes gravity `r emo::ji("wink")`)
+# Back to Reality
 
 .pull-right[
 
@@ -142,13 +142,13 @@ There are several approaches to constructing confidence intervals:
     
 --
     
-We'll focus on simulation to give you the intuition and come back to the maths approach next week.
+We'll focus on simulation to give you the intuition and come back to the maths approach in the next weeks.
 
 ---
 
 # Back to Pasta
 
-* As in real life, imagine we had access to *only one random sample* from our bowl of past.
+* As in real life, imagine we had access to *only one random sample* from our bowl of pasta.
 
 --
 
@@ -175,18 +175,18 @@ my_sample = bowl %>%
 
 ```{r, eval = FALSE}
 library(tidyverse)
+library(infer)
 bowl <- read.csv("https://www.dropbox.com/s/qpjsk0rfgc0gx80/pasta.csv?dl=1")
-
+set.seed(1234)
 my_sample = bowl %>%
-  mutate(color = as.factor(ifelse(color == "green","green","non-green"))) %>%
-  rep_sample_n(size = 50) %>%
-  ungroup() %>%
+  mutate(color = as.factor(ifelse(color == "green","green","non-green"))) %>% # Let's focus on either "green" or "non-green" rather than 3 different colours (see `unique(bowl$color)` or `levels(bowl$color)`)
+  rep_sample_n(size = 50) %>% ungroup() %>%
   select(pasta_ID, color)
 ```
 
 .pull-left[
 ```{r}
-head(my_sample,3)
+head(my_sample,2)
 ```
 ]
 
@@ -276,8 +276,6 @@ What if we repeated this resampling procedure many times? Would the proportion b
 --
 
 .pull-left[
-We use the `infer` package to ease the bootstrapping procedure.
-
 ```{r, echo=FALSE}
 bootstrap_distrib = my_sample %>% # take my random sample
   specify(response = color, success = "green") %>%
@@ -292,8 +290,8 @@ percentile_95ub = percentile_95ci[[2]]
 
 
 ```{r, eval = FALSE}
-library(infer)
-
+# Using the `infer` package
+set.seed(1234) 
 bootstrap_distrib = my_sample %>%
   # specify the variable and level of interest
   specify(response = color, success = "green") %>% 
@@ -301,6 +299,20 @@ bootstrap_distrib = my_sample %>%
   generate(reps = 1000, type = "bootstrap") %>% 
   # calculate the proportion of green pasta for each
   calculate(stat = "prop") 
+
+# - OR - using the same approach as last week
+set.seed(1234)
+bootstrap_distrib <- my_sample %>%
+  # resample 50 draws with replacement a 1000 times
+  rep_sample_n(size = 50, reps = 1000, replace = TRUE)  %>% 
+  # compute the average number of 
+  # green colors in each sample
+  group_by(replicate) %>% 
+  summarize(stat = mean(color == "green", na.rm = TRUE)) 
+
+# Remember to `set.seed()` to the same number to compare 
+# the two approaches (e.g., `set.seed(1234)`)
+
 ```
 ]
 
@@ -322,14 +334,18 @@ Let's visualize this sampling variation!
 ---
 
 # Bootstrap Distribution
-
-```{r,echo = FALSE,fig.height = 4.75, fig.width = 8}
+```{r, eval=TRUE, echo=FALSE}
 boot_distrib_plot = bootstrap_distrib %>%
   ggplot(aes(x = stat)) +
-  geom_histogram(boundary = 0.39, binwidth = 0.02, col = "white", fill = "darkgreen") +
+  ylim(0, max(table(bootstrap_distrib$stat))+10) + 
+  geom_histogram(boundary = 0.39, binwidth = 0.02, col = "white", fill = "forestgreen") +
   labs(x = "Proportion of green pasta",
        y = "Frequency") +
   theme_bw(base_size = 14)
+```
+
+
+```{r,echo = FALSE,fig.height = 4.75, fig.width = 8}
 boot_distrib_plot
 ```
 
@@ -344,7 +360,7 @@ The ***bootstrap distribution*** is an approximation of the ***sampling distribu
 ```{r,echo = FALSE,fig.height = 4.75, fig.width = 8}
 boot_distrib_plot +
   geom_vline(xintercept = mean(bootstrap_distrib$stat), linetype = "dashed", size = 1) +
-  annotate("text", x = 0.375, y = 127, label = "bootstrap distribution mean", size = 4)
+  annotate("text", x = 0.345, y = max(table(bootstrap_distrib$stat)), label = paste0("bootstrap distribution mean at ",round(mean(bootstrap_distrib$stat),2)), size = 4)
 ```
 
 --
@@ -358,7 +374,7 @@ The ***bootstrap distribution*** mean is very close to the original sample propo
 ```{r,echo = FALSE,fig.height = 4.75, fig.width = 8}
 boot_distrib_plot +
   geom_vline(xintercept = mean(bootstrap_distrib$stat), linetype = "dashed", size = 1) +
-  annotate("text", x = 0.375, y = 127, label = "bootstrap distribution mean", size = 4)
+  annotate("text", x = 0.345, y = max(table(bootstrap_distrib$stat)), label = paste0("bootstrap distribution mean at ",round(mean(bootstrap_distrib$stat),2)), size = 4)
 ```
 
 Let's use this ***bootstrap distribution*** to construct confidence intervals!
@@ -450,9 +466,12 @@ Does the interval contain the true population proportion?
 ```{r,echo = FALSE,fig.height = 4.75, fig.width = 8}
 p = mean(bowl$color == "green")
 
-boot_distrib_plot_ci +
+boot_distrib_plot +
+  geom_vline(xintercept = percentile_95lb, linetype = "dashed", size = 1.5) +
+  geom_vline(xintercept = percentile_95ub, linetype = "dashed", size = 1.5) +
+  annotate("rect", xmin=percentile_95lb, xmax=percentile_95ub, ymin=0, ymax=Inf, fill = "#d90502", alpha=0.4) +
   geom_vline(xintercept = p, col = "black", size = 1.25) +
-  annotate("text", x = 0.56, y = 125, label = "population proportion", size = 4)
+  annotate("text", x = p+0.08, y = 125, label = paste0("population proportion = ", round(p,2)), size = 4)
 ```
 
 --
@@ -463,7 +482,7 @@ True population parameter is indeed in our 95% interval! Will it always be?
 
 # Interpreting a 95% Confidence Interval
 
-Let's repeatedly draw 100 different samples from our `bowl` and for each sample compute the associated 95% CI using the percentile method.
+* Let's repeatedly draw 100 different samples from our `bowl` and for each sample compute the associated 95% CI using the percentile method.
 
 --
 
@@ -528,7 +547,7 @@ ggplot(percentile_cis) +
   theme(legend.position = "top")
 ```
 
-How many confidence intervals contain the true parameter? Why?
+* How many confidence intervals contain the true parameter? Why?
 
 ---
 
@@ -794,7 +813,7 @@ null_distribution <- promotions %>%
   calculate(stat = "diff in props",
             order = c("male", "female"))
 
-visualize(null_distribution, bins = 10, fill = "#d90502") + 
+visualize(null_distribution, bins = 10, fill = "forestgreen") + 
   labs(title = "Sampling distribution", x = "Difference in promotion rates (male - female)", y = "Frequency") +
   xlim(-0.4, 0.4)+
   theme_bw(base_size = 14)
@@ -805,7 +824,7 @@ visualize(null_distribution, bins = 10, fill = "#d90502") +
 # Sampling Distribution with 1000 Reshufflings
 
 ```{r,echo = FALSE, fig.height = 4.75, fig.width = 8}
-visualize(null_distribution, bins = 10, fill = "#d90502") + 
+visualize(null_distribution, bins = 10, fill = "forestgreen") + 
   geom_vline(xintercept = 0.292, size =1.25) +
   labs(x = "Difference in promotion rates (male - female)", y = "Frequency") +
   xlim(-0.4, 0.4)+
@@ -888,7 +907,7 @@ where $p_m =$ promotion rate of men, and $p_f =$ promotion rate of women.
 # Null Distribution
 
 ```{r,echo = FALSE, fig.height = 4.75, fig.width = 8}
-visualize(null_distribution, bins = 10, fill = "#d90502") + 
+visualize(null_distribution, bins = 10, fill = "forestgreen") + 
   geom_vline(xintercept = 0.292, size =1.25) +
   labs(x = "Difference in sample proportions (male - female)", y = "Frequency") +
   xlim(-0.4, 0.4)+
@@ -958,11 +977,11 @@ obs_diff_prop <- promotions %>%
   specify(decision ~ gender, success = "promoted") %>%
   calculate(stat = "diff in props", order = c("male", "female"))
 
-visualize(null_distribution, bins = 10, fill = "#d90502") + 
+visualize(null_distribution, bins = 10, fill = "forestgreen") + 
   shade_p_value(obs_stat = obs_diff_prop,
                 size = 0.5,
                 direction = "right", 
-                fill = "black") +
+                fill = "red") +
   labs(x = "Differences in sample proportions (male - female)",
        y = "Frequency") +
   xlim(-0.4, 0.4)+
@@ -973,7 +992,7 @@ visualize(null_distribution, bins = 10, fill = "#d90502") +
 
 --
 
-The shaded area correponds to the p-value!
+The red-shaded area correponds to the p-value!
 
 ---
 
@@ -1121,9 +1140,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape CI_and_hypothesis_test.html CI_and_hypothesis_test.pdf --chrome-arg=--disable-web-security")
+```

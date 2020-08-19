@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Confidence Intervals and The Bootstrap"
-author: "Florian Oswald"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -84,7 +84,7 @@ background-size: 500px
 
 * If we knew in real life, we wouldn't have to take samples altogether, would we?
 
-* So what on earth was all of this good for? Fun Only?! `r emo::ji("anguished")`. 
+* So what on earth was all of this good for? Fun Only?! `r emo::ji("anguished")`
 ]
 
 ---
@@ -218,7 +218,7 @@ pennies_sample
 library(ggplot2)
 library(dplyr)
 ggplot(pennies_sample, aes(x = year)) +
-  geom_histogram(binwidth = 10, color = "white")
+  geom_histogram(binwidth = 10, color = "white") + theme_bw()
 ```
 
 ```{r}
@@ -243,7 +243,6 @@ pennies_sample %>%
 * If we went back to the bank for another roll of pennies, would we end up with the same number for $\bar{x}$?
 ]
 
---
 
 .pull-right[
 * Last week we drew 1000 samples from our population of (virtual) balls.
@@ -310,10 +309,10 @@ pennies_resample <- tibble(
 ```{r,echo = FALSE, fig.height = 5}
 p1 = ggplot(pennies_resample, aes(x = year)) +
   geom_histogram(binwidth = 10, color = "white",boundary = 1990) +
-  labs(title = "Resample of 50 pennies")
+  labs(title = "Resample of 50 pennies")+theme_bw()
 p2 = ggplot(pennies_sample, aes(x = year)) +
   geom_histogram(binwidth = 10, color = "white",boundary = 1990) +
-  labs(title = "Original sample of 50 pennies")
+  labs(title = "Original sample of 50 pennies")+theme_bw()
 cowplot::plot_grid(p1,p2)
 ```
 ]
@@ -354,6 +353,11 @@ pennies_resample %>%
 * We'll collect data via this [shared google sheet](https://docs.google.com/spreadsheets/d/1cBefpVyP3q2SortQD3TJ_XFQ2kJ5iSxM6qjwTvqcooY/edit?usp=sharing)
 
 * In class, read this data with
+```{r,eval= FALSE,echo=FALSE}
+# e.g., rep_sample_n(tibble(pennies$year), size = nrow(pennies), replace = TRUE) - Don't show
+## NOTE: update google sheet
+```
+
     ```{r}
     url <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vTb_D6Qczq_WLN-VmhG0-xTxh4Kb_e4A_5BPr2p9wtLN9UBB77yMDDKU3nGe34xVvadzjUQCt9jpWj_/pub?gid=0&single=true&output=csv"
     # pennies_our_sample <- readr::read_csv(url)
@@ -399,7 +403,7 @@ pennies_resample %>%
 ```{r,echo = FALSE,fig.height=5}
 ggplot(resampled_means, aes(x = mean_year)) +
   geom_histogram(binwidth = 1, color = "white", boundary = 1990) +
-  labs(x = "Sampled mean year")
+  labs(x = "Sampled mean year") + theme_bw()
 ```
 ]
 
@@ -510,7 +514,7 @@ virtual_resampled_means
 ```{r,echo = FALSE,fig.height = 5}
 ggplot(virtual_resampled_means, aes(x = mean_year)) +
   geom_histogram(binwidth = 1, color = "white", boundary = 1990) +
-  labs(x = "sample mean")
+  labs(x = "sample mean") + theme_bw()
 ```
 
 
@@ -571,7 +575,7 @@ ggplot(virtual_resampled_means, aes(x = mean_year)) +
   labs(x = "Resample sample mean") +
   scale_x_continuous(breaks = seq(1988, 2006, 2)) +
   geom_vline(xintercept = percentile_ci[[1, 1]], size = 1) +
-  geom_vline(xintercept = percentile_ci[[1, 2]], size = 1)
+  geom_vline(xintercept = percentile_ci[[1, 2]], size = 1)  + theme_bw()
 
 ```
 ]
@@ -644,7 +648,7 @@ ggplot(virtual_resampled_means, aes(x = mean_year)) +
   geom_vline(xintercept = percentile_ci[[1, 1]], size = 1) +
   geom_vline(xintercept = percentile_ci[[1, 2]], size = 1) + 
   geom_vline(xintercept = standard_error_ci[[1, 1]], linetype = "dashed", size = 1) +
-  geom_vline(xintercept = standard_error_ci[[1, 2]], linetype = "dashed", size = 1)
+  geom_vline(xintercept = standard_error_ci[[1, 2]], linetype = "dashed", size = 1)  + theme_bw()
 ```
 ]
 
@@ -673,7 +677,7 @@ pennies_sample %>%
   specify(response = year) %>%
   generate(reps = 35,type = "bootstrap") %>%
   calculate(stat = "mean") %>%
-  visualize()
+  visualize() + theme_bw()
 ```
 ]
 
@@ -705,7 +709,7 @@ pennies_sample %>%
 * Then, let's visualize it!
 
 ```{r,fig.height=5}
-visualize(bootstrap_distribution)
+visualize(bootstrap_distribution)  + theme_bw()
 ```
 ]
 
@@ -733,7 +737,7 @@ visualize(bootstrap_distribution)
 ```{r,fig.height=5}
 visualize(bootstrap_distribution) + 
   shade_confidence_interval(endpoints = 
-                              percentile_ci)
+                              percentile_ci) + theme_bw()
 ```
 
 * Or shorter `shade_ci()`.
@@ -796,7 +800,7 @@ percentile_ci_1
 sample_1_bootstrap %>% 
   visualize(bins = 15) + 
   shade_confidence_interval(endpoints = percentile_ci_1) +
-  geom_vline(xintercept = 0.375, linetype = "dashed")
+  geom_vline(xintercept = 0.375, linetype = "dashed") + theme_bw()
 ```
 ]
 
@@ -807,7 +811,7 @@ sample_1_bootstrap %>%
 sample_1_bootstrap %>% 
   visualize(bins = 15) + 
   shade_confidence_interval(endpoints = percentile_ci_1) +
-  geom_vline(xintercept = 0.375, linetype = "dashed")
+  geom_vline(xintercept = 0.375, linetype = "dashed") + theme_bw()
 ```
 * Had we taken another sample, we would have obtained a different result. 
 * Take 100 samples and see how well we do!
@@ -888,7 +892,7 @@ ggplot(percentile_cis) +
   coord_cartesian(xlim = c(0.1, 0.7)) + 
   theme_light() + 
   theme(panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(),
-        panel.grid.minor.x = element_blank())
+        panel.grid.minor.x = element_blank())  + theme_bw()
 ```
 ]
 
@@ -915,9 +919,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape bootstrap.html bootstrap.pdf --chrome-arg=--disable-web-security")
+```

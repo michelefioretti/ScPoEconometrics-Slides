@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Intro To Causality"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -281,6 +281,17 @@ Let's adjust our Canadian statistics **taking the age distribution into account 
 
 1. What would the average mortality rate be for pipe smokers if they had the same age distribution as non-smokers?
 
+```{r,eval=FALSE,echo=FALSE}
+# Question 1
+avg_death_rate <- (15*11+35*13+50*16)/40
+avg_death_rate
+
+# Question 2
+avg_death_rate2 <- (15*29+35*9+50*2)/40
+avg_death_rate2
+
+```
+
 ---
 
 
@@ -293,13 +304,11 @@ Here is the age-adjusted death rates table found by [Cochran (1968)](https://www
 knitr::include_graphics("../img/photos/adjusted_death_rates.png")
 ```
 
+--
+
 - Cigars/pipes seem much less dangerous than in the previous table...
 
---
-
 - ... but this table still does not allow us to tell about the causal effect of smoking.
-
---
 
 - There are still a lot of ***confounding factors*** that are not accounted for. 
 
@@ -311,9 +320,9 @@ knitr::include_graphics("../img/photos/adjusted_death_rates.png")
 
 - In some other cases, there are both correlation and causality but not of the same **magnitude**, or even the same **direction**.
 
---
+- So how can we make causal inference then?
 
-- So how can we make causal inference then? 
+--
 
 - The ***Potential Outcomes Framework*** will be our guide.
 
@@ -584,14 +593,43 @@ If you got it right, the bias should be very close to 0. Why is it not exactly 0
 
 1. *To do at home*:  Compute the value of the ***selection bias*** and the ***heterogenous treatment effect bias*** and check that we have $$SDO = ATE + \textrm{selection bias} + \textrm{heterogenous treatment effect bias}$$
 
+```{r,eval=FALSE,echo=FALSE}
+## NOTE: review this exercise
+# Question 1 
+data = read.csv("https://www.dropbox.com/s/a4u67nmu9gnl94y/toy_data.csv?dl=1")
+head(data)
 
+# Question 2
+data$Y_i = data$D_i * data$Y1_i + (1-data$D_i) * data$Y0_i
+data$delta_i = data$Y1_i - data$Y0_i
+
+# Question 3
+ATE = mean(data$Y1_i) - mean(data$Y0_i)
+round(ATE,5) == round(mean(data$delta_i),5) # ATE == delta
+SDO = mean(data$Y_i[data$D_i == 1]) - mean(data$Y_i[data$D_i == 0])
+bias = SDO - ATE
+
+# Question 4
+data$Y_i_random = data$D_i_random * data$Y1_i + (1-data$D_i_random) * data$Y0_i
+SDO_random = mean(data$Y_i_random[data$D_i_random == 1]) - mean(data$Y_i_random[data$D_i_random == 0])
+bias_random = SDO_random - ATE
+
+# Question 5
+selection_bias = mean(data$Y0_i[data$D_i == 1]) - mean(data$Y0_i[data$D_i == 0])
+ATT = mean(data$Y1_i[data$D_i == 1]) - mean(data$Y0_i[data$D_i == 1])
+ATU = mean(data$Y1_i[data$D_i == 0]) - mean(data$Y0_i[data$D_i == 0])
+pi <- mean(data$D_i) # share in the treatment group
+heterogeneout_treatment_effect_bias = (1-pi) * (ATT - ATU)
+
+SDO - (ATE + selection_bias + heterogeneout_treatment_effect_bias)
+```
 ---
 
 # Randomization solves the problem of causal inference!
 
 * ***Randomized experiments***: you ***randomly*** assign people to a treatment and a control group.
 
-* In this case, the treatment status **independent** of the potential outcomes.
+* In this case, the treatment status is **independent** of the potential outcomes.
 
 --
 
@@ -716,12 +754,13 @@ class:inverse
 `star_df <- star_df[complete.cases(star_df),]`
 
 1. Let's check how well the randomization was done by doing ***balancing checks***.  
-Compute the average percentage of girls, african americans, and free lunch qualifiers by grade *and* treatment class.  
+Compute the average percentage of girls, african americans, and free lunch qualifiers *by* grade *and* treatment class.  
 *Hint*: The following computes the percentage of girls (without the relevant `dplyr` verbs)
 `share_female = mean(gender == "female") * 100`.
 
 
 ```{r, echo = FALSE}
+# Question 1
 # data("STAR", package = "AER")
 # star <- STAR %>%
 #     pivot_longer(
@@ -730,7 +769,28 @@ Compute the average percentage of girls, african americans, and free lunch quali
 #         names_pattern = "(.+)(k|1|2|3)$")
 # write.csv2(star, file = "star_data.csv", row.names = F)
 star_df = read.csv(file = "https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
+
+# Question 2
+head(star_df)
+nrow(star_df) # NOTE: why so many??? 4 years of experiment?
+
+# Question 3
+# The same student is only in one class at any point in time. Outcome of "RESHAPE" # NOTE: check it with Florian!
+
+# Question 4
 star_df <- star_df[complete.cases(star_df),]
+
+# Question 5
+star_df %>%
+  group_by(star,grade) %>%
+  mutate(share_female = mean(gender == "female") * 100,
+         share_afam = mean(ethnicity == "afam") * 100,
+         share_lunch = mean(lunch == "free") * 100) %>%
+  summarise(mean_share_female = mean(share_female, na.rm = T),
+            mean_share_afam = mean(share_afam, na.rm = T),
+            mean_share_lunch = mean(share_lunch, na.rm = T))
+
+
 ```
 
 ---
@@ -893,11 +953,35 @@ class:inverse
 
 1. Compute the average math score for both groups, and the difference between the two. (Use base `R`.)
 
-1. Create a dummy variable `treatment` equal to `TRUE` if student is in treatment group (i.e. small class size) and `FALSE` if in control group (i.e. regular class size). See slide 33 for how to create a dummy variable.
+1. Create a dummy variable `treatment` equal to `TRUE` if student is in treatment group (i.e. small class size) and `FALSE` if in control group (i.e. regular class size).
 
 1. Regress math score on the treatment dummy variable. Are the results in line with the previous question?
 
 1. How do you interpret these coefficients?
+
+```{r,eval=FALSE,echo=FALSE}
+# Question 1
+star_sr <- star_df %>%
+  filter(star != "regular+aide")
+
+# Question 2
+avg_math_small = mean(star_sr$math[star_sr$star == "small"])
+avg_math_small
+avg_math_regular = mean(star_sr$math[star_sr$star == "regular"])
+avg_math_regular
+avg_diff = avg_math_small - avg_math_regular
+avg_diff
+
+# Question 3
+star_sr$treatment = FALSE
+star_sr$treatment[star_sr$star == "small"] = TRUE
+
+# Question 4
+reg <- lm(math ~ treatment , data = star_sr)
+
+# Question 5
+# Belonging to a small class improves a student's math score by 13.16 points on average, ceteris paribus.
+```
 
 ---
 

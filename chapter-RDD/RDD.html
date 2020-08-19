@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
-    <title>ScPoEconometrics</title>
+    <title>Applied Data Analysis for Public Policy Studies</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald, Gustave Kenedi and Pierre Villedieu" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
     <link rel="stylesheet" href="../css/scpo.css" type="text/css" />
@@ -13,10 +13,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ScPoEconometrics
+# Applied Data Analysis for Public Policy Studies
 ## Regression Discontinuity Design
-### Florian Oswald, Gustave Kenedi and Pierre Villedieu
-### SciencesPo Paris </br> 2020-04-21
+### Michele Fioretti
+### SciencesPo Paris </br> 2020-08-19
 
 ---
 
@@ -173,8 +173,9 @@ devtools::install_github("jrnold/masteringmetrics",
 
 # load package
 library(masteringmetrics)
-# load data
+# load data | `?mlda`
 data("mlda", package = "masteringmetrics")
+# "MLDA: Minimum Legal Dringing Age" (Age-Fatalities Data)
 ```
 ]
 
@@ -267,11 +268,9 @@ class: inverse
 
 1. Do the same for motor vehicle-related causes (`mva`) and alcohol-related causes (`alcohol`) as a function of age.
 
----
 
-# Graphical Results: All Death Rates
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
+]
 
 ---
 
@@ -293,6 +292,12 @@ class: inverse
 
 ---
 
+# Graphical Results: All Death Rates
+
+&lt;img src="RDD_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
 # RDD as Local Average Treatment Effect (LATE)
 
 * The RD estimator is a __local average treatment effect (LATE)__.
@@ -307,7 +312,7 @@ class: inverse
 
 --
 
-* Using the 21 year old alcohol restriction age in the RD context will only tell you the effect of this restriction on death rates but not the general effect of alcohol consumption.
+* Using the 21 year old alcohol restriction age in the RD context will only tell you the effect of this restriction on death rates but *not the general effect of alcohol consumption*.
 
 --
 
@@ -361,6 +366,8 @@ class: inverse
 1. How do you interpret each coefficient?
 
 1. What is the causal effect of legal access to alcohol on death rates?
+
+
 
 ---
 
@@ -436,7 +443,7 @@ mean(mlda$all, na.rm = TRUE)
 
 # Simulations - Linear Relationship and Clear Discontinuity
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -446,7 +453,7 @@ mean(mlda$all, na.rm = TRUE)
 
 # Simulations - Linear Relationship and Clear Discontinuity
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
 
 `$$outcome_i = \alpha + \color{#d90502}\delta treatment_i + \beta running_i + e_i,$$`
 
@@ -454,7 +461,7 @@ mean(mlda$all, na.rm = TRUE)
 
 # Simulations - Quadratic Relationship and Clear Discontinuity
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -464,7 +471,7 @@ mean(mlda$all, na.rm = TRUE)
 
 # Simulations - Quadratic Relationship and Clear Discontinuity
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
 
 `$$outcome_i = \alpha + \color{#d90502}\delta treatment_i + \beta_1 running_i + \beta_2 running_i^2 + e_i,$$`
 
@@ -472,13 +479,13 @@ mean(mlda$all, na.rm = TRUE)
 
 # Simulations - Linear Relationship but NO Discontinuity
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Simulations - Different Slopes
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -488,7 +495,7 @@ mean(mlda$all, na.rm = TRUE)
 
 # Simulations - Different (Linear) Slopes
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
 
 `$$outcome_i = \alpha + \color{#d90502}\delta treatment_i + \beta (running_i - cutoff) + \\ \gamma treatment_i * (running_i - cutoff) + e_i,$$`
 
@@ -515,13 +522,13 @@ mean(mlda$all, na.rm = TRUE)
 
 # Going Back to our Example: Nonlinearities / `\(\neq\)` Slopes?
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Going Back to our Example: Nonlinearities / `\(\neq\)` Slopes?
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -543,11 +550,13 @@ class: inverse
 
 * Re-run these models (linear, quadratic, different slopes) for the following death causes: motor vehicle accidents (`mva`), alcohol-related (`alcohol`), and internal (`internal`).
 
+
+
 ---
 
 # Graphical Representation of the Regression Results
 
-&lt;img src="RDD_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="RDD_files/figure-html/unnamed-chunk-25-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -719,9 +728,9 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| &lt;a href="mailto:florian.oswald@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | florian.oswald@sciencespo.fr       |
-| &lt;a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
-| &lt;a href="https://scpoecon.github.io/ScPoEconometrics"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
+| &lt;a href="mailto:michele.fioretti@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | michele.fioretti@sciencespo.fr       |
+| &lt;a href="https://github.com/michelefioretti/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
+| &lt;a href="https://michelefioretti.github.io/ScPoEconometrics/"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
 | &lt;a href="http://twitter.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                         |
 | &lt;a href="http://github.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-github fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                       |
     </textarea>
@@ -773,6 +782,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -790,17 +825,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

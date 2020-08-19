@@ -235,17 +235,49 @@ As we did for the sampling distribution of the proportion of *green pasta*, we w
 
 1. Plot this simulated sampling distribution and compute mean and the standard error of $b_\textrm{small}$.
 
+```{r, echo=FALSE, eval=FALSE}
+  # Solution next slide
+```
+
 ---
 
 # Bootstrap Distribution
 
 ```{r, echo=FALSE, fig.height = 4.75, fig.width = 8}
+
+# Question 1
+star_df = read.csv("https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
+star_df = star_df[complete.cases(star_df),]
+star_df = star_df %>%
+    filter(star %in% c("small","regular") &
+               grade == "k") %>% 
+    mutate(small = (star == "small"))
+
+# Question 2 and 3
 library(infer)
+repetitions = 1000
+set.seed(123)
 bootstrap_distrib = star_df %>% 
     specify(formula = math ~ small) %>%
-    generate(reps = 1000, type = "bootstrap") %>%
+    generate(reps = repetitions, type = "bootstrap") %>%
     calculate(stat = "slope", order = c("TRUE","FALSE"))
 se_simul = round(sd(bootstrap_distrib$stat),3)
+
+set.seed(123)
+# - or, alternatively, with some more code (but potentially cleaner) -
+boot_alt <- star_df %>%
+  # resample with replacement a number of times
+  rep_sample_n(size = nrow(star_df), reps = repetitions, replace = TRUE) %>%
+  # group the resulting `data.frame` by the ID of each repetition (we have 1000 samples)
+  group_by(replicate) %>%
+  # we propose 2 alternative ways to compute the standard error: (i) as the standard deviation of the `small beta` coefficient in each regression, and (ii) as the average of the standard error of the `small beta` coefficient in each regression. 
+  # To do that we run a regression in each sample using `summarise`
+  summarise(beta = summary(lm(math ~ small))$coefficients[2,1], 
+            se = summary(lm(math ~ small))$coefficients[2,2]) %>%
+  ungroup() %>%
+  summarise(st_error = round(sd(beta),3),
+         st_error_same_alternative_way = round(mean(se),3)) # These two numbers should be reeeeally close to each others, and to `se_simul`. Try changing the variable `repetitions`: what does it happen to the standard error if you increase the number of repetitions? If you decrease it instead?
+  
 
 bootstrap_distrib %>%
     ggplot(aes(x = stat)) +
@@ -254,6 +286,7 @@ bootstrap_distrib %>%
         x = "Bootstrap sample slope estimate",
         y = "Frequency"
     ) +
+  scale_x_continuous(breaks = seq(2,16,2)) +
     theme_bw(base_size = 14)
 ```
 
@@ -311,7 +344,7 @@ $$\begin{align}H_0:& \beta_k = 0\\H_A:& \beta_k \neq 0\end{align}$$
 
 .pull-left[
 ```{r}
-observed_stat = reg_star$coefficients[2]/sd(bootstrap_distrib$stat)
+observed_stat = lm(math ~ small, star_df)$coefficients[2]/sd(bootstrap_distrib$stat)
 round(observed_stat,2)
 ```
 ]
@@ -345,6 +378,7 @@ round(observed_stat,2)
 * Let's generate 1000 permuted samples and compute $b_\textrm{small}$ for each.
 
 ```{r}
+set.seed(123)
 null_distribution <- star_df %>% 
   specify(formula = math ~ small) %>%
   hypothesize(null = "independence") %>% 
@@ -382,7 +416,8 @@ plot_null_distrib = null_distribution %>%
   labs(x = "Test statistic under the null hypothesis",
        y = "Frequency",
        title = "Simulation-Based Null Distribution") +
-  theme_bw(base_size = 14)
+  theme_bw(base_size = 14) +
+  xlim(min(null_distribution$test_stat)-0.5, max(null_distribution$test_stat,observed_stat)+0.5)
 plot_null_distrib
 ```
 
@@ -393,6 +428,7 @@ plot_null_distrib
 
 ```{r echo=FALSE, fig.height = 4.75, fig.width = 8}
 plot_null_distrib +
+  xlim(min(null_distribution$test_stat)-0.5, max(null_distribution$test_stat,observed_stat)+0.5) +
   geom_vline(xintercept = observed_stat, size = 1.25) +
   annotate("text", x = 4.1, y = 75, label = "observed test statistic", size = 4)
 
@@ -507,7 +543,9 @@ layout: true
 
   * $\hat{\textrm{SE}(b)}$ is the sample estimate of the standard deviation of $b$.
   * It is also obtained through a theoretical formula (which you can find in the [book](https://scpoecon.github.io/ScPoEconometrics/std-errors.html#se-theory)!) but we'll leave it aside.
-
+```{r, echo = FALSE, eval=FALSE}
+# NOTE: change the page of the book
+```
 --
 
 * A ***standard normal distribution*** is a *normal distribution* with *mean* 0 and *standard deviation* 1.
@@ -553,7 +591,7 @@ knitr::include_graphics("../img/photos/standard_normal_distrib.png")
 .pull-left[
 ```{r}
 tidy(lm(math ~ small, star_df),
-     conf.int = TRUE, conf.level = 0.95) %>%
+     conf.int = TRUE, conf.level = 0.95) %>% # To display confidence intervals
   filter(term == "smallTRUE") %>%
   select(term, conf.low, conf.high)
 ```
@@ -582,6 +620,21 @@ class:inverse
 1. Using the bootstrap distributed you generated in Task 1, compute the 95% confidence interval using the *percentile method*.
 
 1. How similar is it to the confidence intervals obtained in the previous slide?
+
+```{r,eval=FALSE,echo=FALSE}
+# Question 1
+quantile(bootstrap_distrib$stat, probs = c(0.025, 0.975))
+
+# Question 2
+tidy(lm(math ~ small, star_df),
+     conf.int = TRUE, conf.level = 0.95) %>% # To display confidence intervals
+  filter(term == "smallTRUE") %>%
+  select(term, conf.low, conf.high) %>%
+  mutate(diff.conf.low = conf.low - quantile(bootstrap_distrib$stat, 0.025),
+         diff.conf.high = conf.high - quantile(bootstrap_distrib$stat, 0.975)) %>%
+  select(diff.conf.low, diff.conf.high) # Quite small! We good!
+
+```
 
 ---
 
@@ -623,7 +676,11 @@ class: title-slide-section-red, middle
 
 --
 
-* Before delving into these assumptions, let's see the small but important modifications we apply to our model (back to [*lecture 4*](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter3/chapter3.html#1)):
+* Before delving into these assumptions, let's see the small but important modifications we apply to our model (back to [*lecture 4: Simple Linear Regression*](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter3/chapter3.html#1)):
+
+```{r,eval=FALSE,echo=FALSE}
+# Note: change this link!
+```
 
 --
 
@@ -679,7 +736,7 @@ The CRM assumption #2 is also know as the (strict) **exogeneity assumption**.
 
 * Suppose there is *unobserved* ability $a_i$. 
   * High ability means higher wage.
-  * It *also* means school is easier, and so $i$ selects into more schooling.
+  * It *also* means school is easier, and so $i$ **selects** into more schooling.
 
 ---
 
@@ -725,7 +782,7 @@ class:inverse
 
 Let's go back to our question of returns to education and gender. 
 
-1. Load the data `CPS1985` from the `AER` package and look back at the `help` to get the definition of each variable: `?CPS1985`
+1. Load the data `CPS1985` from the `AER` package and look back at the `help` to get the definition of each variable: `?CPS1985`. Call the data.frame `cps`.
 
 1. Create the `log_wage` variable equal to the log of `wage`.
 
@@ -741,6 +798,31 @@ Let's go back to our question of returns to education and gender.
   
   * Can we reject the nullity of this coefficient at the 5% level? At 10%?  
   
+  
+```{r,eval=FALSE,echo=FALSE}
+# Question 1
+library(AER)
+data(CPS1985)
+cps <- CPS1985 # rename it for simplicity of typing
+head(df)
+
+# Question 2
+cps$log_wage <- log(cps$wage)
+
+# Question 3
+reg1 <- lm(log_wage ~ gender + education, cps)
+tidy(reg1)
+# alternatively
+summary(reg1)
+# The coefficients are significant at 1% level
+
+# Question 4
+reg2 <- lm(log_wage ~ gender * education, cps)
+summary(reg2)
+# a year more of education increases `log_wages` for women by 0.03 more than for `men`.
+# The coefficient is not significant at 5% level, but it is significant at 10% level.
+
+```
 ---
 
 class:inverse
@@ -760,6 +842,46 @@ class:inverse
   1. From `reg_bootstrap` extract and save the value of the intercept for men as `intercept_men_bootstrap` and the value of the slope for men as `slope_men_bootstrap`. Do the same for women.
 
   1. Add both predicted lines from this bootstrap sample to the previous plot (*Hint*: use `geom_abline` (x2))
+  
+```{r,eval=FALSE,echo=FALSE}
+# Question 1
+geduc_wage <- ggplot(cps, aes(x=education, y=log_wage))+
+  geom_point(size = 2, alpha = 0.5, position = "jitter", color = "#d90502")+ # jitter + Sciences Po Red color!
+  xlim(0,20) +
+    ylim(-0.1, 4) +
+    labs(
+      x = "Education",
+      y = "Log(Wage)",
+      title = "Relation between log(wage) and education") +
+    theme_bw(base_size = 20)
+
+geduc_wage
+
+# we see some bunching at 12ish, but an overall increasing relationship. Some outliers for log(wage) = 0 and close to 4.
+
+# Question 2
+geduc_wage + geom_smooth() #`geom_smooth()` computes a smooth local regression. A bit fancy, but basically it just tells you how `y` (i.e., log_wage) changes in a small neighborhood of `x` (i.e., education).
+
+# Question 3
+cps_boot <- cps %>%
+  rep_sample_n(size = nrow(cps), reps = 1, replace = TRUE) # bootstrap --> " replace = TRUE "
+
+reg_bootstrap <- lm(log_wage ~ gender * education , cps_boot)
+summary(reg_bootstrap)
+
+intercept_men_bootstrap <- summary(reg_bootstrap)$coefficients[1,1]
+slope_men_bootstrap <- summary(reg_bootstrap)$coefficients[3,1]
+
+intercept_women_bootstrap <-intercept_men_bootstrap  + summary(reg_bootstrap)$coefficients[2,1]
+slope_women_bootstrap <- slope_men_bootstrap + summary(reg_bootstrap)$coefficients[4,1]
+
+geduc_wage + 
+  geom_abline(intercept = intercept_men_bootstrap, slope = slope_men_bootstrap, color = "blue") +
+  geom_abline(intercept = intercept_women_bootstrap, slope = slope_women_bootstrap, color = "red")
+
+
+
+```
   
 ---
 
@@ -850,7 +972,7 @@ Even better : [`ungeviz`](https://github.com/wilkelab/ungeviz) and `gganimate` b
 
 ---
 
-# Teaser for next session (the last one `r emo::ji("cry")`)
+# Teaser for next session 
 
 * Methods for program evaluation!
 
@@ -898,9 +1020,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape reg_inference.html reg_inference.pdf --chrome-arg=--disable-web-security")
+```

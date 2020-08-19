@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Applied Data Analysis for Public Policy Studies
 ## Regression Inference
 ### Michele Fioretti
-### SciencesPo Paris </br> 2020-08-11
+### SciencesPo Paris </br> 2020-08-17
 
 ---
 
@@ -230,15 +230,17 @@ As we did for the sampling distribution of the proportion of *green pasta*, we w
 
 1. Plot this simulated sampling distribution and compute mean and the standard error of `\(b_\textrm{small}\)`.
 
+
+
 ---
 
 # Bootstrap Distribution
 
-&lt;img src="reg_inference_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="reg_inference_files/figure-html/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
 
 --
 
-***standard error:*** 1.7 `\(\rightarrow\)` very close to the one in the table (1.68)!
+***standard error:*** 1.67 `\(\rightarrow\)` very close to the one in the table (1.68)!
 
 ---
 
@@ -291,13 +293,13 @@ By default, the regression output provides the results associated with the follo
 .pull-left[
 
 ```r
-observed_stat = reg_star$coefficients[2]/sd(bootstrap_distrib$stat)
+observed_stat = lm(math ~ small, star_df)$coefficients[2]/sd(bootstrap_distrib$stat)
 round(observed_stat,2)
 ```
 
 ```
 ## smallTRUE 
-##      5.24
+##      5.33
 ```
 ]
 
@@ -331,6 +333,7 @@ round(observed_stat,2)
 
 
 ```r
+set.seed(123)
 null_distribution &lt;- star_df %&gt;% 
   specify(formula = math ~ small) %&gt;%
   hypothesize(null = "independence") %&gt;% 
@@ -351,7 +354,7 @@ null_distribution &lt;- null_distribution %&gt;%
   mutate(test_stat = stat/sd(bootstrap_distrib$stat))
 ```
 
-* Remember we got `\(\hat{SE}(b_\textrm{small})\)` = 1.7 from our bootstrap distribution.
+* Remember we got `\(\hat{SE}(b_\textrm{small})\)` = 1.67 from our bootstrap distribution.
 ]
 
   
@@ -362,24 +365,7 @@ null_distribution &lt;- null_distribution %&gt;%
 # Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
 
 
-&lt;img src="reg_inference_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
-
----
-
-# Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
-
-
 &lt;img src="reg_inference_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
-
---
-
-Very unlikely to obtain `\(b_\textrm{small}\)` = 8.9 when `\(H_0\)` is true.
-
----
-
-# Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
-
-* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.24 **or** superior to 5.24. 
 
 ---
 
@@ -390,13 +376,30 @@ Very unlikely to obtain `\(b_\textrm{small}\)` = 8.9 when `\(H_0\)` is true.
 
 --
 
+Very unlikely to obtain `\(b_\textrm{small}\)` = 8.9 when `\(H_0\)` is true.
+
+---
+
+# Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
+
+* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.333 **or** superior to 5.333. 
+
+---
+
+# Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
+
+
+&lt;img src="reg_inference_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
 What does the p-value correspond to?
 
 ---
 
 # Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
 
-* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.24 **or** superior to 5.24. 
+* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.33 **or** superior to 5.33. 
 
 * Computing the *p-value* we get:
 
@@ -422,7 +425,7 @@ p_value
 
 # Testing `\(\beta_\textrm{small} = 0\)` vs `\(\beta_\textrm{small} \neq 0\)`
 
-* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.24 **or** superior to 5.24. 
+* To decide if we reject `\(H_0\)`, recall we are considering a **two-sided test** here: *more extreme* means inferior to -5.33 **or** superior to 5.33. 
 
 * Computing the *p-value* we get:
 
@@ -530,7 +533,7 @@ layout: true
 
 ```r
 tidy(lm(math ~ small, star_df),
-     conf.int = TRUE, conf.level = 0.95) %&gt;%
+     conf.int = TRUE, conf.level = 0.95) %&gt;% # To display confidence intervals
   filter(term == "smallTRUE") %&gt;%
   select(term, conf.low, conf.high)
 ```
@@ -557,7 +560,7 @@ bootstrap_distrib %&gt;%
 ## # A tibble: 1 x 2
 ##   lower_bound upper_bound
 ##         &lt;dbl&gt;       &lt;dbl&gt;
-## 1        5.57        12.2
+## 1        5.63        12.2
 ```
 ]
 
@@ -574,6 +577,8 @@ class:inverse
 1. Using the bootstrap distributed you generated in Task 1, compute the 95% confidence interval using the *percentile method*.
 
 1. How similar is it to the confidence intervals obtained in the previous slide?
+
+
 
 ---
 
@@ -615,7 +620,9 @@ class: title-slide-section-red, middle
 
 --
 
-* Before delving into these assumptions, let's see the small but important modifications we apply to our model (back to [*lecture 4*](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter3/chapter3.html#1)):
+* Before delving into these assumptions, let's see the small but important modifications we apply to our model (back to [*lecture 4: Simple Linear Regression*](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter3/chapter3.html#1)):
+
+
 
 --
 
@@ -671,7 +678,7 @@ The CRM assumption #2 is also know as the (strict) **exogeneity assumption**.
 
 * Suppose there is *unobserved* ability `\(a_i\)`. 
   * High ability means higher wage.
-  * It *also* means school is easier, and so `\(i\)` selects into more schooling.
+  * It *also* means school is easier, and so `\(i\)` **selects** into more schooling.
 
 ---
 
@@ -790,7 +797,7 @@ ggplot(data=cps,aes(y = log_wage, x = education, colour = gender)) +
 
 .pull-right[
 
-&lt;img src="reg_inference_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="reg_inference_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
 
 ]
 

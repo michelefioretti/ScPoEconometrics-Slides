@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Multiple Regression Model"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -50,7 +50,7 @@ library(gtools)
 ```
 
 
-# Recap from last week
+# Recap from last week NOTE: UPDATE THIS SLIDE!!
 
 * Causality versus correlation
 
@@ -434,6 +434,22 @@ Let's analyse the regression results using **reading** score as the dependent va
   * Look at the coefficients.
   * Discuss all coefficients: sign and magnitude.
 
+
+```{r, eval=FALSE, echo = FALSE}
+# Question 1
+  library(haven)
+  grades <- read_dta("https://www.dropbox.com/s/wwp2cs9f0dubmhr/grade5.dta?dl=1")
+  
+# Question 2
+  summary(reg <- lm(avgverb ~ classize + disadvantaged, data = grades))
+  
+# Question 3
+  reg$coefficients
+  
+# Question 4
+  summary(reg_full <- lm(avgverb ~ classize + disadvantaged + school_enrollment  + female + religious, data = grades))
+```
+
 ---
 
 # No Perfect Collinearity
@@ -468,13 +484,35 @@ Still need to think about this perfect collinearity issue? Let's run a regressio
 `star_df <- star_df[complete.cases(star_df),]`  
 Keep only second graders and small and regular class groups.
 
-1. Create a dummy variable `small` equal to `TRUE` if students are in a small class and `FALSE` if they are in a regular class. In the same way, create a dummy variable `regular` equal to `TRUE` if students are in a regular class and to `FALSE` if they are in a small class. Clearly these two variables are perfectly collinear.
+1. In the same dataset, add a dummy variable `star_df$small` equal to `TRUE` if students are in a small class and `FALSE` if they are in a regular class. In the same way, add a dummy variable `star_df$regular` equal to `TRUE` if students are NOT in a small class and to `FALSE` if they are in a small class. Clearly these two variables are perfectly collinear.
 
 1. Regress `small` on `math`. What is the average predicted `math` score of students in a small class?
 
 1. Regress `regular` on `math`. What is the average predicted `math` score of students in a regular class?
 
 1. Regress `small` and `regular` on `math`. What do you notice? Can you explain why?
+
+```{r, eval=FALSE, echo=FALSE}
+# Question 1
+  star_df <- read.csv("https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
+  star_df <- star_df[complete.cases(star_df),]
+
+# Quesiton 2
+  star_df$small = FALSE 
+  star_df$small[star_df$star == "small"] = TRUE
+  
+  star_df$regular = FALSE 
+  star_df$regular[star_df$star != "small"] = TRUE
+  
+# Question 4
+  lm(small ~ math, data = star_df)
+  
+# Question 5
+  lm(regular ~ math, data = star_df)
+  
+# Question 6
+  summary(lm(small ~ math + regular, data = star_df))
+```
 
 ---
 
@@ -591,7 +629,7 @@ class:inverse
 Let's go back our `grades` dataset. These are the estimates we got from regressing the math test score on the full set of regressors.
 
 ```{r echo = FALSE}
-reg_full <- lm(avgverb ~ classize + disadvantaged + school_enrollment + female + religious, grades)
+reg_full <- lm(avgmath ~ classize + disadvantaged + school_enrollment + female + religious, grades)
 reg_full$coefficients
 ```
 
@@ -605,6 +643,34 @@ reg_full$coefficients
   * Would it make sense to standardize the `religious` variable?
 
 1. Regress `avgmath_stand` on the full set of standardized regressors and `religious`. Discuss the relative influence of the regressors.
+
+
+```{r, eval=FALSE,echo=FALSE}
+# Question 1
+  grades$avgmath_stand <- standardize(grades$avgmath)
+
+# Question 2
+  reg_full2 <- lm(avgmath_stand ~ classize + disadvantaged + school_enrollment + female + religious, grades)
+  reg_full2$coefficients
+  
+# Question 3
+  # hard to tell... we need to standardize the variables
+  
+# Question 4
+  grades$classize_stand <- standardize(grades$classize)
+  grades$disadvantaged_stand <- standardize(grades$disadvantaged)
+  grades$school_enrollment_stand <- standardize(grades$school_enrollment)
+  grades$female_stand <- standardize(grades$female)
+  grades$religious_stand <- standardize(grades$religious)
+  
+  # No because it is a dummy variable. 
+  reg_full3 <- lm(avgmath_stand ~ classize_stand + disadvantaged_stand + school_enrollment_stand + female_stand + religious, grades)
+  reg_full3$coefficients
+  
+  reg_full4 <- lm(avgmath_stand ~ classize_stand + disadvantaged_stand + school_enrollment_stand + female_stand + religious_stand, grades)
+  reg_full4$coefficients
+
+```
 ---
 
 # Log Models
@@ -909,6 +975,38 @@ class:inverse
 
 1. Add all of other regressors to `reg2` and save it as `reg3`. Do our coefficients of interest change?
 
+```{r,eval=FALSE,echo=FALSE}
+
+# Question 1
+  # install.packages("AER")
+  library(AER)
+  data(CPS1985)
+  df <- CPS1985
+
+# Question 2
+  ?CPS1985
+
+# Question 3
+  # it matters for instance if women (or men) are more likely to work part-time. 
+  # If we find that women (or men) earn less, but we do not observe part-time/full-time employment, and part-time 
+  # workers have smaller wages than full-time workers, then we may mistakenly associate the wage gap between men and women
+  # to gender differences rather than to the decision to work part-time or full-time.
+  
+# Question 4
+  df$log_wage <- log(df$wage)
+  
+# Question 5
+  reg1 <- lm(log_wage ~ gender + education, data = df)
+  
+# Question 6
+  reg2 <- lm(log_wage ~ gender*education, data = df)
+  
+# Question 7
+  reg3 <- lm(log_wage ~ gender*education + experience + age +ethnicity + region+ occupation + sector+ union + married, data = df)
+  
+
+```
+
 ---
 
 # Wage, Gender and Education - Visually (Simple Model)
@@ -960,12 +1058,14 @@ background-position: 9% 19%
 
 # SEE YOU NEXT WEEK!
 
-
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape chapter4.html chapter4.pdf --chrome-arg=--disable-web-security")
+```

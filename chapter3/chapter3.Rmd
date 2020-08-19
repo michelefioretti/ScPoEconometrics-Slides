@@ -1118,5 +1118,5 @@ background-position: 9% 19%
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
 ```{r makepdf, echo=FALSE,eval=FALSE}
-system("decktape chapter3.html chapter3.pdf --chrome-arg=--disable-web-security")
+system("decktape chapter2.html chapter2.pdf --chrome-arg=--disable-web-security")
 ```

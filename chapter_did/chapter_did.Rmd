@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Differences-in-Differences"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -209,6 +209,7 @@ Pennsylvania and New Jersey are ***very similar***: similar institutions, simila
 .pull-left[
 Let's take a closer at their data
 ```{r, echo = FALSE, eval = TRUE, results = "hide"}
+library(devtools)
   # install package that contains the cleaned data
 remotes::install_github("b-rodrigues/diffindiff")
   # load package
@@ -218,6 +219,7 @@ ck1994 <- njmin
 ```
 
 ```{r, echo = TRUE, eval = FALSE}
+library(devtools)
   # install package that contains the cleaned data
 remotes::install_github("b-rodrigues/diffindiff")
   # load package
@@ -231,9 +233,10 @@ ck1994 <- njmin
 
 .pull-right[
 ```{r}
+library(tidyverse)
 ck1994 %>%
   select(sheet,chain,state,observation,empft,emppt) %>%
-  head()
+  head(n=4)
 ```
 
 ]
@@ -253,6 +256,56 @@ class: inverse
 
 5. How different are New Jersey and Pennsylvania's fast-food restaurants before the minimum wage increase?
 
+```{r,eval=FALSE,echo=FALSE}
+# Question 1
+?njmin
+    # sheet = unique store id
+    # chain = fast food chain
+    # region = pa1 is northeast suburbs of Phila, pa2 is Easton etc, centralj is central NJ, northj is northern NJ, southj is south NJ
+    # observation = Date of first (February 1992) and second (November 1992) observation.
+    # ncalls = Number of call-backs. Is 0 if contacted on first call.
+    # empft = Number of full-time employees
+    # emppt = Number of part-time employees
+    # ...
+
+# Question 2
+ck1994 %>% 
+  group_by(state, observation) %>% 
+  summarise(count = n())
+  # 410 stores == "Number of Interviewed Stores"
+
+# Question 3
+ck1994$empfte <- ck1994$empft + 0.5*ck1994$emppt + ck1994$nmgrs # see page 475 of the paper
+
+# Question 4
+ck1994 %>% 
+  group_by(state, observation) %>% 
+  summarise(avg_empfte = mean(empfte, na.rm = T),
+            per_empfte = mean(empft / empfte, na.rm = T)*100,
+            avg_wage_st = mean(wage_st, na.rm = T))
+
+# Question 5
+ck1994 %>% 
+  group_by(state, observation) %>% 
+  summarise(n = n(),
+            avg_empfte = mean(empfte, na.rm = T),
+            se_avg_empfte = sd(empfte, na.rm = T)/sqrt(n),
+            per_empfte = mean(empft / empfte, na.rm = T)*100,
+            se_per_empfte = sd(empft / empfte*100, na.rm = T)/sqrt(n),
+            avg_wage_st = mean(wage_st, na.rm = T),
+            se_avg_wage_st = sd(wage_st, na.rm = T)/sqrt(n)) %>%
+  group_by(state) %>%
+  summarise(diff_avg_empfte = diff(avg_empfte),
+            diff_per_empfte = diff(per_empfte),
+            diff_avg_wage_st = diff(avg_wage_st),
+            t_test_avg_empfte = diff(-avg_empfte)/sqrt(sum(se_avg_empfte^2)),
+            t_test_per_empfte = diff(-per_empfte)/sqrt(sum(se_per_empfte^2)),
+            t_test_avg_wage_st = diff(-avg_wage_st)/sqrt(sum(se_avg_wage_st^2)))
+
+# Note: consider whether to include standard errors of t-test
+# formula for t.test <- http://www.sthda.com/english/wiki/unpaired-two-samples-t-test-in-r
+
+```
 ---
 
 # Card and Krueger DiD: Tabular Results
@@ -712,6 +765,19 @@ class: inverse
 1. Estimate the following regression model. Do you obtain the same results as in slide 9?
 
 $$empfte_{st} = \alpha + \beta treat_s + \gamma post_t + \delta(treat_s \times post_t) + \varepsilon_{st}$$
+```{r,echo=FALSE,eval=FALSE}
+# Question 1
+ck1994$treat = FALSE
+ck1994$treat[ck1994$state == "New Jersey"] = TRUE
+
+# Question 2
+ck1994$post = FALSE
+ck1994$post[ck1994$observation == "November 1992"] = TRUE
+
+# Question 3
+summary(lm(empfte ~ treat*post, data = ck1994))
+
+```
 
 ---
 
@@ -1125,9 +1191,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape chapter_did.html chapter_did.pdf --chrome-arg=--disable-web-security")
+```

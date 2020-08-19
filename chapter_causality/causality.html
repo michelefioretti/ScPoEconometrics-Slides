@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
-    <title>ScPoEconometrics</title>
+    <title>Applied Data Analysis for Public Policy Studies</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald, Gustave Kenedi and Pierre Villedieu" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
     <link rel="stylesheet" href="../css/scpo.css" type="text/css" />
@@ -13,10 +13,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ScPoEconometrics
+# Applied Data Analysis for Public Policy Studies
 ## Intro To Causality
-### Florian Oswald, Gustave Kenedi and Pierre Villedieu
-### SciencesPo Paris </br> 2020-03-10
+### Michele Fioretti
+### SciencesPo Paris </br> 2020-08-13
 
 ---
 
@@ -251,6 +251,8 @@ Let's adjust our Canadian statistics **taking the age distribution into account 
 
 1. What would the average mortality rate be for pipe smokers if they had the same age distribution as non-smokers?
 
+
+
 ---
 
 
@@ -261,13 +263,11 @@ Here is the age-adjusted death rates table found by [Cochran (1968)](https://www
 
 &lt;img src="../img/photos/adjusted_death_rates.png" width="600px" style="display: block; margin: auto;" /&gt;
 
+--
+
 - Cigars/pipes seem much less dangerous than in the previous table...
 
---
-
 - ... but this table still does not allow us to tell about the causal effect of smoking.
-
---
 
 - There are still a lot of ***confounding factors*** that are not accounted for. 
 
@@ -279,9 +279,9 @@ Here is the age-adjusted death rates table found by [Cochran (1968)](https://www
 
 - In some other cases, there are both correlation and causality but not of the same **magnitude**, or even the same **direction**.
 
---
+- So how can we make causal inference then?
 
-- So how can we make causal inference then? 
+--
 
 - The ***Potential Outcomes Framework*** will be our guide.
 
@@ -452,9 +452,9 @@ $$ SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) $$
 --
 
 * For example, it would consist in taking the difference between:
-  * Death rates for smokers and non-smokers,
-  * GDP growth rates for democratic and non democratic countries,
-  * Unemployment rates for countries with and without a minimum wage.
+  1. Death rates for smokers and non-smokers,
+  1. GDP growth rates for democratic and non democratic countries,
+  1. Unemployment rates for countries with and without a minimum wage.
 
 --
 
@@ -958,6 +958,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -975,17 +1001,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

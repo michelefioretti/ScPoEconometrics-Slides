@@ -1,7 +1,7 @@
 ---
-title: "ScPoEconometrics"
+title: "Applied Data Analysis for Public Policy Studies"
 subtitle: "Regression Discontinuity Design"
-author: "Florian Oswald, Gustave Kenedi and Pierre Villedieu"
+author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -197,8 +197,9 @@ devtools::install_github("jrnold/masteringmetrics",
 
 # load package
 library(masteringmetrics)
-# load data
+# load data | `?mlda`
 data("mlda", package = "masteringmetrics")
+# "MLDA: Minimum Legal Dringing Age" (Age-Fatalities Data)
 ```
 ]
 
@@ -229,7 +230,7 @@ rdd_run <- mlda %>%
   ggplot(aes(x = agecell, y = over21, color = over21)) +
   geom_point(size = 4, alpha = 0.8) +
   geom_vline(xintercept = 21, linetype = "longdash") +
-  labs(x = "Age", y = "Above LMDA") +
+  labs(x = "Age", y = "Above MLDA") +
   scale_color_viridis_d() +
   theme_bw(base_size = 14) + theme(legend.position="none")
 rdd_run
@@ -312,6 +313,71 @@ class: inverse
 1. Add a regression line to the plot. What do you observe?
 
 1. Do the same for motor vehicle-related causes (`mva`) and alcohol-related causes (`alcohol`) as a function of age.
+
+
+```{r, echo = FALSE, eval = FALSE}
+# Question 1
+    # install package containing data
+    devtools::install_github("jrnold/masteringmetrics",
+                             subdir = "masteringmetrics")
+    
+    # load package
+    library(masteringmetrics)
+    # load data | `?mlda`
+    data("mlda", package = "masteringmetrics")
+    # "MLDA: Minimum Legal Dringing Age" (Age-Fatalities Data)
+
+# Question 2
+    library(tidyverse)
+    mlda <- mlda %>%
+        mutate(over21 = (agecell >= 21))
+    
+    # - or
+    # mlda$over21 = FALSE
+    # mlda$over21[mlda$agecell >= 21] = TRUE
+    
+# Question 3
+    plot <- ggplot(mlda, aes(y=all, x=agecell, color = over21)) + 
+        geom_point(size = 4, alpha = 0.8) +
+        geom_vline(xintercept = 21, linetype = "longdash") +
+        labs(x = "Age", y = "All Death Causes (rate)") +
+        scale_color_viridis_d() + # prettier colors `?scale_color_viridis_d`
+        theme_bw(base_size = 14) + theme(legend.position="none")
+    # is there something striking?? Do we observe a clear break at 21?
+
+# Question 4
+    plot + geom_smooth()
+    # Using `geom_smooth()` - local regression, we see a clear jump at age 21
+    
+    # Alternatively, we can run two different regressions, one for above and one for below the `Age 21` cutoff
+    reg_below21 <- lm(all ~ agecell, mlda[mlda$over21 == FALSE,])
+    reg_below21
+    reg_over21 <- lm(all ~ agecell, mlda[mlda$over21 == TRUE,])
+    reg_over21
+    # Compare the intercepts and coefficients of the two regressions! Are they different?
+    # To plot these regression on our `plot`, we can simply run:
+    plot + geom_smooth(method = "lm")
+    # the `method = "lm"` option substitute the local smoothing for the linear regression.
+    
+# Question 5
+    ggplot(mlda, aes(y=mva, x=agecell, color = over21)) + 
+        geom_point(size = 4, alpha = 0.8) +
+        geom_vline(xintercept = 21, linetype = "longdash") +
+        labs(x = "Age", y = "Moter Vehicle-Related Causes (rate)") +
+        scale_color_viridis_d() + # prettier colors `?scale_color_viridis_d`
+        theme_bw(base_size = 14) + theme(legend.position="none") + 
+        geom_smooth(method = "lm")
+    
+    ggplot(mlda, aes(y=alcohol, x=agecell, color = over21)) + 
+        geom_point(size = 4, alpha = 0.8) +
+        geom_vline(xintercept = 21, linetype = "longdash") +
+        labs(x = "Age", y = "Alcohol-Related Causes (rate)") +
+        scale_color_viridis_d() + # prettier colors `?scale_color_viridis_d`
+        theme_bw(base_size = 14) + theme(legend.position="none") + 
+        geom_smooth(method = "lm")
+    
+```
+]
 
 ---
 
@@ -416,7 +482,7 @@ rdd_plot +
 
 --
 
-* Using the 21 year old alcohol restriction age in the RD context will only tell you the effect of this restriction on death rates but not the general effect of alcohol consumption.
+* Using the 21 year old alcohol restriction age in the RD context will only tell you the effect of this restriction on death rates but *not the general effect of alcohol consumption*.
 
 --
 
@@ -470,6 +536,21 @@ $$DEATHRATE_a = \alpha + \delta D_a + \beta a + \varepsilon_i,$$
 1. How do you interpret each coefficient?
 
 1. What is the causal effect of legal access to alcohol on death rates?
+
+```{r, echo = FALSE, eval = FALSE}
+# Question 1
+reg <- lm(all ~ over21 + agecell, data = mlda)
+summary(reg)
+
+# Question 2
+# Intercept: the average death rate is 112 for a person with 0 years (does this make sense to you?)
+# agecell: every additional year decreases the average death rate by almost 1 point.
+# over21TRUE: the average death rate increases by 7.7 at the cut-off.
+
+# Question 3
+# Legal access to alchool increases death rates by 7.7 points.
+    
+```
 
 ---
 
@@ -877,6 +958,39 @@ $$DEATHRATE_a = \alpha + \delta D_a + \beta (a - 21) + \gamma D_a * (a - 21) + \
 
 * Re-run these models (linear, quadratic, different slopes) for the following death causes: motor vehicle accidents (`mva`), alcohol-related (`alcohol`), and internal (`internal`).
 
+```{r,eval=FALSE,echo=FALSE}
+# Question 1
+mlda <- mlda %>%
+  mutate(over21 = (agecell >= 21),
+         agecell_21 = agecell - 21)
+rdd <- lm(all ~ agecell_21 + over21, mlda)
+rdd2 <- lm(all ~ agecell_21 + I(agecell_21^2) + over21, mlda)
+summary(rdd)
+summary(rdd2)
+
+# Question 2
+rdd_diff_slopes <- lm(all ~ agecell_21 + over21 + over21*agecell_21, mlda)
+library(broom)
+tidy(rdd_diff_slopes) # or summary(rdd_diff_slopes)
+# The RDD coefficient stays unaffected
+
+# Question 3
+summary(lm(mva ~ agecell_21 + over21, mlda))
+summary(lm(mva ~ agecell_21 + I(agecell_21^2) + over21, mlda))
+summary(lm(mva ~ agecell_21 + over21 + over21*agecell_21, mlda))
+
+summary(lm(alcohol ~ agecell_21 + over21, mlda))
+summary(lm(alcohol ~ agecell_21 + I(agecell_21^2) + over21, mlda))
+summary(lm(alcohol ~ agecell_21 + over21 + over21*agecell_21, mlda))
+
+summary(lm(internal ~ agecell_21 + over21, mlda))
+summary(lm(internal ~ agecell_21 + I(agecell_21^2) + over21, mlda))
+summary(lm(internal ~ agecell_21 + over21 + over21*agecell_21, mlda))
+# We find no discontinuity for internal causes see Figure 3 at: http://masteringmetrics.com/wp-content/uploads/2015/01/Carpenter-and-Dobkin-2009.pdf This indicates that the increase in overall death at age 21 is due to external causes, and in particular to the increase in moter vehicle related deaths and alcohol related deaths
+# See Figure 4 for relative importance of each type of death. The increase in alcohol is rather small compared to MVA
+
+```
+
 ---
 
 # Graphical Representation of the Regression Results
@@ -1075,8 +1189,12 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
-| <a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
-| <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
+| <a href="https://github.com/michelefioretti/ScPoEconometrics-Slides">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
+| <a href="https://michelefioretti.github.io/ScPoEconometrics/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
+
+```{r makepdf, echo=FALSE,eval=FALSE}
+system("decktape RDD.html RDD.pdf --chrome-arg=--disable-web-security")
+```

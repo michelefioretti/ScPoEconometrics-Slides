@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
-    <title>ScPoEconometrics</title>
+    <title>Applied Data Analysis for Public Policy Studies</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Florian Oswald, Gustave Kenedi and Pierre Villedieu" />
+    <meta name="author" content="Michele Fioretti" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <script src="libs/kePrint/kePrint.js"></script>
     <script src="https://use.fontawesome.com/5235085b15.js"></script>
@@ -14,10 +14,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# ScPoEconometrics
+# Applied Data Analysis for Public Policy Studies
 ## Differences-in-Differences
-### Florian Oswald, Gustave Kenedi and Pierre Villedieu
-### SciencesPo Paris </br> 2020-04-21
+### Michele Fioretti
+### SciencesPo Paris </br> 2020-08-18
 
 ---
 
@@ -191,6 +191,7 @@ Let's take a closer at their data
 
 
 ```r
+library(devtools)
   # install package that contains the cleaned data
 remotes::install_github("b-rodrigues/diffindiff")
   # load package
@@ -205,21 +206,20 @@ ck1994 &lt;- njmin
 .pull-right[
 
 ```r
+library(tidyverse)
 ck1994 %&gt;%
   select(sheet,chain,state,observation,empft,emppt) %&gt;%
-  head()
+  head(n=4)
 ```
 
 ```
-## # A tibble: 6 x 6
+## # A tibble: 4 x 6
 ##   sheet chain  state        observation   empft emppt
 ##   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;
 ## 1 46    bk     Pennsylvania February 1992  30    15  
 ## 2 49    kfc    Pennsylvania February 1992   6.5   6.5
 ## 3 506   kfc    Pennsylvania February 1992   3     7  
-## 4 56    wendys Pennsylvania February 1992  20    20  
-## 5 61    wendys Pennsylvania February 1992   6    26  
-## 6 62    wendys Pennsylvania February 1992   0    31
+## 4 56    wendys Pennsylvania February 1992  20    20
 ```
 
 ]
@@ -238,6 +238,7 @@ class: inverse
 1. Compute the average number of FTE employment, average percentage of FT employees (out of the number of FTE employees), and average starting wage (`wage_st`) by state and by survey wave. Compare your results with *Table 2* of the paper.
 
 5. How different are New Jersey and Pennsylvania's fast-food restaurants before the minimum wage increase?
+
 
 ---
 
@@ -294,61 +295,61 @@ Let's look at these results graphically.
 
 # DiD Graphically
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-110-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # DiD Graphically
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-111-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # DiD Graphically
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-112-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # DiD Graphically
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-113-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # DiD Graphically
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-114-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # DiD Graphically
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-115-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # What if we had done a naive after/before comparison?
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-116-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # What if we had done a naive after/before comparison?
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-117-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # What if we had done a naive after NJ/PA comparison?
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-118-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # What if we had done a naive after NJ/PA comparison?
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-119-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -483,6 +484,7 @@ class: inverse
 
 `$$empfte_{st} = \alpha + \beta treat_s + \gamma post_t + \delta(treat_s \times post_t) + \varepsilon_{st}$$`
 
+
 ---
 
 layout: false
@@ -516,44 +518,44 @@ layout: true
 
 #  Parallel Trends: Graphically
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-120-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Checking the parallel trends assumption
 
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-121-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Checking the parallel trends assumption
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-122-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Parallel trends assumption `\(\rightarrow\)` Verified ✅
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-123-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Parallel trends assumption `\(\rightarrow\)` Verified ✅
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-124-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Parallel trends assumption `\(\rightarrow\)` Not verified ❌
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-125-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 # Parallel trends assumption `\(\rightarrow\)` Not verified ❌
 
-&lt;img src="chapter_did_files/figure-html/unnamed-chunk-126-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter_did_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -783,6 +785,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -800,17 +828,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

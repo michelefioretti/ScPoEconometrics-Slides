@@ -28,7 +28,7 @@ Lecture 11: Regression Discontinuity [HTML](https://raw.githack.com/michelefiore
 
 Lecture 12: Recap (*coming soon!*)
 
-The suggested reading list can be found [here](https://github.com/ScPoEcon/ScPoEconometrics-Slides/blob/master/syllabus.md).
+The suggested reading list can be found [here](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/syllabus.md).
 
 ## Legal
 

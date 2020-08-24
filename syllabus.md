@@ -81,6 +81,7 @@ Chapters [2](https://moderndive.com/2-viz.html) and [3](https://moderndive.com/3
 a Difference?](https://www.journals.uchicago.edu/doi/pdfplus/10.1086/209897?casa_token=qxbk70WjM2EAAAAA:-MC8awUaxs58pljRE2CJQTHupYq6klQbm4pN699bm3UXmwI_Ll3YEw22ETbKhViheYq4_bmK-g)
 
 *Literature reviews:* 
+
 [Imbens and Wooldridge (2007, NBER - Lecture Notes), What’s New in Econometrics? Difference-in-Differences Estimation](https://www.nber.org/WNE/lect_10_diffindiffs.pdf)
 
 

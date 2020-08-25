@@ -1,4 +1,4 @@
-# Applied Data Analysis for Public Policy Studies Slide Host
+# Applied Data Analysis for Public Policy Studies Slide Host [(Home)](https://michelefioretti.github.io/ScPoEconometrics-Slides/)
 
 * Here you can look at the slide for the [Applied Data Analysis for Public Policy Studies (link to book)](https://michelefioretti.github.io/ScPoEconometrics/) course. 
 * This repo is frequently updated, so check back often.
@@ -20,7 +20,7 @@ Lecture 7: Sampling [HTML](https://raw.githack.com/michelefioretti/ScPoEconometr
 
 Lecture 8: Confidence Intervals and Hypothesis Testing [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_hypothesis/hypothesis.html) [PDF](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter_hypothesis/hypothesis.pdf)
 
-Lecture 9: Regression Inference [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter8_chapter_hypothesis/hypothesis.html) [PDF](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter_reginference/reg_inference.pdf)
+Lecture 9: Regression Inference [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_reginference/reg_inference.html) [PDF](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter_reginference/reg_inference.pdf)
 
 Lecture 10: Differences-in-Differences [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_did/chapter_did.html) [PDF](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter_did/chapter_did.pdf)
 

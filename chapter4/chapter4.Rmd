@@ -50,7 +50,7 @@ library(gtools)
 ```
 
 
-# Recap from last week NOTE: UPDATE THIS SLIDE!!
+# Recap from last week
 
 * Causality versus correlation
 

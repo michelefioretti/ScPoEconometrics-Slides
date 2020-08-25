@@ -831,9 +831,7 @@ class: inverse
 
 # OLS variations / restrictions
 
-<!-- Note: change the link -->
-
-* All are described [in the book](https://scpoecon.github.io/ScPoEconometrics/linreg.html#OLS). Optional `r emo::ji("nerd_face")`.
+* All are described [in the book](https://michelefioretti.github.io/ScPoEconometrics/linreg.html#OLS). Optional `r emo::ji("nerd_face")`.
 
 * There is an app for each of them:
 <br>
@@ -1118,5 +1116,5 @@ background-position: 9% 19%
 | <a href="http://github.com/ScPoEcon">.ScPored[<i class="fa fa-github fa-fw"></i>]                          | @ScPoEcon                       |
 
 ```{r makepdf, echo=FALSE,eval=FALSE}
-system("decktape chapter2.html chapter2.pdf --chrome-arg=--disable-web-security")
+system("decktape chapter3.html chapter3.pdf --chrome-arg=--disable-web-security")
 ```

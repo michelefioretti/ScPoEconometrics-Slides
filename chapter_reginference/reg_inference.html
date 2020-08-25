@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Applied Data Analysis for Public Policy Studies
 ## Regression Inference
 ### Michele Fioretti
-### SciencesPo Paris </br> 2020-08-17
+### SciencesPo Paris </br> 2020-08-25
 
 ---
 
@@ -487,8 +487,7 @@ layout: true
 * Theory-based approach uses one fundamental result: the sampling distribution of the sample statistic `\(\frac{b - \beta}{\hat{\textrm{SE}(b)}}\)` *converges* to a ***standard normal distribution*** as the sample size gets larger and larger.
 
   * `\(\hat{\textrm{SE}(b)}\)` is the sample estimate of the standard deviation of `\(b\)`.
-  * It is also obtained through a theoretical formula (which you can find in the [book](https://scpoecon.github.io/ScPoEconometrics/std-errors.html#se-theory)!) but we'll leave it aside.
-
+  * It is also obtained through a theoretical formula (which you can find in the [book](https://michelefioretti.github.io/ScPoEconometrics/std-errors.html#se-theory)!) but we'll leave it aside.
 --
 
 * A ***standard normal distribution*** is a *normal distribution* with *mean* 0 and *standard deviation* 1.
@@ -620,8 +619,7 @@ class: title-slide-section-red, middle
 
 --
 
-* Before delving into these assumptions, let's see the small but important modifications we apply to our model (back to [*lecture 4: Simple Linear Regression*](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter3/chapter3.html#1)):
-
+* Before delving into these assumptions, let's see the small but important modifications we apply to our model (back to [*lecture 4: Simple Linear Regression*](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter3/chapter3.html#1)):
 
 
 --
@@ -724,7 +722,7 @@ class:inverse
 
 Let's go back to our question of returns to education and gender. 
 
-1. Load the data `CPS1985` from the `AER` package and look back at the `help` to get the definition of each variable: `?CPS1985`
+1. Load the data `CPS1985` from the `AER` package and look back at the `help` to get the definition of each variable: `?CPS1985`. Call the data.frame `cps`.
 
 1. Create the `log_wage` variable equal to the log of `wage`.
 
@@ -740,6 +738,8 @@ Let's go back to our question of returns to education and gender.
   
   * Can we reject the nullity of this coefficient at the 5% level? At 10%?  
   
+  
+
 ---
 
 class:inverse
@@ -759,6 +759,8 @@ class:inverse
   1. From `reg_bootstrap` extract and save the value of the intercept for men as `intercept_men_bootstrap` and the value of the slope for men as `slope_men_bootstrap`. Do the same for women.
 
   1. Add both predicted lines from this bootstrap sample to the previous plot (*Hint*: use `geom_abline` (x2))
+  
+
   
 ---
 
@@ -829,7 +831,7 @@ Even better : [`ungeviz`](https://github.com/wilkelab/ungeviz) and `gganimate` b
 
 ---
 
-# Teaser for next session (the last one 😢)
+# Teaser for next session 
 
 * Methods for program evaluation!
 
@@ -877,9 +879,9 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| &lt;a href="mailto:florian.oswald@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | florian.oswald@sciencespo.fr       |
-| &lt;a href="https://github.com/ScPoEcon/ScPoEconometrics-Slides"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
-| &lt;a href="https://scpoecon.github.io/ScPoEconometrics"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
+| &lt;a href="mailto:michele.fioretti@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | michele.fioretti@sciencespo.fr       |
+| &lt;a href="https://michelefioretti.github.io/ScPoEconometrics-Slides/"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
+| &lt;a href="https://michelefioretti.github.io/ScPoEconometrics/"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
 | &lt;a href="http://twitter.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                         |
 | &lt;a href="http://github.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-github fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                       |
     </textarea>

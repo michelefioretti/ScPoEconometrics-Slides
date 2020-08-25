@@ -542,10 +542,7 @@ layout: true
 * Theory-based approach uses one fundamental result: the sampling distribution of the sample statistic $\frac{b - \beta}{\hat{\textrm{SE}(b)}}$ *converges* to a ***standard normal distribution*** as the sample size gets larger and larger.
 
   * $\hat{\textrm{SE}(b)}$ is the sample estimate of the standard deviation of $b$.
-  * It is also obtained through a theoretical formula (which you can find in the [book](https://scpoecon.github.io/ScPoEconometrics/std-errors.html#se-theory)!) but we'll leave it aside.
-```{r, echo = FALSE, eval=FALSE}
-# NOTE: change the page of the book
-```
+  * It is also obtained through a theoretical formula (which you can find in the [book](https://michelefioretti.github.io/ScPoEconometrics/std-errors.html#se-theory)!) but we'll leave it aside.
 --
 
 * A ***standard normal distribution*** is a *normal distribution* with *mean* 0 and *standard deviation* 1.
@@ -676,11 +673,8 @@ class: title-slide-section-red, middle
 
 --
 
-* Before delving into these assumptions, let's see the small but important modifications we apply to our model (back to [*lecture 4: Simple Linear Regression*](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter3/chapter3.html#1)):
+* Before delving into these assumptions, let's see the small but important modifications we apply to our model (back to [*lecture 4: Simple Linear Regression*](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter3/chapter3.html#1)):
 
-```{r,eval=FALSE,echo=FALSE}
-# Note: change this link!
-```
 
 --
 

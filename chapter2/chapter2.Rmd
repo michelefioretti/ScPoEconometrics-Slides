@@ -787,8 +787,7 @@ ScPoEconometrics::runTutorial('chapter2-script')
 ---
 
 # How are x and y related? Covariance and Correlation
-<!-- Note: update the link below -->
-* [This](https://scpoecon.github.io/ScPoEconometrics/sum.html#summarize-two) is the relevant section in the book about Covariance. 
+* [This](https://michelefioretti.github.io/ScPoEconometrics/sum.html#summarize-two) is the relevant section in the book about Covariance. 
 
 .pull-left[
 ```{r x-y-corr,echo=FALSE,message=FALSE,warning=FALSE,fig.align='center',fig.height = 5,fig.width=6}

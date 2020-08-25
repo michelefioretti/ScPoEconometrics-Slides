@@ -85,7 +85,7 @@ library(knitr)
  
 --
 
-- A [book overview](https://scpoecon.github.io/ScPoEconometrics/index.html) of the material is also available. Note: UPDATE LINKS!
+- A [book overview](https://michelefioretti.github.io/ScPoEconometrics/index.html) of the material is also available.
 
 --
 
@@ -719,7 +719,7 @@ class: inverse
 
 # `ScPoEconometrics` package
 
-* We wrote an `R` package for you.
+* The ScPoEconometrics team wrote an `R` package for you.
 
 * It's hosted on [GitHub](https://github.com/ScPoEcon/ScPoEconometrics)
 

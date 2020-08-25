@@ -7,7 +7,7 @@ The material below is a complement to the lecture slides and should be used as r
 
 **Introduction, Mastering Metrics**
 
-[**Angrist and Pischke (2010 JEP), *The Credibility Revolution in Empirical Economics***](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)  
+[**Angrist and Pischke (2010, JEP), *The Credibility Revolution in Empirical Economics***](https://www.aeaweb.org/articles?id=10.1257/jep.24.2.3)  
 
 
 ### Lecture 2/3: Summarizing, Visualizing and Tidying Data
@@ -45,7 +45,7 @@ Chapters [2](https://moderndive.com/2-viz.html) and [3](https://moderndive.com/3
 
 [Chapter 6, ModernDive](https://moderndive.com/6-multiple-regression.html)
 
-[Belloc et al. (VoxEU 2020), Cross-Country Correlation Analysis for Research on COVID-19](https://voxeu.org/article/cross-country-correlation-analysis-research-covid-19)
+[Belloc et al. (2020, VoxEU), Cross-Country Correlation Analysis for Research on COVID-19](https://voxeu.org/article/cross-country-correlation-analysis-research-covid-19)
 
 
 ### Lecture 7: Sampling
@@ -57,7 +57,13 @@ Chapters [2](https://moderndive.com/2-viz.html) and [3](https://moderndive.com/3
 
 **Chapters [8](https://moderndive.com/8-confidence-intervals.html) and [9](https://moderndive.com/9-hypothesis-testing.html), ModernDive**
 
+[Bertrand and Mullainathan (2004, AER), Are Emily and Greg more Employable than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination](https://pubs.aeaweb.org/doi/pdfplus/10.1257/0002828042002561)
+
+[List and DellaVigna (2012, QJE), Testing for Altruism and Social Pressure in Charitable Giving](https://watermark.silverchair.com/qjr050.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAArUwggKxBgkqhkiG9w0BBwagggKiMIICngIBADCCApcGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMWFD_C7jEheELLRDIAgEQgIICaMc17FZLN7KCnV3OhuHikStT5_Te13eZp0ZAa5tDAboYORjQV02rsCs8c0MMnMhNyn3ChdUCueeYLAP1k8mpFGdhIyP5y7-wsXfoR7DSbucVwcqW3oBkrguwHCD1cJa2raOpBb_WKvviKXRrj7LweW8PgwHzlsS_AozjTLlqRh-zUzDQsoxga97eNcNj0J27YNaWpAaMQbBpLAmU5LnrUBNRuJGk_aLmonQapyvG5UQNM616uIhaBttcmcYHdpysYIHtQroSiEVHjzyb5g6ERuOPbjdbS4b8N_mObjkHFZElqLBAc1qAjTY_GN6ZCrZztQ7hAHjXzMrxHW5b6n496zLP2jSovzB12P9eWu4Fq8gKnzcwzplcKFBVCLqgo874i5IvfojgFkAPGjW0p3uVH2vZyBj5jvLxz5qFfyfCkwSx-UWfqymZZMENs13d_tz_m5LzWaKIM0BQD8rSv9LPTwEZVdLbrjfix81AHl_L0EWyfg952X5GuqAdJJ14FWwqtpnoVccU-ZI_vGKXs2puP3FZCBYI18U7wRMRpZJX86tpHFj-YrBH52-yGXDcOxtjFoQSTkDrL81JjJFhzVbwfd8iyrohOf170zC9G-kQNxG8ZpyG28DOFE4M3_ABZztNxzHnB72A1PIluX6cBnONZock1e7ogHYEk5iBcg-cmwroz_Pt7H6XL3Ih29Ut06vTeyldGC78-kJbgyLFO1jscO7Q3OLasZc-RBtQzyXxpRouUPHA_tcvMqiIvbWVQdxFi8XE-iBPZtku38OeFfwQZbNo8_pmCFjs3SnqdddcdrNub3FIwNveqho)
+
 [Financial Times, Scientists Strike Back Against Statistical Tyranny](https://www.ft.com/content/36f9374c-5075-11e9-8f44-fe4a86c48b33)
+
+[New York Times, Biased Algorithms Are Easier to Fix Than Biased People](https://www.nytimes.com/2019/12/06/business/algorithm-bias-fix.html)
 
 ### Lecture 9: Regression Inference
 
@@ -77,8 +83,7 @@ Chapters [2](https://moderndive.com/2-viz.html) and [3](https://moderndive.com/3
 
 [Snow (1854, Medical Times and Gazette), The cholera near Golden-square, and at Deptford](https://johnsnow.matrix.msu.edu/work.php?id=15-78-45)
 
-[Waldfogel (1998, JoLE),The Family Gap for Young Women in the United States and Britain: Can Maternity Leave Make
-a Difference?](https://www.journals.uchicago.edu/doi/pdfplus/10.1086/209897?casa_token=qxbk70WjM2EAAAAA:-MC8awUaxs58pljRE2CJQTHupYq6klQbm4pN699bm3UXmwI_Ll3YEw22ETbKhViheYq4_bmK-g)
+[Waldfogel (1998, JoLE), The Family Gap for Young Women in the United States and Britain: Can Maternity Leave Make a Difference](https://www.journals.uchicago.edu/doi/pdfplus/10.1086/209897?casa_token=qxbk70WjM2EAAAAA:-MC8awUaxs58pljRE2CJQTHupYq6klQbm4pN699bm3UXmwI_Ll3YEw22ETbKhViheYq4_bmK-g)
 
 *Literature reviews:*  
 [Imbens and Wooldridge (2007, NBER - Lecture Notes), What’s New in Econometrics? Difference-in-Differences Estimation](https://www.nber.org/WNE/lect_10_diffindiffs.pdf)

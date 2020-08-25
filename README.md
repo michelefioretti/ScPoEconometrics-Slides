@@ -1,6 +1,6 @@
-# ScPoEconometrics Slide Host
+# Applied Data Analysis for Public Policy Studies Slide Host
 
-* Here you can look at the slide for the [ScPoEconometrics](https://github.com/ScPoEcon/ScPoEconometrics) course.
+* Here you can look at the slide for the [Applied Data Analysis for Public Policy Studies](https://michelefioretti.github.io/ScPoEconometrics/) course.
 * This repo is frequently updated, so check back often.
 
 
@@ -8,19 +8,19 @@
 
 Lecture 1: Introduction [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter1/chapter1.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter1/chapter1.pdf)
 
-Lectures 2/3: Summarizing, Visualizing and Tidying Data [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter2/chapter2.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter2/chapter2.pdf)
+Lectures 2/3: Summarizing, Visualizing and Tidying Data [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter2/chapter2.html) [PDF](https://rawcdn.githack.com/michelefioretti/ScPoEconometrics-Slides/162266383cbfe30af44155e5b2fc5e6b75b4dcfd/chapter2/chapter2.html)
 
-Lecture 4: Simple Linear Regression [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter3/chapter3.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter3/chapter3.pdf)
+Lecture 4: Simple Linear Regression [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter3/chapter3.html) [PDF](https://rawcdn.githack.com/michelefioretti/ScPoEconometrics-Slides/162266383cbfe30af44155e5b2fc5e6b75b4dcfd/chapter3/chapter3.html)
 
-Lecture 5: Introduction to Causality [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_causality/causality.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_causality/causality.pdf)
+Lecture 5: Introduction to Causality [HTML](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_causality/causality.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/f706a9567aafa448b71eba5bdff3145b12aa1838/chapter_causality/causality.html)
 
-Lecture 6: Multiple Linear Regression [HTML](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter4/chapter4.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter4/chapter4.pdf)
+Lecture 6: Multiple Linear Regression [HTML](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/f706a9567aafa448b71eba5bdff3145b12aa1838/chapter4/chapter4.html) [PDF](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter4/chapter4.html)
 
 Lecture 7: Sampling [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter6/chapter6.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter6/chapter6.pdf)
 
-Lecture 8: Confidence Intervals and Hypothesis Testing [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter7_chapter_CI_hypothesis/CI_and_hypothesis_test.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_CI_hypothesis/CI_and_hypothesis_test.pdf)
+Lecture 8: Confidence Intervals and Hypothesis Testing [HTML](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_hypothesis/hypothesis.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/f706a9567aafa448b71eba5bdff3145b12aa1838/chapter_hypothesis/hypothesis.html)
 
-Lecture 9: Regression Inference [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_reginference/reg_inference.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_reginference/reg_inference.pdf)
+Lecture 9: Regression Inference [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_reginference/reg_inference.html) [PDF](https://raw.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_reginference/reg_inference.html)
 
 Lecture 10: Differences-in-Differences [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_did/chapter_did.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter_did/chapter_did.pdf)
 

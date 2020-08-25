@@ -8,7 +8,7 @@
 
 Lecture 1: Introduction [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter1/chapter1.html) [PDF](https://rawcdn.githack.com/ScPoEcon/ScPoEconometrics-Slides/master/chapter1/chapter1.pdf)
 
-Lectures 2/3: Summarizing, Visualizing and Tidying Data [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter2/chapter2.html) [PDF](https://rawcdn.githack.com/michelefioretti/ScPoEconometrics-Slides/162266383cbfe30af44155e5b2fc5e6b75b4dcfd/chapter2/chapter2.html)
+Lectures 2/3: Summarizing, Visualizing and Tidying Data [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter2/chapter2.html) [PDF](https://rawcdn.githack.com/michelefioretti/ScPoEconometrics-Slides/0f6d9be91bb81710f4a6bd1e7ca6331a7cb4f180/chapter2/chapter2.pdf)
 
 Lecture 4: Simple Linear Regression [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter3/chapter3.html) [PDF](https://rawcdn.githack.com/michelefioretti/ScPoEconometrics-Slides/162266383cbfe30af44155e5b2fc5e6b75b4dcfd/chapter3/chapter3.html)
 

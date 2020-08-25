@@ -1,6 +1,6 @@
 # Applied Data Analysis for Public Policy Studies Slide Host [(Home)](https://michelefioretti.github.io/ScPoEconometrics-Slides/)
 
-* Here you can look at the slide for the [Applied Data Analysis for Public Policy Studies (link to book)](https://michelefioretti.github.io/ScPoEconometrics/) course. 
+* Here you can look at the slide for the **Applied Data Analysis for Public Policy Studies course** [(link to book)](https://michelefioretti.github.io/ScPoEconometrics/). 
 * This repo is frequently updated, so check back often.
 
 

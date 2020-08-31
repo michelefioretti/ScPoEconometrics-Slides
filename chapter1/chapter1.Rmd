@@ -63,11 +63,11 @@ library(knitr)
  
 --
 
-- We will meet every Wednesday at XXX on Zoom. 
+- We will meet every Wednesday at 8.00 AM (GMT+2) on Zoom. 
 
 --
 
-- You will meet with the TA, Florin Cogne, every couple of weeks to discuss the material and review problem sets.
+- You will meet with the TA, Florentin Cognie, every couple of weeks to discuss the material and review problem sets. email: ***florentin dot cognie at sciencespo dot fr***
 
 
 

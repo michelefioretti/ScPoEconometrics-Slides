@@ -774,14 +774,14 @@ Time for our first tutorial!!
 Type this into your `RStudio` console:
 
 ```{r, echo = TRUE, eval=FALSE}
-library(ScPoEconometrics)
+library(ScPoApps)
 runTutorial('chapter2')
 ```
 
 If you have trouble with the interactive doc, try this version (no interactive content):
 
 ```{r, echo = TRUE, eval=FALSE}
-ScPoEconometrics::runTutorial('chapter2-script')
+runTutorial('chapter2-script')
 ```
 
 ---
@@ -823,7 +823,7 @@ class: inverse
 # Correlation App
 
 ```{r, echo = TRUE, eval=FALSE}
-library(ScPoEconometrics)
+library(ScPoApps)
 runTutorial('correlation')
 ```
 

@@ -302,7 +302,7 @@ class: inverse
 * Try to find the best line again!
 
 ```{r,eval=FALSE}
-library(ScPoEconometrics)
+library(ScPoApps)
 launchApp("reg_dummy")
 ```
 
@@ -332,7 +332,7 @@ class: inverse
 # App!
 
 ```{r,eval=FALSE}
-library(ScPoEconometrics)
+library(ScPoApps)
 launchApp("reg_dummy_example")
 ```
 

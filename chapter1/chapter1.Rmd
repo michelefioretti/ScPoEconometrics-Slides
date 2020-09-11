@@ -184,7 +184,7 @@ As in the acclaimed [Book of Why](https://www.amazon.fr/Book-Why-Science-Cause-E
 
 --
 
-1. There will be ***two problem sets / case studies*** => 30%
+1. There will be ***a problem set / case study*** => 30%
 
 --
 
@@ -717,25 +717,27 @@ class: inverse
 
 ---
 
-# `ScPoEconometrics` package
+# `ScPoApps` package
 
-* The ScPoEconometrics team wrote an `R` package for you.
-
-* It's hosted on [GitHub](https://github.com/ScPoEcon/ScPoEconometrics)
+* The ScPoEconometrics team wrote an `R` package for you, which is hosted on [GitHub](https://github.com/ScPoEcon/ScPoApps)
 
 * You can install (and frequently update!) from here:
     ```{r,eval=FALSE}
-    if (!require("devtools")) install.packages("devtools")
-    library(devtools)
-    install_github(repo = "ScPoEcon/ScPoEconometrics")
+    if (!require(devtools)) {install.packages("devtools"); library(devtools)}
+install_github(repo = "ScPoEcon/ScPoApps") # Let me know if you encounter an error
     ```
 
 --
 
 * Did it work?
     ```{r,warning=FALSE,message=FALSE}
-    library(ScPoEconometrics)
-    packageVersion("ScPoEconometrics")
+    library(ScPoApps)
+    packageVersion("ScPoApps") # latest release is 0.1
+    ```
+
+* Check also if the package finds the tutorials
+    ```{r,warning=FALSE,message=FALSE, error=TRUE}
+    ScPoApps::runTutorial() 
     ```
 
 ---

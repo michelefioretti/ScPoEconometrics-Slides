@@ -546,7 +546,7 @@ $\mid \sum^n_{i=1}{e_i} \mid$, that is one might want the sum of errors as close
 Let's try to find the best line by minimizing the absolute value of the sum of errors. The line *won't* turn green so don't spend all day waiting for it.
 
 ```{r,eval=FALSE}
-library(ScPoEconometrics) # load our library
+library(ScPoApps) # load our library
 launchApp('reg_simple_arrows')
 aboutApp('reg_simple_arrows') # explainer about app
 ```

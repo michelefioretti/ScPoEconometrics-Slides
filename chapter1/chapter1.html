@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Applied Data Analysis for Public Policy Studies
 ## Introduction
 ### Michele Fioretti
-### Sciences Po Paris </br> 2020-09-09
+### Sciences Po Paris </br> 2020-09-11
 
 ---
 
@@ -159,7 +159,7 @@ As in the acclaimed [Book of Why](https://www.amazon.fr/Book-Why-Science-Cause-E
 
 --
 
-1. There will be ***two problem sets / case studies*** =&gt; 30%
+1. There will be ***a problem set / case study*** =&gt; 30%
 
 --
 
@@ -682,18 +682,15 @@ class: inverse
 
 ---
 
-# `ScPoEconometrics` package
+# `ScPoApps` package
 
-* The ScPoEconometrics team wrote an `R` package for you.
-
-* It's hosted on [GitHub](https://github.com/ScPoEcon/ScPoEconometrics)
+* The ScPoEconometrics team wrote an `R` package for you, which is hosted on [GitHub](https://github.com/ScPoEcon/ScPoApps)
 
 * You can install (and frequently update!) from here:
     
     ```r
-    if (!require("devtools")) install.packages("devtools")
-    library(devtools)
-    install_github(repo = "ScPoEcon/ScPoEconometrics")
+    if (!require(devtools)) {install.packages("devtools"); library(devtools)}
+    install_github(repo = "ScPoEcon/ScPoApps") # Let me know if you encounter an error
     ```
 
 --
@@ -701,12 +698,23 @@ class: inverse
 * Did it work?
     
     ```r
-    library(ScPoEconometrics)
-    packageVersion("ScPoEconometrics")
+    library(ScPoApps)
+    packageVersion("ScPoApps") # latest release is 0.1
     ```
     
     ```
-    ## [1] '0.2.6'
+    ## [1] '0.1'
+    ```
+
+* Check also if the package finds the tutorials
+    
+    ```r
+    ScPoApps::runTutorial() 
+    ```
+    
+    ```
+    ## Error: Please run `runTutorial()` with a valid tutorial as an argument.
+    ## Valid tutorial are: 'airline-safety', 'chapter2', 'chapter2-script', 'correlation', 'lm-example', 'non-normal', 'rescaling', 'trade'
     ```
 
 ---
@@ -763,8 +771,8 @@ example_data
 ```
 ##   x       y     z
 ## 1 1   Hello FALSE
-## 2 3   Hello FALSE
-## 3 5   Hello  TRUE
+## 2 3   Hello  TRUE
+## 3 5   Hello FALSE
 ## 4 7 Goodbye  TRUE
 ```
 

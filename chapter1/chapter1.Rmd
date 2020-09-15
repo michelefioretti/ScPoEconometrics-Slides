@@ -73,6 +73,7 @@ library(knitr)
 
 # Welcome to ScPoEconometrics!
 
+--
 
 - We will learn these tools through example based on ***the programming language R***. 
 
@@ -87,7 +88,7 @@ library(knitr)
 ---
 
 
-## What is *econometrics*?
+# What is *econometrics*?
 
 - A set of techniques and methods to answer questions with data.
 
@@ -484,7 +485,7 @@ ggplot(data = gapminder_dplyr,
        y = "Average GDP per capita",
        color = "Continent",
        size = "Nb of countries") +
- + + me_bw() # white background
+  theme_bw() # white background
 ```
 ]
 

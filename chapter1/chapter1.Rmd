@@ -87,7 +87,7 @@ library(knitr)
 ---
 
 
-## What is *econometrics*?
+# What is *econometrics*?
 
 - A set of techniques and methods to answer questions with data.
 

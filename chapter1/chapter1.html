@@ -34,37 +34,31 @@ layout: true
 
 --
 
-- This course will teach you the core tools of ***econometrics***.
+- This course will teach you the core tools of ***econometrics***. The goal of the course is to provide you with essential data analysis tools 
  
---
 
 - We will meet every Wednesday at 8.00 AM (GMT+2) on Zoom. 
 
---
 
 - You will meet with the TA, Eléonore Richard, every couple of weeks to discuss the material and review problem sets. Her email address is ***eleonore.richard@sciencespo.fr***
 
 
 
-
+--
 
 # Welcome to ScPoEconometrics!
 
---
 
 - We will learn these tools through example based on ***the programming language R***. 
 
---
 
 - This course builds on the (amazing) [openSource lectures](https://github.com/ScPoEcon/ScPoEconometrics) by the ScPo Econometrics team (Florian Oswald, Gustave Kenedi and Pierre Villedieu).
  
---
+
 
 - A [book overview](https://michelefioretti.github.io/ScPoEconometrics/index.html) of the material is also available.
 
---
 
-- The goal of the course is to provide you with essential data analysis tools (a.k.a. ***econometrics***).
 
 
 
@@ -369,8 +363,7 @@ tm_shape(iris_map) +
 
 # In Practice: Data Wrangling
 
---
-ou will spend a lot of time preparing data for further analysis.
+* You will spend a lot of time preparing data for further analysis.
 
 --
 
@@ -640,7 +633,9 @@ class: inverse
 
 * Help from Humans!
   * Google is your best friend!
-  * [stackoverflow.com](https://stackoverflow.com) [S* Your classroom channel on SlaSlack. If you haven't joined click [here](https://join.slack.com/t/applieddata/shared_invite/zt-h8gsmw9y-xdzV46sY5T2ldgK74u~0Mw) to join* [rstudio forum](https://community.rstudio.com)
+  * [stackoverflow.com](https://stackoverflow.com)
+  * Your classroom channel on Slack. If you haven't joined click [here](https://join.slack.com/t/applieddata/shared_invite/zt-h8gsmw9y-xdzV46sY5T2ldgK74u~0Mw) to join
+  * [rstudio forum](https://community.rstudio.com)
   
 ---
 
@@ -778,27 +773,20 @@ class: inverse
 
 # Task 2 (10 minutes)
 
-* Find out (using `hegle) how to import a .csv file.
+* Find out (using google) how to import a .csv file.
 
-* Import [gun_murders.csv](https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1)&lt;sup&gt;1&lt;/sup&gt; in a new object `murders`. This file contains data on gun murders by US state in 2010. (Hint: objects are created using `=`either )
+* Import [gun_murders.csv](https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1)&lt;sup&gt;1&lt;/sup&gt; in a new object `murders`. This file contains data on gun murders by US state in 2010. (Hint: objects are created using `=`)
 
- or `&lt;-````{r,echo=F}
-library(dslabs)
 
-# Import murders
-data("murders")
-murders &lt;- murders
-```
 
 * Ensure that `murders` is a data.frame by running:
     
     ```r
     # Check class
-    class(murder)
-     s   ```
-    
-    * Find out what variables are contained in `murders` by running:
+    class(murders)
     ```
+
+* Find out what variables are contained in `murders` by running:
     
     ```r
     # Obain variable names

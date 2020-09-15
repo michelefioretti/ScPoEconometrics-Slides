@@ -84,7 +84,7 @@ library(knitr)
 - A [book overview](https://michelefioretti.github.io/ScPoEconometrics/index.html) of the material is also available.
 
 
-
+---
 
 
 ## What is *econometrics*?

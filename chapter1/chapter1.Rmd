@@ -164,15 +164,12 @@ As in the acclaimed [Book of Why](https://www.amazon.fr/Book-Why-Science-Cause-E
 
 - Teach you the basics of ***linear regression***, ***statistical inference*** and ***impact evaluation***.
 
---
 
 - Equip you with a framework to think more deeply about causality.
 
---
 
 - Introduce you to the `R` software environment.
 
---
 
 - `r emo::ji("warning")` This is *not* a course about `R`.
 
@@ -280,23 +277,23 @@ layout: true
 
 `R` is a __programming language__ with powerful statistical and graphic capabilities.
 
---
+
 
 ## Why are we using `R`?<sup>1</sup>
 
---
+
 
 1. `R` is __free__ and __open source__—saving both you and the university 💰💵💰.
 
---
+
 
 1. `R` is very __flexible and powerful__—adaptable to nearly any task, _e.g._, data cleaning, data visualization, econometrics, spatial data analysis, machine learning, web scraping, ...
 
---
+
 
 1. `R` has a vibrant, thriving online community that will (almost) always have a solution to your problem. ([stack overflow](https://stackoverflow.com/questions/tagged/r))
 
---
+
 
 1. If you put in the work<sup>2</sup>, you will come away with a __very valuable and marketable__ tool.
 
@@ -409,8 +406,7 @@ tm_shape(iris_map) +
 # In Practice: Data Wrangling
 
 --
-
-* You will spend a lot of time preparing data for further analysis.
+ou will spend a lot of time preparing data for further analysis.
 
 --
 
@@ -455,9 +451,9 @@ head(gapminder,n = 4)
 * Here we will only focus on the `dplyr` way:
 
 ```{r}
-  # to install the dplyr package: install.packages("dplyr")
-library(dplyr)
-  # compute the required statistics
+# You may want to install the dplyr package first: install.packages("dplyr")
+library(dplyr) 
+# compute the required statistics
 gapminder_dplyr <- gapminder %>% 
   group_by(continent, year) %>% 
   summarise(
@@ -468,8 +464,8 @@ gapminder_dplyr <- gapminder %>%
 ```
 
 ```{r}
-  # show first 5 lines of this dataframe
-head(gapminder_dplyr, n = 5)
+  # show first 4 lines of this dataframe
+head(gapminder_dplyr, n = 4)
 ```
 
 ---
@@ -494,7 +490,8 @@ ggplot(data = gapminder_dplyr,
   labs(x = "Average life expectancy",
        y = "Average GDP per capita",
        color = "Continent",
-       size = "Nb of countries")
+       size = "Nb of countries") +
+   + theme_bw() # white background
 ```
 ]
 
@@ -509,7 +506,7 @@ ggplot(data = gapminder_dplyr,
   labs(x = "Average life expectancy",
        y = "Average GDP per capita",
        color = "Continent",
-       size = "Nb of countries")
+       size = "Nb of countries") + theme_bw()
 ```
 ]
 
@@ -681,9 +678,7 @@ class: inverse
 
 * Help from Humans!
   * Google is your best friend!
-  * [stackoverflow.com](https://stackoverflow.com) [SO]
-  * Your classroom channel on Slack
-  * [rstudio forum](https://community.rstudio.com)
+  * [stackoverflow.com](https://stackoverflow.com) [S* Your classroom channel on SlaSlack. If you haven't joined click [here](https://join.slack.com/t/applieddata/shared_invite/zt-h8gsmw9y-xdzV46sY5T2ldgK74u~0Mw) to join* [rstudio forum](https://community.rstudio.com)
   
 ---
 
@@ -782,11 +777,11 @@ class: inverse
 
 # Task 2 (10 minutes)
 
-* Find out (using `help()` or google) how to import a .csv file.
+* Find out (using `hegle) how to import a .csv file.
 
-* Import [gun_murders.csv](https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1)<sup>1</sup> in a new object `murders`. This file contains data on gun murders by US state in 2010. (Hint: objects are created using `=`)
+* Import [gun_murders.csv](https://www.dropbox.com/s/zuk0qcfm3kyzs4e/gun_murders.csv?dl=1)<sup>1</sup> in a new object `murders`. This file contains data on gun murders by US state in 2010. (Hint: objects are created using `=`either )
 
-```{r,echo=F}
+ or `<-````{r,echo=F}
 library(dslabs)
 
 # Import murders
@@ -798,7 +793,7 @@ murders <- murders
     ```{r,eval=F}
     # Check class
     class(murder)
-    ```
+ s   ```
 
 * Find out what variables are contained in `murders` by running:
     ```{r, eval = F}

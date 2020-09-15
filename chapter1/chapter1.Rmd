@@ -241,10 +241,10 @@ Lecture 12: ***Recap***
 # Useful Resources (Other Than our [_Book_](https://scpoecon.github.io/ScPoEconometrics/))
 
 ## Econometrics
-- [*Mastering Metrics* by Angrist and Pischke](http://catalogue.sciencespo.fr/ark:/46513/sc0001290364)
-- [*Modern Introduction to Econometrics* by Wooldridge](http://catalogue.sciencespo.fr/ark:/46513/sc0001336459)
-- [*Introduction to Econometrics* by Stock and Watson](http://catalogue.sciencespo.fr/ark:/46513/sc0001334932)
-- [*Causal Inference: The Mixtape* by Cunningham](https://scunning.com/cunningham_mixtape.pdf)
+- [*Mastering Metrics*](https://catalogue-bibliotheque.sciencespo.fr/discovery/fulldisplay?docid=alma991003947949705808&context=L&vid=33USPC_SPO:SPO&lang=fr&search_scope=MyInst_and_CI&adaptor=Local%20Search%20Engine&tab=Everything&query=title,contains,Mastering%20Metrics,AND&query=creator,contains,Angrist%20and%20Pischke,AND&mode=advanced&offset=0) by Angrist and Pischke
+- [*Introductory Econometrics: Modern Approach*](https://catalogue-bibliotheque.sciencespo.fr/discovery/fulldisplay?docid=alma991003442689705808&context=L&vid=33USPC_SPO:SPO&lang=fr&search_scope=MyInst_and_CI&adaptor=Local%20Search%20Engine&isFrbr=true&tab=Everything&query=title,contains,Econometrics,AND&query=creator,contains,Wooldridge,AND&mode=advanced&offset=0) by Wooldridge
+- [*Introduction to Econometrics*](https://catalogue-bibliotheque.sciencespo.fr/discovery/fulldisplay?docid=alma991003436429705808&context=L&vid=33USPC_SPO:SPO&lang=fr&search_scope=MyInst_and_CI&adaptor=Local%20Search%20Engine&isFrbr=true&tab=Everything&query=title,contains,Econometrics,AND&query=creator,contains,Stock%20and%20Watson,AND&mode=advanced&offset=0) by Stock and Watson
+- [*Causal Inference: The Mixtape*](https://scunning.com/cunningham_mixtape.pdf) by Cunningham
 - [Ben Lambert's youtube channel](https://www.youtube.com/user/SpartacanUsuals)
 
 ## Metrics and `R`
@@ -289,11 +289,11 @@ layout: true
 
 
 
-1. If you put in the work<sup>2</sup>, you will come away with a __very valuable and marketable__ tool.
+1. If you put in the work,<sup>2</sup> you will come away with a __very valuable and marketable__ tool.
 
 .footnote[
 [1]: This list has been inspired by [Ed Rubin's](https://github.com/edrubin/EC421S19).  
-[2]: Learning `R` definitely requires time and effort but it's worth it, trust me! `r emo::ji("muscle")`.
+[2]: Learning `R` definitely requires time and effort but it's worth it, trust me! `r emo::ji("muscle")`
 ]
 
 ---
@@ -484,7 +484,7 @@ ggplot(data = gapminder_dplyr,
        y = "Average GDP per capita",
        color = "Continent",
        size = "Nb of countries") +
-   + theme_bw() # white background
+ + + me_bw() # white background
 ```
 ]
 

@@ -48,11 +48,10 @@ knitr::opts_chunk$set(
 
 * ***Causality*** plays a central role in modern econometrics!
 
---
 
 * Using R is ***very*** valuable
 
---
+
 
 * Basic data wrangling:
   - `View`, `str`, `names`, `nrow`, `ncol`
@@ -91,7 +90,7 @@ knitr::include_graphics("chapter2_files/figure-html/data_science_pipeline.png")
 * Let's first load a dataset with these commands:
     ```{r, echo = TRUE, eval = FALSE}
     library(dslabs)
-    gapminder <- gapminder
+    gapminder <- dslabs::gapminder
     ```
     
     ```{r, echo = FALSE, eval = TRUE}
@@ -179,7 +178,7 @@ layout: true
 
 * One can learn only a limited amount from **looking** at a `data.frame`. `r emo::ji("mag")`
 
---
+
 
 * Even if you *could* see all rows of the dataset, you would not know very much **about it**.
 
@@ -187,7 +186,7 @@ layout: true
 
 * We need to **summarize** the data for us to learn from it.
 
---
+
 
 * In general, we can compute summary statistics, or visualize the data with plots.
 
@@ -195,7 +194,7 @@ layout: true
 
 * Let's start with some statistics first!
 
---
+
 
 * Let's look at two features: *central tendency* and *spread*.
 
@@ -302,7 +301,7 @@ ggplot(data = data.frame(x = c(-5, 5)), aes(x)) +
 
 ```{r,eval = FALSE}
     var(x)
-    range(x)   # range
+    range(x)   # range: max value - min value
     ```
 ]
 ---
@@ -460,10 +459,11 @@ hist(gapminder_2015$life_expectancy,
      xlab   = "Life Expectancy", 
      main   = "Histogram of life expectancy in 2015", 
      breaks = seq(from = 40, to = 90, by = 5),
-     las = 1, # horizontal y-axis values
+     las = 1, # label orientation
      col  = "#d90502",
      border = "white")
 ```
+
 
 ]
 
@@ -517,6 +517,8 @@ boxplot(life_expectancy ~ continent,
 ```
 
 * see `?boxplot` for more options
+
+***Your turn:*** How does the same plot look like for `fertility`? For `infant_mortality`?
 ]
 
 .pull-right[
@@ -553,9 +555,11 @@ boxplot(life_expectancy ~ continent,
 ```{r, echo = TRUE, fig.height=5}
 plot(fertility ~ infant_mortality,
     data = gapminder_2015,
-    xlab   = "Infant mortality",
-    ylab   = "Fertility rate",
-    main   = "Relationship between fertility and infant mortality in 2015",
+    xlab = "Infant mortality",
+    ylab = "Fertility rate",
+    xlim = c(0,200), # range of x axis
+    ylim = c(0,8), # range of y axis
+    main = "Relationship between fertility and infant mortality in 2015",
     col = "#d90502",
     las = 1)
 ```
@@ -570,6 +574,8 @@ plot(fertility ~ infant_mortality,
 * Corresponding to one *row* of the `data.frame`.
 
 * Why do some dots appear *darker* than others here?
+
+***Your turn:*** How does the same scatter plot looks like for 1960?
 ]
 
 ---
@@ -635,13 +641,13 @@ library(ggplot2)
 ggplot(gapminder_2015,
        aes(x = life_expectancy)) +
   geom_histogram(binwidth = 5,
-                 boundary = 45,
+                 boundary = 0, # try with 1: what does it do?,
                  colour = "white",
                  fill = "#d90502") +
   labs(x = "Life Expectancy",
        y = "Frequency",
        title = "Histogram of life expectancy in 2015") +
-  theme_bw(base_size = 16)
+  theme_bw(base_size = 16) # white background + base font size adjusted to 16 pts
 ```
 ]
 
@@ -649,7 +655,7 @@ ggplot(gapminder_2015,
 ```{r, echo = FALSE, eval = TRUE, fig.height = 5}
 ggplot(gapminder_2015,
        aes(x = life_expectancy)) +
-  geom_histogram(binwidth = 5, boundary = 45, colour = "white", fill = "#d90502") +
+  geom_histogram(binwidth = 5, boundary = 0, colour = "white", fill = "#d90502") +
   labs(x = "Life Expectancy", y = "Frequency", title = "Histogram of life expectancy in 2015") +
   theme_bw(base_size = 16)
 ```
@@ -666,7 +672,7 @@ library(ggplot2)
 ggplot(gapminder_2015,
        aes(x = life_expectancy)) +
   geom_histogram(binwidth = 5,
-                 boundary = 45,
+                 boundary = 0, 
                  colour = "white",
                  fill = "#d90502") +
   labs(x = "Life Expectancy",
@@ -682,7 +688,7 @@ ggplot(gapminder_2015,
 ggplot(gapminder_2015,
        aes(x = life_expectancy)) +
   geom_histogram(binwidth = 5,
-                 boundary = 45,
+                 boundary = 0, 
                  colour = "white",
                  fill = "#d90502") +
   labs(x = "Life Expectancy",
@@ -901,16 +907,20 @@ layout: true
 * This dataset contains __real__ data on polls made during the 2016 US Presidential elections and compiled by [fivethirtyeight](fivethirtyeight.com)
 
 ```{r dslabs, echo = TRUE}
-library(dslabs)
-library(dplyr)
+library(dslabs, dplyr)
 data(polls_us_election_2016) # this data is from fivethirtyeight.com
 polls_us_election_2016 <- as_tibble(polls_us_election_2016)
 head(polls_us_election_2016[,1:6], n = 6) # show first 6 lines of first 6 variables
 ```
 
-`r emo::ji("rotating_light")` This is a `tibble` (more informative than `data.frame`)
+`r emo::ji("rotating_light")` This is a `tibble` (more informative than a  `data.frame`)
 
-What variables does this dataset contain?
+What variables does this dataset contain? 
+
+--
+
+1. `?polls_us_election_2016`
+1. [FiveThirtyEight’s Pollster Ratings website](https://projects.fivethirtyeight.com/pollster-ratings/)
 
 ---
 
@@ -1093,7 +1103,7 @@ summarise(
 --
 
 .pull-right[
-Works for all `dplyr` verbs:
+Works for all `dplyr` verbs***!!***
 ```{r, echo = TRUE, eval = TRUE}
 polls_us_election_2016 %>%
   mutate(trump_clinton_diff = rawpoll_trump-rawpoll_clinton) %>%

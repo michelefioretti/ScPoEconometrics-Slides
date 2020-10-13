@@ -513,9 +513,13 @@ $$ SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) $$
 
 Let's rewrite the SDO to make the individual treatment effect $(\delta_i)$ appear in the equation. 
 
+--
+
 \begin{align}
   \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) &= \mathop{\mathbb{E}}(Y_i^0 + \delta_i | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
 \end{align}
+
+--
 
 For now, suppose **treatment effect is constant** across people: $\forall i, \delta_i = \delta$.
 
@@ -525,8 +529,9 @@ Then,
   \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) &= \delta + \mathop{\mathbb{E}}(Y_i^0 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
 \end{align}
 
-And because $ATE = \mathop{\mathbb{E}}(\delta_i) = \mathop{\mathbb{E}}(\delta) = \delta$ (by assumption), we get: 
+--
 
+And because $ATE = \mathop{\mathbb{E}}(\delta_i) = \mathop{\mathbb{E}}(\delta) = \delta$ (by assumption), we get: 
 
 \begin{align}
   SDO &= \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) \\
@@ -769,26 +774,37 @@ Compute the average percentage of girls, african americans, and free lunch quali
 #         names_pattern = "(.+)(k|1|2|3)$")
 # write.csv2(star, file = "star_data.csv", row.names = F)
 star_df = read.csv(file = "https://www.dropbox.com/s/bf1fog8yasw3wjj/star_data.csv?dl=1")
+head(star_df)
 
 # Question 2
 head(star_df)
 nrow(star_df) # NOTE: why so many??? 4 years of experiment?
 
 # Question 3
-# The same student is only in one class at any point in time. Outcome of "RESHAPE" # NOTE: check it with Florian!
+# Each row correspond to a student in a specific grade. The unit of observation is student by grade. 
+# (i)   the class assignment is `star`
+# (ii)  the student's class grade is `grade`
+# (iii) the outcomes of interest are `read` and `math`
 
 # Question 4
-star_df <- star_df[complete.cases(star_df),]
+nrow(star_df) # number of observations
+ncol(star_df) # number of variables
+# There are many observations because the dataset is in its `wide` format: it includes also observations
+# for students whose records are missing for some grades because the STAR experiment started after they
+# completed those grades.
 
 # Question 5
+# See answer above
+
+# Question 6
+star_df <- star_df[complete.cases(star_df),]
+
+# Question 7
 star_df %>%
   group_by(star,grade) %>%
-  mutate(share_female = mean(gender == "female") * 100,
-         share_afam = mean(ethnicity == "afam") * 100,
-         share_lunch = mean(lunch == "free") * 100) %>%
-  summarise(mean_share_female = mean(share_female, na.rm = T),
-            mean_share_afam = mean(share_afam, na.rm = T),
-            mean_share_lunch = mean(share_lunch, na.rm = T))
+  summarise(share_female = mean(gender == "female", na.rm = T),
+            share_afam = mean(ethnicity == "afam", na.rm = T),
+            share_lunch = mean(lunch == "free", na.rm = T))
 
 
 ```
@@ -1055,7 +1071,7 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| <a href="mailto:florian.oswald@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | florian.oswald@sciencespo.fr       |
+| <a href="mailto:michele.fioretti@sciencespo.fr">.ScPored[<i class="fa fa-paper-plane fa-fw"></i>]               | michele.fioretti@sciencespo.fr       |
 | <a href="https://michelefioretti.github.io/ScPoEconometrics-Slides/">.ScPored[<i class="fa fa-link fa-fw"></i>] | Slides |
 | <a href="https://scpoecon.github.io/ScPoEconometrics">.ScPored[<i class="fa fa-link fa-fw"></i>] | Book |
 | <a href="http://twitter.com/ScPoEcon">.ScPored[<i class="fa fa-twitter fa-fw"></i>]                          | @ScPoEcon                         |

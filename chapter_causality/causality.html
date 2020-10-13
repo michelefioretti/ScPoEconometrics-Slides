@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Applied Data Analysis for Public Policy Studies
 ## Intro To Causality
 ### Michele Fioretti
-### SciencesPo Paris </br> 2020-08-25
+### SciencesPo Paris </br> 2020-10-13
 
 ---
 
@@ -470,9 +470,13 @@ $$ SDO = \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) $$
 
 Let's rewrite the SDO to make the individual treatment effect `\((\delta_i)\)` appear in the equation. 
 
+--
+
 `\begin{align}
   \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) &amp;= \mathop{\mathbb{E}}(Y_i^0 + \delta_i | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
 \end{align}`
+
+--
 
 For now, suppose **treatment effect is constant** across people: `\(\forall i, \delta_i = \delta\)`.
 
@@ -482,8 +486,9 @@ Then,
   \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) &amp;= \delta + \mathop{\mathbb{E}}(Y_i^0 | D_i = 1) - \mathop{\mathbb{E}}(Y_i^0 | D_i = 0)
 \end{align}`
 
-And because `\(ATE = \mathop{\mathbb{E}}(\delta_i) = \mathop{\mathbb{E}}(\delta) = \delta\)` (by assumption), we get: 
+--
 
+And because `\(ATE = \mathop{\mathbb{E}}(\delta_i) = \mathop{\mathbb{E}}(\delta) = \delta\)` (by assumption), we get: 
 
 `\begin{align}
   SDO &amp;= \mathop{\mathbb{E}}(Y_i^1|D_i=1) - \mathop{\mathbb{E}}(Y_i^0|D_i=0) \\
@@ -691,26 +696,51 @@ Compute the average percentage of girls, african americans, and free lunch quali
 ```
 
 ```
+##   gender ethnicity  birth grade    star read math    lunch   school   degree
+## 1 female      afam 1979.5     k    &lt;NA&gt;   NA   NA     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 2 female      afam 1979.5     1    &lt;NA&gt;   NA   NA     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 3 female      afam 1979.5     2    &lt;NA&gt;   NA   NA     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;
+## 4 female      afam 1979.5     3 regular  580  564     free suburban bachelor
+## 5 female      cauc 1980.0     k   small  447  473 non-free    rural bachelor
+## 6 female      cauc 1980.0     1   small  507  538     free    rural bachelor
+##   ladder experience tethnicity system schoolid
+## 1   &lt;NA&gt;         NA       &lt;NA&gt;     NA       NA
+## 2   &lt;NA&gt;         NA       &lt;NA&gt;     NA       NA
+## 3   &lt;NA&gt;         NA       &lt;NA&gt;     NA       NA
+## 4 level1         30       cauc     22       54
+## 5 level1          7       cauc     30       63
+## 6 level1          7       cauc     30       63
+```
+
+```
 ## [1] 46392
+```
+
+```
+## [1] 46392
+```
+
+```
+## [1] 15
 ```
 
 ```
 ## # A tibble: 12 x 5
 ## # Groups:   star [3]
-##    star         grade mean_share_female mean_share_afam mean_share_lunch
-##    &lt;fct&gt;        &lt;fct&gt;             &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;
-##  1 regular      1                  48.7            37.3             51.5
-##  2 regular      2                  48.3            36.7             50.6
-##  3 regular      3                  48.9            35.2             49.7
-##  4 regular      k                  48.5            28.5             46.0
-##  5 regular+aide 1                  47.8            29.8             50.8
-##  6 regular+aide 2                  47.7            33.8             48.2
-##  7 regular+aide 3                  47.2            34.3             49.1
-##  8 regular+aide k                  48.8            32.2             49.3
-##  9 small        1                  48.6            31.9             47.9
-## 10 small        2                  49.1            33.3             46.6
-## 11 small        3                  50.1            31.6             46.8
-## 12 small        k                  48.0            30.2             46.7
+##    star         grade share_female share_afam share_lunch
+##    &lt;fct&gt;        &lt;fct&gt;        &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+##  1 regular      1            0.487      0.373       0.515
+##  2 regular      2            0.483      0.367       0.506
+##  3 regular      3            0.489      0.352       0.497
+##  4 regular      k            0.485      0.285       0.460
+##  5 regular+aide 1            0.478      0.298       0.508
+##  6 regular+aide 2            0.477      0.338       0.482
+##  7 regular+aide 3            0.472      0.343       0.491
+##  8 regular+aide k            0.488      0.322       0.493
+##  9 small        1            0.486      0.319       0.479
+## 10 small        2            0.491      0.333       0.466
+## 11 small        3            0.501      0.316       0.468
+## 12 small        k            0.480      0.302       0.467
 ```
 
 ---
@@ -945,7 +975,7 @@ background-position: 9% 19%
 
 |                                                                                                            |                                   |
 | :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| &lt;a href="mailto:florian.oswald@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | florian.oswald@sciencespo.fr       |
+| &lt;a href="mailto:michele.fioretti@sciencespo.fr"&gt;.ScPored[&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;]               | michele.fioretti@sciencespo.fr       |
 | &lt;a href="https://michelefioretti.github.io/ScPoEconometrics-Slides/"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Slides |
 | &lt;a href="https://scpoecon.github.io/ScPoEconometrics"&gt;.ScPored[&lt;i class="fa fa-link fa-fw"&gt;&lt;/i&gt;] | Book |
 | &lt;a href="http://twitter.com/ScPoEcon"&gt;.ScPored[&lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;]                          | @ScPoEcon                         |

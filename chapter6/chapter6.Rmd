@@ -344,17 +344,21 @@ nrow(bowl)
 * We will take a first sample of size 50, using the `moderndive` function `rep_sample_n`.
 
 --
-
-```{r}
+.pull-left[
+```{r, echo=TRUE, eval=TRUE}
 #load moderndive package
 library(moderndive)
 set.seed(123) # we will all have the same draw!
+#
 virtual_shovel <- bowl %>% # notice that moderndive functions can be "pipped"
   rep_sample_n(size = 50) # take a sample of 50 balls
+#
+# display the sample's first 6 rows
+head(virtual_shovel)
 ```
 
-.pull-left[
-```{r, echo = TRUE}
+
+```{r, echo = FALSE, eval = FALSE}
 # display the sample's first 6 rows
 head(virtual_shovel)
 # number of observations in sample
@@ -366,6 +370,11 @@ nrow(virtual_shovel)
 --
 
 .pull-right[
+```{r, echo = TRUE, eval = TRUE}
+# number of observations in sample
+nrow(virtual_shovel)
+```
+
 * Column `replicate` tells us the ID of the sample. Here: `1` since we create only one sample (see option `reps`).
 ```{r, echo = TRUE}
 # display the sample's first 6 rows
@@ -408,9 +417,11 @@ sample_1
 
 ]
 
-
+--
 
 * `r emo::ji("point_right")` `r sample_1$prop_green` are green! This is an ***estimate*** of the proportion of green pasta in the bowl. What if we try again?
+
+--
 
 * What if we try many times, like, 33 times?
 
@@ -439,7 +450,6 @@ virtual_samples
 Compute the proportion of green pasta in each sample.
 
 ```{r}
-set.seed(123) # we will all have the same draw!
 virtual_prop_green <- virtual_samples %>% 
   group_by(replicate) %>% # calculate stat by sample
   summarize(
@@ -574,7 +584,7 @@ Instead of taking only 33 samples, let's take ***1000***!
   # Instead, how likely is it that  we sample 50 pasta of which less than 50% are green?
   nrow(virtual_prop_green_1000[virtual_prop_green_1000$prop_green < 0.5,])
   #[1] 458
-  # There are 458 such occurrences our of 1000 draws or
+  # There are 458 such occurrences out of 1000 draws or
   nrow(virtual_prop_green_1000[virtual_prop_green_1000$prop_green < 0.5,])/nrow(virtual_prop_green_1000) * 100
   # [1] 45.8
   # occurrences

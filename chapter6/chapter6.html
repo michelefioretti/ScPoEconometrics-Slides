@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Applied Data Analysis for Public Policy Studies
 ## Sampling
 ### Michele Fioretti
-### SciencesPo Paris </br> 2020-10-31
+### SciencesPo Paris </br> 2020-11-02
 
 ---
 
@@ -271,19 +271,16 @@ nrow(bowl)
 * We will take a first sample of size 50, using the `moderndive` function `rep_sample_n`.
 
 --
-
+.pull-left[
 
 ```r
 #load moderndive package
 library(moderndive)
 set.seed(123) # we will all have the same draw!
+#
 virtual_shovel &lt;- bowl %&gt;% # notice that moderndive functions can be "pipped"
   rep_sample_n(size = 50) # take a sample of 50 balls
-```
-
-.pull-left[
-
-```r
+#
 # display the sample's first 6 rows
 head(virtual_shovel)
 ```
@@ -293,13 +290,22 @@ head(virtual_shovel)
 ## # Groups:   replicate [1]
 ##   replicate pasta_ID color 
 ##       &lt;int&gt;    &lt;int&gt; &lt;fct&gt; 
-## 1         1      313 yellow
-## 2         1      548 green 
-## 3         1      696 green 
-## 4         1      264 green 
-## 5         1       20 red   
-## 6         1      308 yellow
+## 1         1      415 yellow
+## 2         1      463 yellow
+## 3         1      179 green 
+## 4         1      526 red   
+## 5         1      195 green 
+## 6         1      118 yellow
 ```
+
+
+
+
+]
+
+--
+
+.pull-right[
 
 ```r
 # number of observations in sample
@@ -310,11 +316,6 @@ nrow(virtual_shovel)
 ## [1] 50
 ```
 
-]
-
---
-
-.pull-right[
 * Column `replicate` tells us the ID of the sample. Here: `1` since we create only one sample (see option `reps`).
 
 ```r
@@ -365,14 +366,16 @@ sample_1
 ## # A tibble: 1 x 4
 ##   replicate num_green sample_n prop_green
 ##       &lt;int&gt;     &lt;int&gt;    &lt;int&gt;      &lt;dbl&gt;
-## 1         1        29       50      0.580
+## 1         1        22       50       0.44
 ```
 
 ]
 
+--
 
+* 👉 0.44 are green! This is an ***estimate*** of the proportion of green pasta in the bowl. What if we try again?
 
-* 👉 0.58 are green! This is an ***estimate*** of the proportion of green pasta in the bowl. What if we try again?
+--
 
 * What if we try many times, like, 33 times?
 
@@ -421,7 +424,6 @@ Compute the proportion of green pasta in each sample.
 
 
 ```r
-set.seed(123) # we will all have the same draw!
 virtual_prop_green &lt;- virtual_samples %&gt;% 
   group_by(replicate) %&gt;% # calculate stat by sample
   summarize(
@@ -479,7 +481,7 @@ ggplot(virtual_prop_green, aes(x = prop_green)) +
 --
 
 .pull-right[
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -510,7 +512,7 @@ Instead of taking only 33 samples, let's take ***1000***!
 
 # Sampling Distribution of 1000 Samples
 
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -583,7 +585,7 @@ virtual_prop_green_25 &lt;- virtual_samples_25 %&gt;%
 
 # Role of Sample Size
 
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -731,7 +733,7 @@ sum(bowl$color == "green")/nrow(bowl)
 
 # Visualizing Unbiasedness and Sampling Variation
 
-&lt;img src="chapter6_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="chapter6_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 # Some Sampling Scenarios

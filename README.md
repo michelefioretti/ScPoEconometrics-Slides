@@ -18,7 +18,7 @@ Lecture 6: Multiple Linear Regression [HTML](https://raw.githack.com/michelefior
 
 Lecture 7: Sampling [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter6/chapter6.html) [PDF](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter6/chapter6.pdf)
 
-Lecture 8: Confidence Intervals and Hypothesis Testing [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_hypothesis/hypothesis.html) [PDF](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter_hypothesis/hypothesis.pdf)
+Lecture 8: Confidence Intervals and Hypothesis Testing [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_CI_hypothesis/CI_and_hypothesis_test.html) [PDF](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter_CI_hypothesis/CI_and_hypothesis_test.pdf)
 
 Lecture 9: Regression Inference [HTML](https://raw.githack.com/michelefioretti/ScPoEconometrics-Slides/master/chapter_reginference/reg_inference.html) [PDF](https://github.com/michelefioretti/ScPoEconometrics-Slides/blob/master/chapter_reginference/reg_inference.pdf)
 

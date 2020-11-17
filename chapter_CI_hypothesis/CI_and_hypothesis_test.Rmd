@@ -116,15 +116,15 @@ layout: true
 
 * Until now, we have only estimated ***point estimates*** from our samples: *sample means*, *sample proportions*, *regression coefficients*, etc.
 
---
+
 
 * We know that this ***sample statistic*** differs from the ***true population parameter*** due to ***sampling variation***. 
 
---
+
 
 * Rather than a point estimate, we could give a ***range of plausible values*** for the population parameter.
 
---
+
 
 * This is precisely what a ***confidence interval*** (CI) provides.
 
@@ -211,15 +211,15 @@ How do we obtain a ***bootstrap sample***?
   
   1. Randomly pick ***one*** pasta from the sample and record the associated color.
   
---
+
   
   1. Put this pasta back in the sample.
   
---
+
   
   1. Repeat steps 1 and 2 49 times, i.e. ***until the new sample is of the same size as the original sample***.
 
---
+
 
   1. Compute the proportion of green pasta in the bootstrap sample.
   
@@ -239,6 +239,7 @@ This procedure is called ***resampling with replacement***:
 Here is one bootstrap sample: 
 
 ```{r}
+set.seed(123)
 one_bootstrap = my_sample %>%
   rep_sample_n(size = 50, replace = TRUE) %>%
   arrange(pasta_ID)
@@ -276,11 +277,15 @@ What if we repeated this resampling procedure many times? Would the proportion b
 --
 
 .pull-left[
-```{r, echo=FALSE}
-bootstrap_distrib = my_sample %>% # take my random sample
-  specify(response = color, success = "green") %>%
-  generate(reps = 1000, type = "bootstrap") %>%
-  calculate(stat = "prop")
+```{r, eval = TRUE, echo=FALSE}
+set.seed(1234) 
+bootstrap_distrib <- my_sample %>%
+  # resample 50 draws with replacement a 1000 times
+  rep_sample_n(size = 50, reps = 1000, replace = TRUE)  %>% 
+  # compute the average number of 
+  # green colors in each sample
+  group_by(replicate) %>% 
+  summarize(stat = mean(color == "green", na.rm = TRUE)) 
 
 percentile_95ci = get_confidence_interval(bootstrap_distrib, level = 0.95, type = "percentile")
 percentile_95lb = percentile_95ci[[1]]
@@ -290,17 +295,7 @@ percentile_95ub = percentile_95ci[[2]]
 
 
 ```{r, eval = FALSE}
-# Using the `infer` package
-set.seed(1234) 
-bootstrap_distrib = my_sample %>%
-  # specify the variable and level of interest
-  specify(response = color, success = "green") %>% 
-  # generate 1000 bootstrap samples 
-  generate(reps = 1000, type = "bootstrap") %>% 
-  # calculate the proportion of green pasta for each
-  calculate(stat = "prop") 
-
-# - OR - using the same approach as last week
+# Using the same approach as last week
 set.seed(1234)
 bootstrap_distrib <- my_sample %>%
   # resample 50 draws with replacement a 1000 times
@@ -309,6 +304,16 @@ bootstrap_distrib <- my_sample %>%
   # green colors in each sample
   group_by(replicate) %>% 
   summarize(stat = mean(color == "green", na.rm = TRUE)) 
+
+# - OR - Using the `infer` package
+set.seed(1234) 
+bootstrap_distrib = my_sample %>%
+  # specify the variable and level of interest
+  specify(response = color, success = "green") %>% 
+  # generate 1000 bootstrap samples 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  # calculate the proportion of green pasta for each
+  calculate(stat = "prop") 
 
 # Remember to `set.seed()` to the same number to compare 
 # the two approaches (e.g., `set.seed(1234)`)
@@ -319,12 +324,14 @@ bootstrap_distrib <- my_sample %>%
 --
 
 .pull-right[
-Here are the first 6 rows:
+Here are the first 4 rows:
 
 ```{r}
-head(bootstrap_distrib)
+head(bootstrap_distrib, 4)
 
 nrow(bootstrap_distrib)
+
+mean(bootstrap_distrib$stat)
 ```
 
 Let's visualize this sampling variation!
@@ -403,11 +410,11 @@ Let's use this ***bootstrap distribution*** to construct confidence intervals!
 
 * The *confidence interval*: from the previous bootstrap distribution, ***where do most proportions lie?***
 
---
+
 
 * Method for confidence interval construction: ***percentile method***.
 
---
+
 
 * Requires specifying a ***confidence level***: 90%, 95%, and 99% are the most common. 
 
@@ -585,7 +592,7 @@ In other words, 95% of the time, the 95% confidence interval will contain the tr
   
 --
 
-***Impact of sample size:*** the greater the confidence level, the wider the confidence intervals.
+***Impact of sample size:*** the greater the sample size, the thinner the confidence intervals.
 
   * *Inutuition*: a larger sample size leads to less sampling variation and therefore a narrower boostrap distribution, which in turn leads to thiner confidence intervals.
   
@@ -632,6 +639,11 @@ layout: true
 * 48 (male) supervisors were given *identical* candidate CVs, differing only with respect to the first name, which was male or female.
 
   * Each CV was "*in the form of a memorandum requesting a decision on the promotion of an employee to the position of branch manager.*"
+  
+  * Many similar experiments have been conducted with other groups. Arabic, Black, Jewish names or other groups that can be similarly identified. [[1]](https://catalogue-bibliotheque.sciencespo.fr/discovery/fulldisplay?docid=cdi_proquest_journals_233023724&context=PC&vid=33USPC_SPO:SPO&lang=fr&search_scope=MyInst_and_CI&adaptor=Primo%20Central&tab=Everything&query=any,contains,Are%20Emily%20and%20Greg%20More%20Employable%20Than%20Lakisha%20and%20Jamal%3F%20A%20Field%20Experiment%20on%20Labor%20Market%20Discrimination&offset=0),
+[[2]](https://catalogue-bibliotheque.sciencespo.fr/discovery/search?query=any,contains,Do%20health%20plans%20risk-select%3F%20An%20audit%20study%20on%20Germany%27s%20Social%20Health%20Insurance☆&tab=Everything&search_scope=MyInst_and_CI&vid=33USPC_SPO:SPO&lang=fr&offset=0),
+[[3]](https://www.nytimes.com/2019/12/06/business/algorithm-bias-fix.html), ...
+
 
 --
 
@@ -648,7 +660,7 @@ layout: true
 .pull-right[
 ```{r}
 library(moderndive)
-head(promotions)
+head(promotions,2)
 ```
 ]
 
@@ -662,7 +674,7 @@ How many men and women were offered a promotion (and not)?
 ```{r}
 promotions %>% 
   group_by(gender, decision) %>% 
-  tally() %>%
+  tally() %>% # handy way to count entries in each gender-decision group
   mutate(percentage = 100 * n / sum(n))
 ```
 
@@ -785,7 +797,7 @@ cowplot::plot_grid(p1,p2,rel_widths = c(1.3,1.3))
   
 --
   
-  * How likely is a 29%p difference to occur in such a world?
+  * **How likely** is a 29%p difference to occur in such a world?
   
 --
 
@@ -1058,27 +1070,34 @@ In hypothesis testing, there are ***two types of errors***:
 
 * In practice, we choose the frequency of a Type I error by setting $\alpha$ and try to minimize the type II error.
 
+--
+
+* The Null plays no role:
+
+  * Type I error arises when *you have enough evidence* for the alternative
+
+  * Type II error arises when *you do not have enough evidence* for the alternative
+
+  
+* [Type I and Type II error and COVID-19 antibody testing](https://www.youtube.com/watch?v=Roke98aXAT0): False positives and false negatives
+
 ---
 
 # How does all of this relate to regression analysis? 
 
 * Now you have all the tools to make ***statistical inference*** for real!
 
---
 
 * Regression analysis is based on a ***sample*** of data.
 
---
 
 * So your ***regression coefficient*** is subject to ***sampling variation***, it's not the true population coefficient.
 
---
 
-* ***Question***: Is the estimated effect statistically significantly different from some value $z$?
+* ***Question***: Is the estimated effect statistically significantly different from some other value $z$?
 
---
 
-* The answer in the next episode of *Introduction to Econometrics with R*! `r emo::ji("monkey_face")`
+* The answer in the next episode! `r emo::ji("monkey_face")`
 
 ---
 
@@ -1090,7 +1109,7 @@ To the amazing [moderndive](https://moderndive.com/) team!
 
 ---
 
-# Appendix: code to generate the null distribution
+# Appendix: code to generate the null distribution using the `infer` package
 
 .pull-left[
 ```{r, eval = FALSE}

@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Applied Data Analysis for Public Policy Studies
 ## Regression Inference
 ### Michele Fioretti
-### SciencesPo Paris </br> 2020-08-25
+### SciencesPo Paris </br> 2020-11-23
 
 ---
 
@@ -200,7 +200,7 @@ Let's imagine we could redo the experiment 1000 times on 1000 different samples:
 
 * We'd run 1000 regression and would get 1000 estimates of `\(\beta_k\)`, `\(b_k\)`.
 
---
+
 
 * The standard error of `\(b_k\)` quantifies how much variation in `\(b_k\)` one would expect across (*an infinity of*) samples.
 
@@ -226,7 +226,7 @@ As we did for the sampling distribution of the proportion of *green pasta*, we w
 
 1. Copy the loading and cleaning code from slide 3 and run it.
 
-1. Generate the bootstrap distribution of `\(b_\textrm{small}\)` based on 1000 samples drawn from `star_df`. *Hint*: use the appropriate functions and arguments from the `infer` package so use the help pages.
+1. Generate the bootstrap distribution of `\(b_\textrm{small}\)` based on 1000 samples drawn from `star_df`. *Hint*: use the appropriate functions and arguments from either the `infer` or `moderndive` package so use the help pages.
 
 1. Plot this simulated sampling distribution and compute mean and the standard error of `\(b_\textrm{small}\)`.
 
@@ -250,7 +250,7 @@ By default, the regression output provides the results associated with the follo
 
 `$$\begin{align}H_0:&amp; \beta_k = 0\\H_A:&amp; \beta_k \neq 0\end{align}$$`
 
---
+
 
 * It allows to statistically test if there is a true relationship between the outcome and our regressor. 
 
@@ -264,7 +264,7 @@ By default, the regression output provides the results associated with the follo
 
 * If `\(H_0\)` is false, then there **is** a true relationship. 
 
---
+
 
 * ***Important:*** This is a ***two-sided*** test!
 
@@ -274,21 +274,21 @@ By default, the regression output provides the results associated with the follo
 
 * As we saw in the previous lecture, to conduct such a test we need to:
 
---
+
 
   * Derive the sampling distribution of our **test statistic** (`statistic`) assuming `\(H_0\)` is true, i.e. the *null distribution*.
   
---
+
 
   * Quantify how extreme the **observed test statistic** is in this hypothetic world.
 
---
+
 
 * Our *observed test statistic* (`statistic`) equals `\(\frac{b}{\hat{SE}(b)}\)`.
 
   * Why not just `\(b\)`? We'll come back and explain this formula later.
 
---
+
 
 .pull-left[
 
@@ -471,12 +471,12 @@ layout: true
 
 * The values reported by statistical packages in `R` are instead obtained from theory.
 
---
+
 
 * Theoretical inference is based on **large sample approximations**.
   * One can show that sampling distributions *converge* to suitable distributions.
   
---
+
   
 * Let's briefly look into the theory-based approach.
 
@@ -488,15 +488,16 @@ layout: true
 
   * `\(\hat{\textrm{SE}(b)}\)` is the sample estimate of the standard deviation of `\(b\)`.
   * It is also obtained through a theoretical formula (which you can find in the [book](https://michelefioretti.github.io/ScPoEconometrics/std-errors.html#se-theory)!) but we'll leave it aside.
+  
 --
 
 * A ***standard normal distribution*** is a *normal distribution* with *mean* 0 and *standard deviation* 1.
 
---
+
 
 * We don't need to simulate any sampling distribution here, we derive it from theory and use it to construct confidence intervals or to conduct hypothesis tests.
 
---
+
 
 * Note that if `\(\frac{b - \beta}{\hat{\textrm{SE}(b)}}\)` *converges* to a ***standard normal distribution***, then `\(b\)` converges to a ***normal distribution*** with mean `\(\beta\)` and standard deviation `\(\hat{\textrm{SE}(b)}\)`.
 
@@ -518,13 +519,9 @@ layout: true
 
 * Since the sampling distribution of `\(b\)` is assumed to be normally shaped, we can use the ***95% rule of thumb*** about normal distributions.
 
---
+  * We know indeed that 95% of the values of a normal distribution lie within approximately 2 standard deviations of the mean (exactly 1.96).
 
-* We know indeed that 95% of the values of a normal distribution lie within approximately 2 standard deviations of the mean (exactly 1.96).
-
---
-
-* So, we can compute a 95% CI for `\(\beta\)` as: `\(\textrm{CI}_{95\%} = [ b \pm 1.96*\hat{\textrm{SE}}(b)]\)`
+  * So, we can compute a 95% CI for `\(\beta\)` as: `\(\textrm{CI}_{95\%} = [ b \pm 1.96*\hat{\textrm{SE}}(b)]\)`
 
 --
 
@@ -590,15 +587,15 @@ class:inverse
 
 * So, **under the null hypothesis** we get from theory that the sampling distribution of `\(\frac{b}{\hat{\textrm{SE}(b)}}\)` will be a standard normal distribution.
 
---
+
 
 * As such we can directly compare the observed test statistic `\(\frac{b}{\hat{\textrm{SE}(b)}}\)` to the *standard normal distribution* which is the **null distribution** of our test statistic. 
 
---
+
 
 * The ***p-value*** associated to our test is then equal to the area of the *standard normal distribution* outside `\(\pm\)` the observed value of `\(\frac{b}{\hat{\textrm{SE}(b)}}\)`.
 
---
+
 
 * Common rule of thumb: if the *estimate* is ***twice the size of the standard error***, then it is significant at the 5% level. Why?
 
@@ -830,31 +827,6 @@ Even better : [`ungeviz`](https://github.com/wilkelab/ungeviz) and `gganimate` b
 ]
 
 ---
-
-# Teaser for next session 
-
-* Methods for program evaluation!
-
---
-
-* 2 options:
-
---
-
-  1. Cover ***regression discontinuity design*** in-depth,
-
-  ***OR***
-  
---
-
-  2. Cover both ***regression discontinuity design*** and ***differences-in-differences*** but you will only get the gist of each method.
-
---
-
-Which do you prefer?
-
----
-
 
 
 class: title-slide-final, middle

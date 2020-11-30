@@ -370,7 +370,7 @@ Interpretation: the minimum wage increase led to an __increase__ in FTE employme
 
 --
 
-Yes the essence of difference-in-differences is _that_ simple! `r emo::ji("grinning")`
+Yes the essence of differences-in-differences is _that_ simple! `r emo::ji("grinning")`
 
 --
 

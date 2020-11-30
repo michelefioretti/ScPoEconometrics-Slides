@@ -1,6 +1,6 @@
 ---
 title: "Applied Data Analysis for Public Policy Studies"
-subtitle: "Differences-in-Differences"
+subtitle: "Difference-in-Differences"
 author: "Michele Fioretti"
 date: "SciencesPo Paris </br> `r Sys.Date()`"
 output:
@@ -65,7 +65,7 @@ layout: true
 
 --
 
-## Today: ***Differences-in-differences***
+## Today: ***Difference-in-differences***
 
 * Exploits changes in policy over time that don't affect everyone
 
@@ -91,7 +91,7 @@ layout: true
 
   - ***instrumental variables (IV)***,
   - ***propensity-score matching***,
-  - ***differences-in-differences (DiD)***, and
+  - ***difference-in-differences (DiD)***, and
   - ***regression discontinuity designs (RDD)***.
 
 --
@@ -100,7 +100,7 @@ layout: true
 
 --
 
-* In this lecture, we will cover a popular and rigorous program evaluation method: __differences-in-differences__.
+* In this lecture, we will cover a popular and rigorous program evaluation method: __difference-in-differences__.
 
 --
 
@@ -108,7 +108,7 @@ layout: true
 
 ---
 
-# Differences-in-Differences (DiD)
+# Difference-in-Differences (DiD)
 
 * Usual starting point: subjects are not randomly allocated to treatment `r emo::ji("warning")`
 
@@ -141,7 +141,7 @@ layout: true
 
 --
 
-* Imagine you are interested in assessing the __causal__ impact of increasing the minimum wage on (un)employment.
+* Imagine you are interested in assessing the __causal__ impact of increasing the minimum wage.
 
 --
 
@@ -216,6 +216,8 @@ remotes::install_github("b-rodrigues/diffindiff")
 library(diffindiff)
   # load data
 ck1994 <- njmin
+  # data info at
+?diffindiff::njmin
 ```
 
 ```{r, echo = TRUE, eval = FALSE}
@@ -226,6 +228,8 @@ remotes::install_github("b-rodrigues/diffindiff")
 library(diffindiff)
   # load data
 ck1994 <- njmin
+  # data info at
+?diffindiff::njmin
 ```
 ]
 
@@ -358,7 +362,7 @@ ck_mw %>%
 
 ## DiD Estimate
 
-Differences-in-differences causal estimate: $0.59 - (-2.17) = 2.76$
+Difference-in-differences causal estimate: $0.59 - (-2.17) = 2.76$
 
 --
 
@@ -366,7 +370,7 @@ Interpretation: the minimum wage increase led to an __increase__ in FTE employme
 
 --
 
-Yes the essence of differences-in-differences is _that_ simple! `r emo::ji("grinning")`
+Yes the essence of difference-in-differences is _that_ simple! `r emo::ji("grinning")`
 
 --
 

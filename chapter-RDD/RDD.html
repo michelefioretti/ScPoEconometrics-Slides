@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Applied Data Analysis for Public Policy Studies
 ## Regression Discontinuity Design
 ### Michele Fioretti
-### SciencesPo Paris </br> 2020-08-25
+### SciencesPo Paris </br> 2020-12-08
 
 ---
 
@@ -62,15 +62,15 @@ layout: true
 
 * Very common research design in applied research because it provides credible causal estimates.
 
---
+
 
 * Starting point: subjects are ***not*** randomly allocated to treatment ⚠️
 
---
+
 
 * RDD can be applied when we have specific information about the rules determining treatment.
 
---
+
 
 * __RDD__ exploits this precise information about allocation to treatment!
 
@@ -124,7 +124,7 @@ We will focus our analysis on the following discontinuity:
 
 --
 
-* Debate on whether the minimum legal drinking age (MLDA) should be lowered to 18, as was the case in the Vietnam-era.
+* Debate on whether the minimum legal drinking age (*MLDA*) should be lowered to 18, as was the case in the Vietnam-era.
 
 ---
 
@@ -200,6 +200,7 @@ data("mlda", package = "masteringmetrics")
 
 * This dataset contains aggregate death rates (and their causes) for different age groups (`agecell`) between 19 and 23 years old.
 
+* See the bottom of page 168 of [the paper](http://masteringmetrics.com/wp-content/uploads/2015/01/Carpenter-and-Dobkin-2009.pdf) for a definition of the variables.
 ---
 
 # Sharp Discontinuity at Cutoff
@@ -243,6 +244,8 @@ At the threshold, the probability of being treated jumps from 0 to 1.
   0 \quad \text{if } a &lt; 21
   \end{array}\end{cases}
   $$
+
+  
   
 ## Key features of RD designs
 
@@ -270,7 +273,7 @@ class: inverse
 
 
 
-]
+
 
 ---
 
@@ -302,7 +305,7 @@ class: inverse
 
 * The RD estimator is a __local average treatment effect (LATE)__.
 
---
+
 
 * It only tells you the impact of treatment `\(D\)` on outcome `\(Y\)` ***around*** the cutoff value of the running variable.
 
@@ -316,7 +319,7 @@ class: inverse
 
 --
 
-* One may easily argue that all results from quantitative empirical analyses have a local nature.
+* ***However,*** one may easily argue that all results from quantitative empirical analyses have a local nature.
 
 ---
 
@@ -430,11 +433,11 @@ mean(mlda$all, na.rm = TRUE)
 
 * The ***functional form*** used to approximate the lines really matters!
 
---
+
 
    `\(\rightarrow\)` an insufficiently flexible specification runs the risk of mistaking nonlinearity for treatment effect;
 
---
+
    
    `\(\rightarrow\)` an overly flexible specification reduces precision and runs the risk of overfitting.
 
@@ -540,15 +543,14 @@ class: inverse
 # Task 3 (15 minutes)
 
 1. Estimate the following *quadratic* model on all death causes. Does the RDD coefficient differ from the linear model? 
-`$$DEATHRATE_a = \alpha + \delta D_a + \beta a + \beta a^2 + \varepsilon_a,$$`
+`$$DEATHRATE_a = \alpha + \delta D_a + \beta a + \beta a^2 + \varepsilon_a.$$`
 
 1. Recall that the regression model allowing for different slopes on each side of the cutoff is:
 `$$DEATHRATE_a = \alpha + \delta D_a + \beta (a - 21) + \gamma D_a * (a - 21) + \varepsilon_a,$$`
-   - Why do we need to substract the `cutoff` from `running_i`? (Hint: compute `\(\mathbb{E}(DEATHRATE_a|a=21)\)`)
-   - Should we expect the relationship between death rates and age to change at 21?
+   - Why do we need to substract the `cutoff` from `running_i`?
    - Estimate this model. How different is the RDD coefficient from the other models you have estimated?
 
-* Re-run these models (linear, quadratic, different slopes) for the following death causes: motor vehicle accidents (`mva`), alcohol-related (`alcohol`), and internal (`internal`).
+1. Re-run these models (linear, quadratic, different slopes) for the following death causes: motor vehicle accidents (`mva`), alcohol-related (`alcohol`), and internal (`internal`).
 
 
 
@@ -557,6 +559,8 @@ class: inverse
 # Graphical Representation of the Regression Results
 
 &lt;img src="RDD_files/figure-html/unnamed-chunk-25-1.svg" style="display: block; margin: auto;" /&gt;
+
+
 
 ---
 
@@ -585,6 +589,194 @@ class: inverse
 --
 
 Luckily there's an `R` package that chooses these settings optimally based on fancy algorythms: `rdrobust`.
+
+
+---
+
+# Function `rdplot` from `rdrobust` 
+
+
+```r
+library(rdrobust)
+rdplot(y=mlda$all, x=mlda$agecell, c = 21, p = 1, nbins = 25,
+       x.label = "Age", y.label = "Death Rate (per 100,000)", y.lim = c(90,110))
+```
+
+--
+
+&lt;img src="RDD_files/figure-html/unnamed-chunk-27-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+# Function `rdplot` from `rdrobust`
+
+
+```r
+rdplot(y=mlda$all, x=mlda$agecell, c = 21, p = 1, nbins = 25,
+       x.label = "Age", y.label = "Death Rate (per 100,000)", y.lim = c(90,110), hide = TRUE)$coef
+```
+
+```
+##            Left      Right
+## [1,] 93.6183688 101.281078
+## [2,]  0.8269952  -2.776364
+```
+
+--
+
+* The package computes the intercept and slopes of ***two*** separate regressions (***before the cutoff*** vs. ***after the cutoff***) of the type: `\(outcome_i = \alpha + \beta (running_i - cutoff) + e_i.\)`
+
+--
+
+* To see this let's create the variable `\(running_i - cutoff\)`:
+
+
+```r
+mlda &lt;- mlda %&gt;% 
+          mutate(over21 = (agecell &gt;= 21), # == Treatment_i
+                 agecell_21 = agecell - 21) # == running_i - cutoff
+```
+
+
+--
+
+
+.pull-left[
+
+```r
+tidy(lm(all~agecell_21,mlda[mlda$over21==FALSE,]))
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   93.6       0.975    96.0   2.37e-30
+## 2 agecell_21     0.827     0.857     0.965 3.45e- 1
+```
+
+]
+
+
+--
+
+.pull-rigth[
+
+```r
+tidy(lm(all~agecell_21,mlda[mlda$over21==TRUE,]))
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   101.       0.887    114.   5.26e-32
+## 2 agecell_21     -2.78     0.779     -3.56 1.74e- 3
+```
+
+
+
+]
+
+
+
+---
+
+# Function `rdplot` from `rdrobust`
+
+
+
+```r
+rdplot(y=mlda$all, x=mlda$agecell, c = 21, p = 1, nbins = 25,
+       x.label = "Age", y.label = "Death Rate (per 100,000)", y.lim = c(90,110), hide = TRUE)$coef 
+```
+
+```
+##            Left      Right
+## [1,] 93.6183688 101.281078
+## [2,]  0.8269952  -2.776364
+```
+
+--
+
+* This is the same as running ***a regression allowing for different slopes*** (slide 28)!
+
+`$$outcome_i = \alpha + \color{#d90502}\delta treatment_i + \beta (running_i - cutoff) + \\ \gamma treatment_i * (running_i - cutoff) + e_i,$$`
+
+
+--
+
+
+
+```r
+tidy(lm(all ~ over21 + agecell_21 + over21*agecell_21, mlda)) %&gt;%
+  mutate_if(is.numeric, round, 5) # to avoid scientific notation (i.e., 10e-4 = 0.001)
+```
+
+```
+## # A tibble: 4 x 5
+##   term                  estimate std.error statistic p.value
+##   &lt;chr&gt;                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)             93.6       0.932    100.   0      
+## 2 over21TRUE               7.66      1.32       5.81 0      
+## 3 agecell_21               0.827     0.819      1.01 0.318  
+## 4 over21TRUE:agecell_21   -3.60      1.16      -3.11 0.00327
+```
+
+--
+
+* Is the treatment ***significant***?
+
+
+
+---
+
+# Different Number of Bins
+
+
+```r
+library(rdrobust)
+rdplot(y=mlda$all, x=mlda$agecell, c = 21, p = 1, nbins = 5,
+       x.label = "Age", y.label = "Death Rate (per 100,000)", y.lim = c(90,110))
+```
+
+--
+
+&lt;img src="RDD_files/figure-html/unnamed-chunk-35-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Non-linear Regression with 20 Bins
+
+
+```r
+library(rdrobust)
+rdplot(y=mlda$all, x=mlda$agecell, c = 21, p = 4, nbins = 20,
+    x.label = "Age", y.label = "Death Rate (per 100,000)", y.lim = c(90,110))
+```
+
+--
+
+&lt;img src="RDD_files/figure-html/unnamed-chunk-37-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Non-linear Regression with 5 Bins
+
+
+```r
+library(rdrobust)
+rdplot(y=mlda$all, x=mlda$agecell, c = 21, p = 4, nbins = 5,
+       Consumption", x.label = "Age", y.label = "Death Rate (per 100,000)", y.lim = c(90,110))
+```
+
+--
+
+&lt;img src="RDD_files/figure-html/unnamed-chunk-39-1.svg" style="display: block; margin: auto;" /&gt;
+
 
 ---
 
@@ -617,7 +809,7 @@ Formally:
 
 --
 
-* The population just below must not be discretely different from the population just above the cutoff.
+* The population just below must not be different from the population just above the cutoff.
 
 --
 
@@ -663,7 +855,7 @@ $$
 
 ---
 
-# Example of Manipulation: [Camacho and Conover (2011)](https://pubs.aeaweb.org/doi/pdfplus/10.1257/pol.3.2.41)
+# Example of Manipulation: [Camacho and Conover (2011)](https://uspc-spo.primo.exlibrisgroup.com/discovery/fulldisplay?docid=cdi_proquest_journals_872053137&amp;context=PC&amp;vid=33USPC_SPO:SPO&amp;lang=fr&amp;search_scope=MyInst_and_CI&amp;adaptor=Primo%20Central&amp;tab=Everything&amp;query=any,contains,Manipulation%20of%20Social%20Program%20Eligibility&amp;offset=0)
 
 What happens when threshold for eligibility to social assistance programs becomes known?
 
